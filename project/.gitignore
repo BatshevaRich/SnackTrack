@@ -19,7 +19,6 @@ npm-debug.log*
 .tmp/
 .versions/
 coverage/
-www/
 dist/
 node_modules/
 tmp/
@@ -28,6 +27,7 @@ platforms/
 plugins/
 plugins/android.json
 plugins/ios.json
+www/
 $RECYCLE.BIN/
 
 .DS_Store
