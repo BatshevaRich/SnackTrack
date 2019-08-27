@@ -9,6 +9,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { OptionsPage } from '../pages/options/options';
 import { DayPage } from '../pages/day/day';
+import { CameraPage } from '../pages/camera/camera';
 
 @Component({
   templateUrl: 'app.html'
@@ -34,6 +35,7 @@ export class MyApp {
       { title: 'My First List', component: ListPage },
       { title: 'Options', component: OptionsPage},
       { title: 'Day', component:DayPage}
+      { title: 'camera', component: CameraPage }
     ];
   }
 

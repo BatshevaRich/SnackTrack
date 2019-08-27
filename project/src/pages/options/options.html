@@ -12,19 +12,23 @@
     <ion-title>Options</ion-title>
   </ion-navbar>
 </ion-header>
-
 <ion-content>
   <ion-list ion-item *ngFor="let label of labels">
-    <ion-checkbox (ionChange)="itemClicked($event)" checked="true" ></ion-checkbox><ion-label>{{label.name}}</ion-label>
+    <ion-checkbox
+      (ionChange)="itemClicked($event)"
+      [checked]="label.wanted"
+    ></ion-checkbox
+    ><ion-label>{{ label.name }}</ion-label>
   </ion-list>
-  <ion-list>
-    <!-- <button ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">
-      <ion-icon name="{{item.icon}}" item-left></ion-icon>
-      {{item.title}}
-      <div class="item-note" item-right>
-        {{item.note}}
-      </div>
-    </button> -->
-  </ion-list>
-  <button ion-button color="primary">Primary</button>
+  <br />
+  <ion-item *ngIf="counter < 10">
+    <ion-label color="primary" floating>Add Label</ion-label>
+    <ion-input
+      [(ngModel)]="value"
+      #box
+      (change)="addedLabel(box.value)"
+    ></ion-input>
+  </ion-item>
+
+  <button ion-button color="primary">OK</button>
 </ion-content>

@@ -10,6 +10,7 @@ import { OptionsPage } from '../pages/options/options'
 import { DayPage } from '../pages/day/day';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { CameraPage } from '../pages/camera/camera'
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     ItemDetailsPage,
     ListPage,
     OptionsPage,
-    DayPage
+    DayPage,
+    CameraPage
   ],
   imports: [
     BrowserModule,
@@ -31,7 +33,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     ItemDetailsPage,
     ListPage,
     OptionsPage,
-    DayPage
+    DayPage,
+    CameraPage
   ],
   providers: [
     StatusBar,
