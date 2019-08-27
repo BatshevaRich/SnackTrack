@@ -6,7 +6,6 @@ import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
 import { ItemDetailsPage } from '../pages/item-details/item-details';
 import { ListPage } from '../pages/list/list';
 import { OptionsPage } from '../pages/options/options';
-import { OptionsPage } from '../pages/options/options'
 import { DayPage } from '../pages/day/day';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -41,5 +40,5 @@ import { CameraPage } from '../pages/camera/camera';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
-}hub.com/BatshevaRich/DietDiaryFrontend.git h)
+})
 export class AppModule {}
