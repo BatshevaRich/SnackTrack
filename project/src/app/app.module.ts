@@ -9,6 +9,7 @@ import { ListPage } from '../pages/list/list';
 import { OptionsPage } from '../pages/options/options'
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { CameraPage } from '../pages/camera/camera'
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     HelloIonicPage,
     ItemDetailsPage,
     ListPage,
-    OptionsPage
+    OptionsPage,
+    CameraPage
   ],
   imports: [
     BrowserModule,
@@ -28,7 +30,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     HelloIonicPage,
     ItemDetailsPage,
     ListPage,
-    OptionsPage
+    OptionsPage,
+    CameraPage
   ],
   providers: [
     StatusBar,
