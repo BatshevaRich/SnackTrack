@@ -2,13 +2,15 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
-
 import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
 import { ItemDetailsPage } from '../pages/item-details/item-details';
 import { ListPage } from '../pages/list/list';
-import { CameraPage } from '../pages/camera/camera'
+import { CameraPage } from '../pages/camera/camera';
+import { OptionsPage } from '../pages/options/options';
+import { DayPage } from '../pages/day/day';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { CameraPage } from '../pages/camera/camera';
 
 @NgModule({
   declarations: [
@@ -16,6 +18,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     HelloIonicPage,
     ItemDetailsPage,
     ListPage,
+    OptionsPage,
+    DayPage,
     CameraPage
   ],
   imports: [
@@ -28,6 +32,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     HelloIonicPage,
     ItemDetailsPage,
     ListPage,
+    OptionsPage,
+    DayPage,
     CameraPage
   ],
   providers: [

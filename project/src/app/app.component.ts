@@ -8,7 +8,9 @@ import { ListPage } from '../pages/list/list';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { CameraPage } from '../pages/camera/camera';
-
+import { OptionsPage } from '../pages/options/options';
+import { DayPage } from '../pages/day/day';
+import { CameraPage } from '../pages/camera/camera';
 
 @Component({
   templateUrl: 'app.html'
@@ -32,6 +34,8 @@ export class MyApp {
     this.pages = [
       { title: 'Hello Ionic', component: HelloIonicPage },
       { title: 'My First List', component: ListPage },
+      { title: 'Options', component: OptionsPage},
+      { title: 'Day', component:DayPage},
       { title: 'camera', component: CameraPage }
     ];
   }
