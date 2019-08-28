@@ -1,5 +1,6 @@
 export class Label {
     Name:string;
+<<<<<<< HEAD
     Probability:number;
     constructor(n:string, p: number){
         this.Name = n;
@@ -7,3 +8,9 @@ export class Label {
     }
       
       }
+=======
+    Probability: number;
+      
+      }
+      
+>>>>>>> batsheva
