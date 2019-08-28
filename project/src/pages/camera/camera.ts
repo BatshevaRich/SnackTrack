@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
+import { ApiPictureProvider } from '../../providers/api-picture/api-picture';
+import {ImageSnippet } from '../../app/classes/Image';
+import { Label } from '../../app/classes/Label';
+import { Observable } from 'rxjs';
 /**
  * Generated class for the CameraPage page.
  *
@@ -12,14 +15,16 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 @Component({
   selector: 'page-camera',
   templateUrl: 'camera.html',
+  providers: [ApiPictureProvider]
 })
 export class CameraPage {
   
   selectedFile: ImageSnippet;
-
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  // public apPic:ApiPictureProvider;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public apPic:ApiPictureProvider ) {
+    console.log(apPic);
   }
-
+  
   ionViewDidLoad() {
     console.log('ionViewDidLoad CameraPage');
   }
@@ -44,8 +49,9 @@ export class CameraPage {
 
     reader.readAsDataURL(file);
   }
-
-
+  getLabels(){
+    this.apPic.GetLabelsForPicture(this.selectedFile.src);
+  }
   private onSuccess() {
     this.selectedFile.pending = false;
     this.selectedFile.status = 'ok';
@@ -57,13 +63,4 @@ export class CameraPage {
     this.selectedFile.src = '';
   }
 
-}
-
-
-
-export class ImageSnippet {
-  pending: boolean = false;
-  status: string = 'init';
-
-  constructor(public src: string, public file: File) {}
 }

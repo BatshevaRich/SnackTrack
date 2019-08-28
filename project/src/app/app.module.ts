@@ -10,7 +10,9 @@ import { DayPage } from '../pages/day/day';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { CameraPage } from '../pages/camera/camera';
-
+import { ApiPictureProvider } from '../providers/api-picture/api-picture';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { MovieServiceProvider } from '../providers/movie-service/movie-service';
 @NgModule({
   declarations: [
     MyApp,
@@ -23,6 +25,7 @@ import { CameraPage } from '../pages/camera/camera';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     IonicModule.forRoot(MyApp),
   ],
   bootstrap: [IonicApp],
@@ -38,7 +41,10 @@ import { CameraPage } from '../pages/camera/camera';
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    ApiPictureProvider,
+    HttpClientModule,
+    MovieServiceProvider
   ]
 })
 export class AppModule {}
