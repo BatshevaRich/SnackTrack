@@ -12,6 +12,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { CameraPage } from '../pages/camera/camera';
 import { ApiPictureProvider } from '../providers/api-picture/api-picture';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
+import {CommonModule} from '@angular/common';
+import { HttpModule } from '@angular/http';
 @NgModule({
   declarations: [
     MyApp,
@@ -25,6 +27,8 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
   imports: [
     BrowserModule,
     HttpClientModule,
+    HttpModule,
+    CommonModule,
     IonicModule.forRoot(MyApp),
   ],
   bootstrap: [IonicApp],
@@ -43,6 +47,7 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ApiPictureProvider,
     HttpClientModule,
+    CommonModule
   ]
 })
 export class AppModule {}

@@ -50,7 +50,7 @@ export class CameraPage {
     reader.readAsDataURL(file);
   }
   getLabels(){
-    this.apPic.GetLabelsForPicture(this.selectedFile.src);
+    // this.apPic.GetLabelsForPicture(this.selectedFile.src);
   }
   private onSuccess() {
     this.selectedFile.pending = false;

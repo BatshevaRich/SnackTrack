@@ -13,13 +13,21 @@
   </ion-navbar>
 </ion-header>
 <ion-content>
-  <ion-list ion-item *ngFor="let label of labels">
+  <ion-list ion-item *ngFor="let label of labels" [hidden] = "labels.length == 0">
+      <ion-checkbox
+        (ionChange)="itemClicked($event)"
+        [checked]="label.wanted"
+      ></ion-checkbox
+      ><ion-label>{{ label.name }} {{label.probability}}</ion-label>
+  </ion-list>
+
+  <!-- <ion-list ion-item *ngFor="let label of labels">
     <ion-checkbox
       (ionChange)="itemClicked($event)"
       [checked]="label.wanted"
     ></ion-checkbox
     ><ion-label>{{ label.name }}</ion-label>
-  </ion-list>
+  </ion-list> -->
   <br />
   <ion-item *ngIf="counter < 10">
     <ion-label color="primary" floating>Add Label</ion-label>
