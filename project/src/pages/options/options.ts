@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { IonicPage, NavController, NavParams } from "ionic-angular";
+import { ApiPictureProvider } from "../../providers/api-picture/api-picture";
 
 /**
  * Generated class for the OptionsPage page.
@@ -17,9 +18,10 @@ export class OptionsPage {
   labels: Array<{ name: string; probability: number; wanted: boolean }>;
   image: string;
   counter: number;
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public apPic: ApiPictureProvider) {
     this.image = ""; //need to be loaded from service
     //need to be loaded from service
+    apPic.GetLabels();  
     this.labels = [];
     let i = 0;
     for (; i < 10; i++) {

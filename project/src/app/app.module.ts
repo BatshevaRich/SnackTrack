@@ -12,7 +12,6 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { CameraPage } from '../pages/camera/camera';
 import { ApiPictureProvider } from '../providers/api-picture/api-picture';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { MovieServiceProvider } from '../providers/movie-service/movie-service';
 @NgModule({
   declarations: [
     MyApp,
@@ -44,7 +43,6 @@ import { MovieServiceProvider } from '../providers/movie-service/movie-service';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ApiPictureProvider,
     HttpClientModule,
-    MovieServiceProvider
   ]
 })
 export class AppModule {}

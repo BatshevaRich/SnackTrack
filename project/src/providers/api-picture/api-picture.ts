@@ -11,27 +11,21 @@ import { Observable } from 'rxjs/Observable';
 @Injectable()
 export class ApiPictureProvider {
 
-<<<<<<< HEAD
-
-=======
 labels: Label[];
->>>>>>> batsheva
   baseURL = "http://localhost:60829/api/"
   constructor(public http: HttpClient) {
     console.log('Hello ApiPictureProvider Provider');
   }
 
-<<<<<<< HEAD
-  GetLabels(){
-    return new Promise(resolve=>{
-      this.http.get(this.baseURL+ 'Clarifai/GetPath').subscribe(data=>{
-        resolve(data);
-      }, err=>{
-        console.log(err);
-      });
-    });
-  }
-=======
+  // GetLabels(){
+  //   return new Promise(resolve=>{
+  //     this.http.get(this.baseURL+ 'Clarifai/GetPath').subscribe(data=>{
+  //       resolve(data);
+  //     }, err=>{
+  //       console.log(err);
+  //     });
+  //   });
+  // }
   GetLabels(): Observable<Label[]> {
     console.log(this.http.get<Label[]>(this.baseURL + 'Clarifai/GetPath'));
     return this.http.get<Label[]>(this.baseURL + 'Clarifai/GetPath');
@@ -51,7 +45,6 @@ labels: Label[];
     // });
   //   console.log(this.labels);
   // }
->>>>>>> batsheva
   
 
 
