@@ -1,10 +1,9 @@
 import { Component } from "@angular/core";
-import { IonicPage, NavController, NavParams } from "ionic-angular";
+import { IonicPage, NavController, NavParams, LoadingController, Loading  } from "ionic-angular";
 import { ApiPictureProvider } from "../../providers/api-picture/api-picture";
 import { Label } from "../../app/classes/Label";
 import { Observable } from "rxjs";
 import { ImageSnippet } from "../../app/classes/Image";
-
 /**
  * Generated class for the OptionsPage page.
  *
@@ -17,7 +16,7 @@ import { ImageSnippet } from "../../app/classes/Image";
   selector: "page-options",
   templateUrl: "options.html"
 })
-export class OptionsPage {
+export class OptionsPage {  
   labels: Array<{ name: string; probability: number; wanted: boolean }>;
   image: string;
   counter: number;
@@ -34,6 +33,16 @@ export class OptionsPage {
   ionViewWillEnter() {
     // this.f1();
   }
+  ionViewLoaded() {
+    // let loader = this.loadingController.create({
+    //   content: 'Getting latest entries...',
+    // });
+  
+    // loader.present().then(() => {
+    //   this.f1(this.image);
+    //   loader.dismiss();
+    // });
+  }
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -44,7 +53,7 @@ export class OptionsPage {
       probability: number;
       wanted: boolean;
     }>();
-    this.image = "C:\\Users\\owner\\Downloads\\download (7).jpg"; //need to be loaded from service
+    this.image = ""; //need to be loaded from service
     this.f1(this.image);
 
     //need to be loaded from service
@@ -90,6 +99,7 @@ export class OptionsPage {
     });
   }
   loadedLabels: Label[];
+
   async f1(path: string) {
     var x = await this.resolveAfter2Seconds(path);
     this.loadedLabels = this.tags as Label[];
@@ -176,4 +186,5 @@ export class OptionsPage {
   ionViewDidLoad() {
     console.log("ionViewDidLoad OptionsPage");
   }
+
 }

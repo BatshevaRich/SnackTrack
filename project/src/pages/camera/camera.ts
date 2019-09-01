@@ -28,7 +28,8 @@ export class CameraPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad CameraPage');
   }
-  
+  loadedLabels: Label[];
+ 
   processFile($event):void {
     const file: File = $event.target.files[0];
     const reader = new FileReader();
@@ -45,7 +46,7 @@ export class CameraPage {
       //   (err) => {
       //     this.onError();
       //   })
-      preview.src = reader.result;
+      preview.src = reader.result; 
     });
 
     reader.readAsDataURL(file);

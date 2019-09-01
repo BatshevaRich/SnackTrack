@@ -1,7 +1,12 @@
 import { Injectable } from "@angular/core";
 import { Label } from "../../app/classes/Label";
 import { Observable } from "rxjs";
-import { Http, Response } from "@angular/http";
+import {
+  Http,
+  Response,
+  RequestOptions,
+  ResponseContentType
+} from "@angular/http";
 import "rxjs/add/operator/catch";
 import "rxjs/add/operator/debounceTime";
 import "rxjs/add/operator/distinctUntilChanged";
@@ -12,6 +17,7 @@ import {
   HttpParams,
   HttpErrorResponse
 } from "@angular/common/http";
+import { Body } from "@angular/http/src/body";
 /*
   Generated class for the ApiPictureProvider provider.
 
@@ -26,23 +32,17 @@ export class ApiPictureProvider {
     console.log("Hello ApiPictureProvider Provider");
   }
 
-  public GetLabels(path:string) {
-    console.log();
-    let header = new HttpHeaders();
-    let params = new HttpParams();
-    var res = this.http.get(this.baseURL + "clarifai/" + "path?'" + path + "'");
+  public GetLabels(picpath: string) {
+    const params = new HttpParams().set("path", picpath);
+    var res = this.http.get(this.baseURL + "clarifai/");
 
-
-    return new Promise(resolve=>{
-      res.subscribe((data=>{
+    return new Promise(resolve => {
+      res.subscribe(data => {
         // console.log(data);
         resolve(data.json());
-      }))
-    })
-
+      });
+    });
   }
-
-
 
   // public GetLabels() { works august 29, except for returning asyn
   //   console.log();

@@ -13,6 +13,7 @@
   </ion-navbar>
 </ion-header>
 <ion-content>
+    
   <ion-list ion-item *ngFor="let label of labels" [hidden] = "labels.length == 0">
       <ion-checkbox
       [disabled]="!label.wanted && this.counter == 10"
@@ -40,5 +41,5 @@
   </ion-item>
 
   <button ion-button color="primary">OK</button>
-  <img src="https://storage.cloud.google.com/image_food_to_dietdairy/meal.JPG">
+  <img id="loaded" src="https://www.kingarthurflour.com/sites/default/files/recipe_legacy/1496-3-large.jpg">
 </ion-content>
