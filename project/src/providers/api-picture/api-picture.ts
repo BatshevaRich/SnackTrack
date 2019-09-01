@@ -26,11 +26,11 @@ export class ApiPictureProvider {
     console.log("Hello ApiPictureProvider Provider");
   }
 
-  public GetLabels() {
+  public GetLabels(path:string) {
     console.log();
     let header = new HttpHeaders();
     let params = new HttpParams();
-    var res = this.http.get(this.baseURL + "clarifai/");
+    var res = this.http.get(this.baseURL + "clarifai/" + "path?'" + path + "'");
 
 
     return new Promise(resolve=>{

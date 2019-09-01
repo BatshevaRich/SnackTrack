@@ -15,8 +15,9 @@
 <ion-content>
   <ion-list ion-item *ngFor="let label of labels" [hidden] = "labels.length == 0">
       <ion-checkbox
+      [disabled]="!label.wanted && this.counter == 10"
         (ionChange)="itemClicked($event)"
-        [checked]="label.wanted"
+        [(ngModel)]="label.wanted"
       ></ion-checkbox
       ><ion-label>{{ label.name }} {{label.probability}}</ion-label>
   </ion-list>
@@ -39,4 +40,5 @@
   </ion-item>
 
   <button ion-button color="primary">OK</button>
+  <img src="https://storage.cloud.google.com/image_food_to_dietdairy/meal.JPG">
 </ion-content>

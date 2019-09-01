@@ -32,9 +32,9 @@ export class CameraPage {
   processFile($event):void {
     const file: File = $event.target.files[0];
     const reader = new FileReader();
-
+    var preview; 
     reader.addEventListener('load', (event: any) => {
-
+      preview = document.getElementById('preview');
       this.selectedFile = new ImageSnippet(event.target.result, file);
 
       this.selectedFile.pending = true;
@@ -45,6 +45,7 @@ export class CameraPage {
       //   (err) => {
       //     this.onError();
       //   })
+      preview.src = reader.result;
     });
 
     reader.readAsDataURL(file);
