@@ -14,6 +14,7 @@ import { ApiPictureProvider } from '../providers/api-picture/api-picture';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import {CommonModule} from '@angular/common';
 import { HttpModule } from '@angular/http';
+import { LoadPicProvider } from '../providers/load-pic/load-pic';
 @NgModule({
   declarations: [
     MyApp,
@@ -47,7 +48,8 @@ import { HttpModule } from '@angular/http';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ApiPictureProvider,
     HttpClientModule,
-    CommonModule
+    CommonModule,
+    LoadPicProvider
   ]
 })
 export class AppModule {}
