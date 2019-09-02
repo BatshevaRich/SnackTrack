@@ -88,7 +88,7 @@ namespace backend.Controllers
                     var filename = file.Headers.ContentDisposition.FileName.Trim('\"');
                     var buffer = await file.ReadAsByteArrayAsync();
                     
-                    string encodedData = Convert.ToBase64String(buffer);
+                    //string encodedData = Convert.ToBase64String(buffer);
                     Results = await GetAsync(buffer);
                 }
             }
