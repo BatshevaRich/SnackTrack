@@ -1,11 +1,9 @@
-﻿using Google.Cloud.Storage.V1;
+﻿using backend.Models;
+using Google.Cloud.Storage.V1;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using backend.Models;
 
 namespace dal
 {
@@ -22,7 +20,7 @@ namespace dal
         }
         public static string UploadFile(string bucketName, string localPath, string objectName = null)
         {
-            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "C:\\key\\DietDairyYL-115c5b2b586f.json");
+            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "C:\\key\\DietDiary-f95b600d05ed.json");
             var env = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS");
             Console.WriteLine($"env {env}");
 
@@ -36,14 +34,15 @@ namespace dal
             return path + bucketName + "/" + objectName;
 
         }
-        public static List<object> getAllMeals()
+        public static List<Meal> getAllMeals()
         {
             List<meal> listMealsEntity;
             listMealsEntity = db.meal.ToList<meal>();
-            List<object/*api obj*/> listMeals = listMealsEntity.Select<meal, object>(m => Mapper.convertEntityToMeal(m)).ToList<Object>();//listMealsEntity.Select<meal,object/*api obj*/>(Mapper.convertEntityToMeal);
+            List<Meal/*api obj*/> listMeals = listMealsEntity.Select<meal, Meal>(m => Mapper.convertEntityToMeal(m)).ToList<Meal>();//listMealsEntity.Select<meal,object/*api obj*/>(Mapper.convertEntityToMeal);
+
             return listMeals;
         }
 
-       
+
     }
 }

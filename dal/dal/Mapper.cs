@@ -13,7 +13,7 @@ namespace dal
         public static meal convertMealToEntity(Meal meal)
         {
             meal res = new meal();
-            res.path = Manager.UploadFile("image_food_to_dietdairy",meal.Path);
+            res.path = Manager.UploadFile("image_food_to_dietdairy", meal.Path);
             foreach (var item in meal.Labels)
             {
                 res.tags += "," + item;

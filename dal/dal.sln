@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dal", "dal\dal.csproj", "{62E538AD-B734-48C7-B66A-5C0A46F66F17}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "backend", "..\webapi\backend\backend.csproj", "{511D81B5-EFA6-4DE2-8B20-CE66B69275E1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{62E538AD-B734-48C7-B66A-5C0A46F66F17} = {62E538AD-B734-48C7-B66A-5C0A46F66F17}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

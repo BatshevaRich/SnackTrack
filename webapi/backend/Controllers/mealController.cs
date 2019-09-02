@@ -4,16 +4,32 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using dal;
+using System.Threading.Tasks;
+using Clarifai.API;
+using Clarifai.DTOs.Inputs;
+using System.IO;
+using System.Web.Http.Cors;
+using Clarifai.DTOs.Predictions;
 using backend.Models;
+using System.Web;
+using System.Text;
+using System.Drawing;
+using dal;
 namespace backend.Controllers
 {
+    [RoutePrefix("api/meal")]
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class mealController : ApiController
     {
         // GET: api/meal
+        //[Route("get")]
+        [HttpGet]
         public List<Meal> Get()
         {
+
+            Manager.UploadFile("dietdiaryfoodpics", "C:\\Users\\owner\\Downloads\\download (6).jpg", "bread.jpg");
             return Manager.getAllMeals();
+            //return null;
         }
 
         // GET: api/meal/5
@@ -23,8 +39,9 @@ namespace backend.Controllers
         }
 
         // POST: api/meal
-        public void Post([FromBody]string value)
+        public void Post([FromBody]Meal value)
         {
+
         }
 
         // PUT: api/meal/5
