@@ -11,7 +11,7 @@ import { Label } from "../../app/classes/Label";
 import { Observable } from "rxjs";
 import { ImageSnippet } from "../../app/classes/Image";
 import { SpinnerDialog } from "@ionic-native/spinner-dialog/ngx";
-import {NgZone} from '@angular/core';
+import { NgZone } from "@angular/core";
 /**
  * Generated class for the OptionsPage page.
  *
@@ -31,30 +31,31 @@ export class OptionsPage {
   tags: any;
   loaded = false;
   show10: boolean;
-  paginationLimit:number;
-  ngOnInit() {
-    this.labels = new Array<{
-      name: string;
-      probability: number;
-      wanted: boolean;
-    }>();
-  }
+  paginationLimit: number;
+  lengthOfLabels: number;
+  // ngOnInit() {
+  //   this.labels = new Array<{
+  //     name: string;
+  //     probability: number;
+  //     wanted: boolean;
+  //   }>();
+  // }
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public apPic: ApiPictureProvider,
     public loadingController: LoadingController,
-    private zone: NgZone,
+    private zone: NgZone
   ) {
     this.labels = new Array<{
       name: string;
       probability: number;
       wanted: boolean;
     }>();
+    this.paginationLimit = 5;
     this.f1();
     this.labels = [];
     this.show10 = false;
-    this.paginationLimit = 5;
   }
   loadedLabels: Label[];
   itemClicked(e): void {
@@ -78,16 +79,19 @@ export class OptionsPage {
     });
     this.counter = this.counter + 1;
     console.log(this.counter);
+    this.lengthOfLabels = this.lengthOfLabels +1;
     this.value = "";
     console.log(this.labels);
+    this.labels.sort((a, b) => a.probability < b.probability ? 1 : a.probability > b.probability ?-1 : 0)
+    alert(this.labels);
   }
-  imageData = localStorage.getItem('loadedImage');
+  imageData = localStorage.getItem("loadedImage");
   resolveAfter2Seconds() {
     return new Promise(resolve => {
       setTimeout(() => {
         resolve(
-          // this.apPic.GetLabels().then(data => {            
-            this.apPic.InsertImages(this.imageData).then(data=>{
+          // this.apPic.GetLabels().then(data => {
+          this.apPic.InsertImages(this.imageData).then(data => {
             this.tags = data;
             this.loaded = true;
           })
@@ -95,30 +99,39 @@ export class OptionsPage {
       }, 200);
     });
   }
-  public update($event){
+  public update($event) {
     console.log(event);
     console.log("Segment clicked! " + $event.value, this, event);
-          if(this.labels.length> 0){
-            this.show10 = !this.show10;
-            console.log(this.show10);
-            if(this.paginationLimit == 10) this.paginationLimit = 5;
-            else this.paginationLimit = 10;
-            }    
+    this.show10 = !this.show10;
+      console.log(this.show10);
+      if (this.paginationLimit == this.lengthOfLabels) this.paginationLimit = 5;
+      else this.paginationLimit = this.lengthOfLabels;
+    if (this.labels.length > 0) {
+      
+    }
   }
   async f1() {
     var x = await this.resolveAfter2Seconds();
 
     this.loadedLabels = this.tags as Label[];
     let i = 0;
-    for (; i < this.loadedLabels.length; i++) {
+    for (; i < this.paginationLimit; i++) {
       this.labels.push({
         name: this.loadedLabels[i].Name,
         probability: this.loadedLabels[i].Probability,
         wanted: true
       });
-      console.log(this.labels);
     }
-    this.counter = i;
+    for (; i < this.loadedLabels.length; i++) {
+      this.labels.push({
+        name: this.loadedLabels[i].Name,
+        probability: this.loadedLabels[i].Probability,
+        wanted: false
+      });
+    }
+    console.log(this.labels);
+    this.lengthOfLabels = this.labels.length;
+    this.counter = this.paginationLimit;
   }
   selectedFile: ImageSnippet;
 }
