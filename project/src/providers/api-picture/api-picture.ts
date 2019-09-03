@@ -28,105 +28,45 @@ import { Body } from "@angular/http/src/body";
 export class ApiPictureProvider {
   labels: Label[];
   baseURL = "http://localhost:54640/api/";
-  constructor(public httpClient: HttpClient, public http: Http) {
-    console.log("Hello ApiPictureProvider Provider");
-  }
+  fileToUpload: File;
+  constructor(public httpClient: HttpClient, public http: Http) {}
 
-  public GetLabels(picpath: string) {
-    const params = new HttpParams().set("path", picpath);
-    var res = this.http.get(this.baseURL + "clarifai/");
-
+  public GetLabels() {
+    var res = this.http.get(this.baseURL + "clarifai/" + "InsertImages");
     return new Promise(resolve => {
       res.subscribe(data => {
-        // console.log(data);
         resolve(data.json());
       });
     });
   }
 
-  // public GetLabels() { works august 29, except for returning asyn
-  //   console.log();
-  //   let header = new HttpHeaders();
-  //   let params = new HttpParams();
-  //   var res = this.http.get(this.baseURL + "clarifai/");
-  //   return res;
-  //   // return this.http.get(this.baseURL + "clarifai/getpathAsync").subscribe(res=>{
-  //   //   this.labels = res as Label[];
-  //   // });
-  //   // console.log(this.http.get<Label[]>(this.baseURL + "clarifai"));
-  //   // return this.http.get(this.baseURL + "clarifai").map((res: Response) => res.json());
-  // }
+  dataURLtoFile(dataurl, filename) {
+    //https://stackoverflow.com/questions/35940290/how-to-convert-base64-string-to-javascript-file-object-like-as-from-file-input-f?noredirect=1&lq=1
+    var arr = dataurl.split(","),
+      mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]),
+      n = bstr.length,
+      u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, { type: mime });
+  }
 
-  // async GetLabels(): Promise<Label[]> {
-  //   try {
-  //     let response = await this.http
-  //       .get(this.baseURL + "Clarifai/GetPath")
-  //       .toPromise();
-  //     return response as Hero[];
-  //   } catch (error) {
-  //     await this.handleError(error);
-  //   }
-  // }
-  // async GetLabelsSlow(): Promise<Label[]> {
-  //   await new Promise<Label[]>(resolve =>
-  //     setTimeout(resolve, 2000));
-  //   return await this.getHeroes();
-  // }
-  // public  GetLabels(){
-  //     return new Promise(resolve=>{
-  //     this.http.get(this.baseURL+ 'Clarifai/GetPath').subscribe(data=>{
-  //       resolve(data);
-  //       this.labels = data as Label[];
-  //       console.log(this.labels);
-  //     }, err=>{
-  //       console.log(err);
-  //     });
-  //   });
-
-  // }
-  // console.log(this.http.get<Label[]>(this.baseURL +'Clarifai/'));
-  //     return this.http.get<Label[]>(this.baseURL + 'Clarifai/');
-  // GetLabels(){
-  //   return new Promise(resolve=>{
-  //     this.http.get(this.baseURL+ 'Clarifai/GetPath').subscribe(data=>{
-  //       resolve(data);
-  //     }, err=>{
-  //       console.log(err);
-  //     });
-  //   });
-  // }
-  // GetLabels(){
-  //   return new Promise(resolve => {
-  //     this.http.get(this.baseURL + 'Clarifai/GetPath')
-  //       .subscribe(data => {
-  //         // we've got back the raw data, now generate the core schedule data
-  //         // and save the data for later reference
-  //         this.labels = data as Label[];
-  //         resolve(this.labels);
-  //   });
-  // });
-  //   // console.log(this.http.get<Label[]>(this.baseURL + 'Clarifai/GetPath'));
-  //   // return this.http.get<Label[]>(this.baseURL + 'Clarifai/GetPath');
-  // }
-
-  // GetLabels(){
-  //   this.http.get(this.baseURL+ 'Clarifai/GetPath').subscribe((data) => {
-  //     this.labels = data as Label[];
-  //     console.log(data); // This will work
-  // });
-  // return new Promise(resolve=>{
-  //   this.http.get(this.baseURL+ 'Clarifai/GetPath').subscribe(data=>{
-  //     resolve(data);
-  //   }, err=>{
-  //     console.log(err);
-  //   });
-  // });
-  //   console.log(this.labels);
-  // }
-
-  // GetLabelsForPicture(path: string): Observable<Label[]> {
-  //   return this.http.get<Label[]>(
-  //     this.baseURL + "Clarifai/GetPath?path=" + path
-  //   );
-  // }
+  InsertImages(formData): any {
+    var file = this.dataURLtoFile(formData, "img.jpg");
+    let _formData = new FormData();
+    this.fileToUpload = file;
+    _formData.append("file", file);
+    console.log(file);
+    var res = this.http.post(
+      this.baseURL + "clarifai/InsertImages/",
+      _formData
+    );
+    return new Promise(resolve => {
+      res.subscribe(data => {
+        resolve(data.json());
+      });
+    });
+  }
 }

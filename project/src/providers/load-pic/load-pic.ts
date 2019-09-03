@@ -11,15 +11,52 @@ import { ApiPictureProvider } from '../api-picture/api-picture';
 */
 @Injectable()
 export class LoadPicProvider {
+  loadedLabels: Label[];
 
+  labels: Array<{ name: string; probability: number; wanted: boolean }>;
+  tags: Label[];
   constructor(public http: HttpClient, public apPic: ApiPictureProvider) {
     console.log('Hello LoadPicProvider Provider');
+    
+    this.labels = new Array<{
+      name: string;
+      probability: number;
+      wanted: boolean;
+    }>();
+    // this.f1('');
   }
-
-  labels: Label[];
   baseURL = "http://localhost:54640/api/";
   public GetLabelForPicture(){
-    this.apPic.GetLabels('');
+    // this.apPic.GetLabels('');
+    // this.f1();
+    return this.labels;
+  }
+
+  resolveAfter2Seconds(path: string) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(
+          this.apPic.GetLabels().then(data => {
+            this.tags = data as Label[];
+            console.log(this.tags);
+          })
+        );
+      }, 4000);
+    });
+  }
+
+  async f1(path: string) {
+    var x = await this.resolveAfter2Seconds(path);
+    this.loadedLabels = this.tags as Label[];
+    let i = 0;
+    for (; i < this.tags.length; i++) {
+      this.labels.push({
+        name: this.loadedLabels[i].Name,
+        probability: this.loadedLabels[i].Probability,
+        wanted: true
+      });
+    }
+    
   }
   
 }

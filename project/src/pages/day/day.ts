@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { LoadPicProvider } from '../../providers/load-pic/load-pic';
 //import { Meal } from '../../app/classes/Meal';
 
 /**
@@ -22,7 +23,11 @@ export class DayPage {
       
 //       this.day.push({ });
 //   }
-constructor(public navCtrl: NavController, public navParams: NavParams){}
+labels: Array<{ name: string; probability: number; wanted: boolean }>;
+constructor(public navCtrl: NavController, public navParams: NavParams, public loadPic: LoadPicProvider){
+  this.labels = this.loadPic.GetLabelForPicture();
+  console.log(this.labels);
+}
   ionViewDidLoad() {
     //load the day from services
     console.log('ionViewDidLoad DayPage');

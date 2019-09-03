@@ -43,5 +43,5 @@
     ></ion-input>
   </ion-item>
 
-  <button ion-button color="primary" [hidden] = "labels.length == 0">OK</button>
+  <button ion-button color="primary" (click)="uploadData()" [hidden] = "labels.length == 0">OK</button>
   </ion-content>

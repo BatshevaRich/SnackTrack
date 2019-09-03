@@ -4,7 +4,8 @@ import {
   NavController,
   NavParams,
   LoadingController,
-  Loading
+  Loading,
+  DateTime
 } from "ionic-angular";
 import { ApiPictureProvider } from "../../providers/api-picture/api-picture";
 import { Label } from "../../app/classes/Label";
@@ -12,6 +13,8 @@ import { Observable } from "rxjs";
 import { ImageSnippet } from "../../app/classes/Image";
 import { SpinnerDialog } from "@ionic-native/spinner-dialog/ngx";
 import { NgZone } from "@angular/core";
+import { MealProvider } from "../../providers/meal/meal";
+import { filter } from "rxjs/operator/filter";
 /**
  * Generated class for the OptionsPage page.
  *
@@ -45,7 +48,8 @@ export class OptionsPage {
     public navParams: NavParams,
     public apPic: ApiPictureProvider,
     public loadingController: LoadingController,
-    private zone: NgZone
+    private zone: NgZone,
+    private mealProvider: MealProvider
   ) {
     this.labels = new Array<{
       name: string;
@@ -79,10 +83,12 @@ export class OptionsPage {
     });
     this.counter = this.counter + 1;
     console.log(this.counter);
-    this.lengthOfLabels = this.lengthOfLabels +1;
+    this.lengthOfLabels = this.lengthOfLabels + 1;
     this.value = "";
     console.log(this.labels);
-    this.labels.sort((a, b) => a.probability < b.probability ? 1 : a.probability > b.probability ?-1 : 0)
+    this.labels.sort((a, b) =>
+      a.probability < b.probability ? 1 : a.probability > b.probability ? -1 : 0
+    );
     alert(this.labels);
   }
   imageData = localStorage.getItem("loadedImage");
@@ -103,11 +109,10 @@ export class OptionsPage {
     console.log(event);
     console.log("Segment clicked! " + $event.value, this, event);
     this.show10 = !this.show10;
-      console.log(this.show10);
-      if (this.paginationLimit == this.lengthOfLabels) this.paginationLimit = 5;
-      else this.paginationLimit = this.lengthOfLabels;
+    console.log(this.show10);
+    if (this.paginationLimit == this.lengthOfLabels) this.paginationLimit = 5;
+    else this.paginationLimit = this.lengthOfLabels;
     if (this.labels.length > 0) {
-      
     }
   }
   async f1() {
@@ -134,4 +139,17 @@ export class OptionsPage {
     this.counter = this.paginationLimit;
   }
   selectedFile: ImageSnippet;
+
+  uploadData() {
+    let stringedLabels: string[];
+    var l = this.labels.filter(l => l.wanted == true);
+    stringedLabels = l.map(l => {
+      return l.name;
+    });
+    this.mealProvider.SaveToServer(
+      localStorage.getItem("loadedImage"),
+      new Date(Date.now()),
+      stringedLabels
+    );
+  }
 }

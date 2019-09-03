@@ -13,19 +13,43 @@
   </ion-navbar>
 </ion-header>
 <ion-content>
-
-<ion-content padding>
     <ion-item>
-        <ion-label class="image-upload-container btn btn-bwm" stacked>select image</ion-label>
-        <ion-input  type="file" accept="image/*" (change)="processFile($event)"></ion-input>
-      </ion-item>
-  <!-- <label class="image-upload-container btn btn-bwm">
-    <span>Select Image</span>
-    <input #imageInput
-           type="file"
-           accept="image/*"
-           (change)="processFile(imageInput)">
-  </label> -->
-  <button ion-button color="primary" (click)= "getLabels()">OK</button>
-  <img id="preview" src="" height="200" alt="Image preview...">
+      <ion-label class="image-upload-container btn btn-bwm"
+        >select image</ion-label
+      >
+      <ion-input
+        type="file"
+        accept="image/*"
+        capture="camera"
+        (change)="onFileSelected($event)"
+        id="fileInput"
+      ></ion-input>
+      <label for="fileInput" icon-only ion-button>
+        <ion-icon name="camera"></ion-icon>
+      </label>
+      <br />
+      <!-- <ion-input type="file" accept="image/*" (change)="sendImage($event)"></ion-input> -->
+    </ion-item>
+    <button ion-button color="primary" (click)="getLabels()">OK</button>
+    
+
+      <input type="file" id="fileLoader" #fileLoader name="files" title="Load File" hidden />
+      <ion-toolbar color="secondary">
+        <ion-buttons>
+          <button ion-button icon-left (click)="presentActionSheet(fileLoader)">
+            <ion-icon name="camera"></ion-icon>Select Image
+          </button>
+          <button ion-button icon-left (click)="removePic()" [disabled]="uploadImage === null">
+            <ion-icon name="trash"></ion-icon>Remove
+          </button>
+        </ion-buttons>
+      </ion-toolbar>
+      <span *ngIf="uploadImage != null">
+        <img id="checkinImage" [src]="uploadImage" (load)="imageLoaded()" /> 
+      </span>
+      <span *ngIf="processing">
+          <ion-spinner></ion-spinner>
+          <h1>Processing...</h1>
+      </span>
+
 </ion-content>
