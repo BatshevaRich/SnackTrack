@@ -124,8 +124,6 @@ C:\Users\יהודית\Documents\google\final project\backend\dal\dal\obj\Debug\d
 C:\Users\יהודית\Documents\google\final project\backend\dal\dal\obj\Debug\dal.pdb
 C:\Users\owner\Documents\GitHub\backend\dal\dal\obj\Debug\dal.csprojAssemblyReference.cache
 C:\Users\owner\Documents\GitHub\backend\dal\dal\obj\Debug\dal.csproj.CoreCompileInputs.cache
-C:\Users\owner\Documents\GitHub\backend\dal\dal\bin\Debug\dbDietDairy.mdf
-C:\Users\owner\Documents\GitHub\backend\dal\dal\bin\Debug\dbDietDairy_log.ldf
 C:\Users\owner\Documents\GitHub\backend\dal\dal\bin\Debug\dal.dll.config
 C:\Users\owner\Documents\GitHub\backend\dal\dal\bin\Debug\dal.dll
 C:\Users\owner\Documents\GitHub\backend\dal\dal\bin\Debug\dal.pdb
