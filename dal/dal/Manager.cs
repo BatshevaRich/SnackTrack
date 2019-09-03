@@ -12,9 +12,9 @@ namespace dal
         private static dbDietDairyEntities db = new dbDietDairyEntities();
         public static string path = "https://storage.cloud.google.com/";
 
-        public static void addMeal(Meal meal)
+        public static void addMeal(Meal m)
         {
-            db.meal.Add(Mapper.convertMealToEntity(meal));
+            db.meals.Add(Mapper.convertMealToEntity(m));
             db.SaveChanges();
 
         }
@@ -34,11 +34,17 @@ namespace dal
             return path + bucketName + "/" + objectName;
 
         }
-        public static List<Meal> getAllMeals()
+        public static List<backend.Models.Meal> getAllMeals()
         {
-            List<meal> listMealsEntity;
-            listMealsEntity = db.meal.ToList<meal>();
-            List<Meal/*api obj*/> listMeals = listMealsEntity.Select<meal, Meal>(m => Mapper.convertEntityToMeal(m)).ToList<Meal>();//listMealsEntity.Select<meal,object/*api obj*/>(Mapper.convertEntityToMeal);
+
+            List<meal> listMealsEntity = new List<meal>();
+            List<Meal> listMeals = new List<Meal>();
+            using(var contextdb = new dbDietDairyEntities())
+            {
+                listMealsEntity = contextdb.meals.ToList<meal>();
+                listMeals = listMealsEntity.Select<meal, Meal>(m => Mapper.convertEntityToMeal(m)).ToList<Meal>();//listMealsEntity.Select<meal,object/*api obj*/>(Mapper.convertEntityToMeal);
+
+            }         
 
             return listMeals;
         }

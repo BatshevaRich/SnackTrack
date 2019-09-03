@@ -27,9 +27,9 @@ namespace backend.Controllers
         public List<Meal> Get()
         {
 
-            Manager.UploadFile("dietdiaryfoodpics", "C:\\Users\\owner\\Downloads\\download (6).jpg", "bread.jpg");
+            //Manager.UploadFile("dietdiaryfoodpics", "C:\\Users\\owner\\Downloads\\download (6).jpg", "bread.jpg");
+
             return Manager.getAllMeals();
-            //return null;
         }
 
         // GET: api/meal/5
