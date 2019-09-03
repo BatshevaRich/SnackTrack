@@ -1,37 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using System.Threading.Tasks;
+﻿using backend.Models;
 using Clarifai.API;
 using Clarifai.DTOs.Inputs;
-using System.IO;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web.Http;
 using System.Web.Http.Cors;
-using Clarifai.DTOs.Predictions;
-using backend.Models;
-using System.Web;
-using System.Text;
-using System.Drawing;
 
 namespace backend.Controllers
 {
     [RoutePrefix("api/clarifai")]
-    [EnableCors(origins:"*", headers:"*", methods:"*")]
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class clarifaiController : ApiController
     {
         ClarifaiClient CLARIFAI_API_URL = new ClarifaiClient("ca331bf809ea4bb6aaa8bfcd091159c0");
         // GET: api/clarifai
+        [Route("getasync")]
+        [HttpGet]
         public async Task<List<Label>> GetAsync()
-        {
+        {//basic get function, does not get any parameters.
+            //only for testing purposes.
             var res = await CLARIFAI_API_URL.PublicModels.FoodModel.Predict(
                     new ClarifaiURLImage("https://www.kingarthurflour.com/sites/default/files/recipe_legacy/1496-3-large.jpg"),
                      minValue: 0.8M, maxConcepts: 10)
                 .ExecuteAsync();
-
             List<Label> results = new List<Label>();
-
             foreach (var concept in res.Get().Data)
             {
                 results.Add(new Label() { Name = concept.Name, Probability = concept.Value });
@@ -40,59 +33,43 @@ namespace backend.Controllers
             return results;
         }
 
-        public List<Label> Results { get; set; }
-
-        [Route("InsertImages")]
-        [HttpGet]
-        public List<Label> getResults()
-        {
-            return Results;
-        }
-
         // GET: api/clarifai/ 
+        /// <summary>GetAsync is the main 'get' function, used by the post.
+        /// <param name="path">Used as base64 image, sent to clarifai api</param>
+        /// </summary>
+        /// <returns>list of labels from clarifai api</returns>
         public async Task<List<Label>> GetAsync(byte[] path)
         {
             var res = await CLARIFAI_API_URL.PublicModels.FoodModel.Predict(
                     new ClarifaiFileImage(path),
                      minValue: 0.8M, maxConcepts: 10)
                 .ExecuteAsync();
-
-            Results = new List<Label>();
-
-            foreach (var concept in res.Get().Data){
+            List<Label> Results = new List<Label>();
+            foreach (var concept in res.Get().Data)
+            {
                 Results.Add(new Label() { Name = concept.Name, Probability = concept.Value });
 
             }
             return Results;
         }
+
+        /// <summary>InsertImagesAsync is the main function of this controller, used to
+        /// return the labels from clarifai api to the frontend.
+        /// gets image from body of http post
+        /// </summary>
+        /// <returns>httpactionresult, with labels in body of message</returns>
         [Route("InsertImages")]
         [HttpPost]
         public async Task<IHttpActionResult> InsertImagesAsync()
         {
-            var httpRequest = HttpContext.Current.Request;
-
-            if (httpRequest.Files.Count > 0)
-            {
-                for (var i = 0; i < httpRequest.Files.Count; i++)
-                {
-                    var postedFile = httpRequest.Files[i];;
-                }
-
-            }
             var provider = new MultipartMemoryStreamProvider();
             await Request.Content.ReadAsMultipartAsync(provider);
+            List<Label> Results = new List<Label>();
             foreach (var file in provider.Contents)
             {
-                using (HttpClient client = new HttpClient())
-                {
-                    var filename = file.Headers.ContentDisposition.FileName.Trim('\"');
-                    var buffer = await file.ReadAsByteArrayAsync();
-                    
-                    //string encodedData = Convert.ToBase64String(buffer);
-                    Results = await GetAsync(buffer);
-                }
+                var buffer = await file.ReadAsByteArrayAsync();
+                Results = await GetAsync(buffer);
             }
-            //Request.CreateResponse<IEnumerable<Label>>(HttpStatusCode.OK, results);
             return Ok(Results);
         }
 
