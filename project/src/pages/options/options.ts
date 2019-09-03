@@ -35,11 +35,10 @@ export class OptionsPage {
   tags: any;
   showAll: boolean;
   paginationLimit: number;
-  lengthOfLabels: number;
   loadedLabels: Label[];
   imageData = localStorage.getItem("loadedImage");
   combinedLabels: string[];
-  value = "";
+  value = "";//for ngmodel, to clean input box
   trues: number;
   constructor(
     public navCtrl: NavController,
@@ -48,10 +47,9 @@ export class OptionsPage {
     public loadingController: LoadingController,
     private mealProvider: MealProvider
   ) {
-    this.counter = 5;
     this.loadLabelsFromAPI();
-    this.labels = new Array<{
-      //init array of labels
+    //init arrays
+    this.labels = new Array<{  
       name: string;
       probability: number;
       wanted: boolean;
@@ -65,9 +63,11 @@ export class OptionsPage {
     this.labels = [];
     this.showAll = false;
     this.trues = 5;
+    this.counter = 5;
   }
   /**
    * func to increase/decrease counter of selected labels
+   * also sorts list by trues/not, so the trues are in the beginnig of the list
    * called on click of checkbox
    * @param e the checkbox html element
    */
@@ -84,7 +84,6 @@ export class OptionsPage {
     for (let i = 0; i < this.labels.length; i++) {
       if (this.labels[i].wanted) this.trues = this.trues + 1;
     }
-    console.log(this.trues);
   }
   /**
    * asynchronous func to load labels from webapi
@@ -104,13 +103,13 @@ export class OptionsPage {
   }
   /**
    * asynchronous func to load labels from webapi
+   * marks as true only 5, all the rest are marked as false
    * called on page load
    */
   async loadLabelsFromAPI() {
     await this.resolveAfter2Seconds();
     this.loadedLabels = this.tags as Label[]; //this.tags is the result from webapi
     let i = 0;
-    alert("load labels from api" + this.paginationLimit);
     for (; i < this.paginationLimit; i++) {
       this.labels.push({
         name: this.loadedLabels[i].Name,
@@ -126,7 +125,6 @@ export class OptionsPage {
       });
     }
     console.log(this.labels);
-    // this.lengthOfLabels = this.labels.length;
   }
   /**
    * func to add label to chosen labels
@@ -138,26 +136,17 @@ export class OptionsPage {
       name: e,
       wanted: true
     });
-    // this.labels.push({
-    //   name: e,
-    //   probability: 1,
-    //   wanted: true
-    // });
-    this.counter = this.counter + 1;
-    // this.lengthOfLabels = this.lengthOfLabels + 1;
+    this.counter = this.counter + 1;//increase number of labels
     console.log(this.userLabels);
-    // this.labels.sort((a, b) =>
-    //   a.probability < b.probability ? 1 : a.probability > b.probability ? -1 : 0
-    // );
     for (let i = 0; i < this.userLabels.length; i++) {
       if (this.userLabels[i].wanted)
         this.combinedLabels.push(this.userLabels[i].name);
-    }
+    }//////////////////bug!!! need to deal with user changing mind
     for (let i = 0; i < this.labels.length; i++) {
       if (this.labels[i].wanted) this.combinedLabels.push(this.labels[i].name);
     }
     console.log(this.combinedLabels);
-    this.value = "";
+    this.value = "";//ngmodel
     this.labels.sort((a, b) =>
       a.wanted < b.wanted ? 1 : a.wanted > b.wanted ? -1 : 0
     );
@@ -171,12 +160,9 @@ export class OptionsPage {
    */
   public changeToggle($event) {
     this.showAll = !this.showAll;
-    console.log(this.showAll);
-    alert("change toggle" + this.paginationLimit);
     if (this.paginationLimit === this.trues)
       this.paginationLimit = this.userLabels.length + this.labels.length;
     else this.paginationLimit = this.trues;
-    alert("change toggle 2" + this.paginationLimit);
   }
   /**
    * func to upload labels to server

@@ -15,7 +15,6 @@
 <ion-content>
   <ion-spinner name="bubbles" [hidden]="labels.length != 0"></ion-spinner>
   <ion-toggle (ionChange)="changeToggle($event)"></ion-toggle>
-
   <ion-list
     ion-item
     *ngFor="let label of userLabels| slice: 0: userLabels.length"
@@ -28,8 +27,6 @@
     ></ion-checkbox
     ><ion-label>{{ label.name }} {{ label.probability }}</ion-label>
   </ion-list>
-
-
   <ion-list
     ion-item
     *ngFor="let label of labels | slice: 0:paginationLimit"
@@ -42,14 +39,6 @@
     ></ion-checkbox
     ><ion-label>{{ label.name }} {{ label.probability }}</ion-label>
   </ion-list>
-
-  <!-- <ion-list ion-item *ngFor="let label of labels">
-    <ion-checkbox
-      (ionChange)="itemClicked($event)"
-      [checked]="label.wanted"
-    ></ion-checkbox
-    ><ion-label>{{ label.name }}</ion-label>
-  </ion-list> -->
   <br />
 
   <ion-item *ngIf="counter < 10">
