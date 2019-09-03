@@ -1,9 +1,17 @@
 import { Component } from "@angular/core";
-import { IonicPage, NavController, NavParams, LoadingController, Loading  } from "ionic-angular";
+import {
+  IonicPage,
+  NavController,
+  NavParams,
+  LoadingController,
+  Loading
+} from "ionic-angular";
 import { ApiPictureProvider } from "../../providers/api-picture/api-picture";
 import { Label } from "../../app/classes/Label";
 import { Observable } from "rxjs";
 import { ImageSnippet } from "../../app/classes/Image";
+import { SpinnerDialog } from "@ionic-native/spinner-dialog/ngx";
+import {NgZone} from '@angular/core';
 /**
  * Generated class for the OptionsPage page.
  *
@@ -16,50 +24,39 @@ import { ImageSnippet } from "../../app/classes/Image";
   selector: "page-options",
   templateUrl: "options.html"
 })
-export class OptionsPage {  
+export class OptionsPage {
   labels: Array<{ name: string; probability: number; wanted: boolean }>;
   image: string;
   counter: number;
   tags: any;
   loaded = false;
+  show10: boolean;
+  paginationLimit:number;
   ngOnInit() {
     this.labels = new Array<{
       name: string;
       probability: number;
       wanted: boolean;
     }>();
-    // this.f1();
-  }
-  ionViewWillEnter() {
-    // this.f1();
-  }
-  ionViewLoaded() {
-    // let loader = this.loadingController.create({
-    //   content: 'Getting latest entries...',
-    // });
-  
-    // loader.present().then(() => {
-    //   this.f1(this.image);
-    //   loader.dismiss();
-    // });
   }
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    public apPic: ApiPictureProvider
+    public apPic: ApiPictureProvider,
+    public loadingController: LoadingController,
+    private zone: NgZone,
   ) {
     this.labels = new Array<{
       name: string;
       probability: number;
       wanted: boolean;
     }>();
-    this.image = ""; //need to be loaded from service
-    this.f1(this.image);
-
-    //need to be loaded from service
-    // this.getLabels();
+    this.f1();
     this.labels = [];
+    this.show10 = false;
+    this.paginationLimit = 5;
   }
+  loadedLabels: Label[];
   itemClicked(e): void {
     if (!e.checked) {
       this.counter--;
@@ -84,24 +81,33 @@ export class OptionsPage {
     this.value = "";
     console.log(this.labels);
   }
-
-  resolveAfter2Seconds(path: string) {
+  imageData = localStorage.getItem('loadedImage');
+  resolveAfter2Seconds() {
     return new Promise(resolve => {
       setTimeout(() => {
         resolve(
-          this.apPic.GetLabels(path).then(data => {
+          // this.apPic.GetLabels().then(data => {            
+            this.apPic.InsertImages(this.imageData).then(data=>{
             this.tags = data;
-            console.log(this.tags);
             this.loaded = true;
           })
         );
-      }, 4000);
+      }, 200);
     });
   }
-  loadedLabels: Label[];
+  public update($event){
+    console.log(event);
+    console.log("Segment clicked! " + $event.value, this, event);
+          if(this.labels.length> 0){
+            this.show10 = !this.show10;
+            console.log(this.show10);
+            if(this.paginationLimit == 10) this.paginationLimit = 5;
+            else this.paginationLimit = 10;
+            }    
+  }
+  async f1() {
+    var x = await this.resolveAfter2Seconds();
 
-  async f1(path: string) {
-    var x = await this.resolveAfter2Seconds(path);
     this.loadedLabels = this.tags as Label[];
     let i = 0;
     for (; i < this.loadedLabels.length; i++) {
@@ -110,81 +116,9 @@ export class OptionsPage {
         probability: this.loadedLabels[i].Probability,
         wanted: true
       });
+      console.log(this.labels);
     }
-    this.counter = i + 1;
+    this.counter = i;
   }
   selectedFile: ImageSnippet;
-  processFile($event): void {
-    const file: File = $event.target.files[0];
-    const reader = new FileReader();
-    var preview;
-    reader.addEventListener("load", (event: any) => {
-      preview = document.getElementById("preview");
-      this.selectedFile = new ImageSnippet(event.target.result, file);
-
-      this.selectedFile.pending = true;
-      // this.imageService.uploadImage(this.selectedFile.file).subscribe(
-      //   (res) => {
-      //     this.onSuccess();
-      //   },
-      //   (err) => {
-      //     this.onError();
-      //   })
-      preview.src = reader.result;
-    });
-
-    reader.readAsDataURL(file);
-  }
-  // this.tags = x;
-  // console.log(this.tags);
-  // console.log(x); // 10
-  // let i = 0;
-  // for (; i < 10; i++) {
-  //from service
-
-  //   this.labels.push({
-  //     name: "Item " + i,
-  //     probability: Math.random(),
-  //     wanted: true
-  //   });
-  //   this.counter = i + 1;
-  // }
-
-  // public getLabels() {
-  //   this.apPic.GetLabels().subscribe(res => {
-  //     this.tags = res as Label[];
-  //     console.log(this.tags);
-  //     console.log(res);
-  //   });
-  // }
-  // this.apPic.GetLabels().subscribe(data => {
-  //   this.tags = data;
-  //   console.log(this.tags);
-  // });
-  // console.log();
-  // this.apPic.GetLabels().subscribe(val => console.log(val));
-  // this.apPic.GetLabels();
-  // .then(data => {
-  //   this.tags = data as Label[];
-  // });
-  // this.f1();
-  // this.load();
-  // this.apPic.GetLabels().then(data => { works august 29 part 2, throws exceptions
-  //   this.tags = data;
-  //   console.log(data);
-  // });
-
-  // this.apPic.GetLabels().subscribe( works august 29, except for async
-  //   res => {
-  //     this.tags = res;
-  //   },
-  //   err => {
-  //     console.log("sorry! there was an error!");
-  //     console.error(err);
-  //   }
-  // );
-  ionViewDidLoad() {
-    console.log("ionViewDidLoad OptionsPage");
-  }
-
 }
