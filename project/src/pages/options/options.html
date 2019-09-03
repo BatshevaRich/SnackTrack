@@ -13,15 +13,34 @@
   </ion-navbar>
 </ion-header>
 <ion-content>
-      <ion-spinner name="bubbles" [hidden] = "labels.length != 0"></ion-spinner>
-  <ion-toggle  (ionChange)="update($event)"></ion-toggle>
-  <ion-list ion-item *ngFor="let label of labels | slice : 0:paginationLimit" [hidden] = "labels.length == 0">
-      <ion-checkbox
+  <ion-spinner name="bubbles" [hidden]="labels.length != 0"></ion-spinner>
+  <ion-toggle (ionChange)="changeToggle($event)"></ion-toggle>
+
+  <ion-list
+    ion-item
+    *ngFor="let label of userLabels| slice: 0: userLabels.length"
+    [hidden]="labels.length == 0"
+  >
+    <ion-checkbox
+      [disabled]="!label.wanted &&this.counter == 10"
+      (ionChange)="itemClicked($event)"
+      [(ngModel)]= "label.wanted"
+    ></ion-checkbox
+    ><ion-label>{{ label.name }} {{ label.probability }}</ion-label>
+  </ion-list>
+
+
+  <ion-list
+    ion-item
+    *ngFor="let label of labels | slice: 0:paginationLimit"
+    [hidden]="labels.length == 0"
+  >
+    <ion-checkbox
       [disabled]="!label.wanted && this.counter == 10"
-        (ionChange)="itemClicked($event)"
-        [(ngModel)]="label.wanted"
-      ></ion-checkbox
-      ><ion-label>{{ label.name }} {{label.probability}}</ion-label>
+      (ionChange)="itemClicked($event)"
+      [(ngModel)]="label.wanted"
+    ></ion-checkbox
+    ><ion-label>{{ label.name }} {{ label.probability }}</ion-label>
   </ion-list>
 
   <!-- <ion-list ion-item *ngFor="let label of labels">
@@ -33,7 +52,6 @@
   </ion-list> -->
   <br />
 
-  
   <ion-item *ngIf="counter < 10">
     <ion-label color="primary" floating>Add Label</ion-label>
     <ion-input
@@ -43,5 +61,12 @@
     ></ion-input>
   </ion-item>
 
-  <button ion-button color="primary" (click)="uploadData()" [hidden] = "labels.length == 0">OK</button>
-  </ion-content>
+  <button
+    ion-button
+    color="primary"
+    (click)="uploadData()"
+    [hidden]="labels.length == 0"
+  >
+    OK
+  </button>
+</ion-content>
