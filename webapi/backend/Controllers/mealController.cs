@@ -29,9 +29,9 @@ namespace backend.Controllers
         }
 
         // GET: api/meal/5
-        public string Get(int id)
+        public List<Meal> Get(DateTime dateTime)
         {
-            return "value";
+            return Manager.getMealsToDay(dateTime);
         }
         /// <summary>
         /// function to add the picture to storage, and add labels + imagepath to db.
