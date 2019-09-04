@@ -2,7 +2,6 @@ import { BrowserModule } from "@angular/platform-browser";
 import { NgModule, ErrorHandler } from "@angular/core";
 import { IonicApp, IonicModule, IonicErrorHandler } from "ionic-angular";
 import { MyApp } from "./app.component";
-import { ItemDetailsPage } from "../pages/item-details/item-details";
 import { OptionsPage } from "../pages/options/options";
 import { DayPage } from "../pages/day/day";
 import { StatusBar } from "@ionic-native/status-bar";
@@ -18,7 +17,6 @@ import { MealProvider } from '../providers/meal/meal';
 @NgModule({
   declarations: [
     MyApp,
-    ItemDetailsPage,
     OptionsPage,
     DayPage,
     CameraPage
@@ -33,7 +31,6 @@ import { MealProvider } from '../providers/meal/meal';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    ItemDetailsPage,
     OptionsPage,
     DayPage,
     CameraPage
