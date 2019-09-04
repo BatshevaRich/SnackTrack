@@ -51,11 +51,12 @@ namespace dal
             listLabels.ForEach(ls => ls.Split(',').ToList().ForEach(l => labelsSet.Add(l)));
             return labelsSet.ToList();
         }
-        public static string UploadFile(string bucketName, string localPath, string objectName = null)
+        public static string UploadFileToStorage(string bucketName, string localPath, string objectName = null)
         {
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "C:\\key\\DietDiary-f95b600d05ed.json");
             // var env = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS");
             var storage = StorageClient.Create();
+            File.WriteAllBytes(@"c:\yourfile", Convert.FromBase64String(localPath));
             using (var f = File.OpenRead(localPath))
             {
                 objectName = objectName ?? Path.GetFileName(localPath);

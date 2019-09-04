@@ -26,9 +26,7 @@ namespace backend.Controllers
         [HttpGet]
         public List<Meal> Get()
         {
-
             //Manager.UploadFile("dietdiaryfoodpics", "C:\\Users\\owner\\Downloads\\download (6).jpg", "bread.jpg");
-
             return Manager.getAllMeals();
         }
 
@@ -37,11 +35,22 @@ namespace backend.Controllers
         {
             return "value";
         }
-
+        //[FromBody]
+        //Meal value
+        [Route("upload")]
+        [HttpPost]
         // POST: api/meal
-        public void Post([FromBody]Meal value)
+        public async Task<IHttpActionResult> InsertImagesAsync()
         {
+            var path = HttpContext.Current.Request.Form["path"];
+            var hour = HttpContext.Current.Request.Form["hour"];
+            var labels = HttpContext.Current.Request.Form["labels"];
 
+            var provider = new MultipartMemoryStreamProvider();
+            await Request.Content.ReadAsMultipartAsync(provider);
+            Manager.UploadFileToStorage("dietdiaryfoodpics", path, hour);
+
+            return Ok();
         }
 
         // PUT: api/meal/5
