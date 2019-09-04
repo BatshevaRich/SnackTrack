@@ -14,16 +14,22 @@
 </ion-header>
 <ion-content>
   <ion-spinner name="bubbles" [hidden]="labels.length != 0"></ion-spinner>
-  <ion-toggle (ionChange)="changeToggle($event)"></ion-toggle>
+  <img *ngIf="load" [src]="domSanitizer.bypassSecurityTrustUrl(base64Image)" />
+  <ion-label
+    ><ion-toggle
+      ion-toggle-text
+      (ionChange)="changeToggle($event)"
+    ></ion-toggle>
+  </ion-label>
   <ion-list
     ion-item
-    *ngFor="let label of userLabels| slice: 0: userLabels.length"
+    *ngFor="let label of userLabels | slice: 0:userLabels.length"
     [hidden]="labels.length == 0"
   >
     <ion-checkbox
-      [disabled]="!label.wanted &&this.counter == 10"
+      [disabled]="!label.wanted && this.counter == 10"
       (ionChange)="itemClicked($event)"
-      [(ngModel)]= "label.wanted"
+      [(ngModel)]="label.wanted"
     ></ion-checkbox
     ><ion-label>{{ label.name }} {{ label.probability }}</ion-label>
   </ion-list>

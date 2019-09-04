@@ -36,11 +36,11 @@ export class MealProvider {
   public SaveToServer(path: string, hour: Date, labels: string[]): any {
     let _formData = new FormData();
     var meal = new Meal(path, hour, labels);
-    _formData.append("path", path);
-    _formData.append("hour", hour.toDateString());
-    for (let i = 0; i < labels.length; i++) {
-      _formData.append("labels", labels[i]);
-    }
+     _formData.append("path", path);
+    // _formData.append("hour", hour.toDateString());
+    let allLabels: string = labels.join(',');
+    _formData.append("labels", allLabels);
+    alert(allLabels);
     var res = this.http.post(
       this.baseURL + "meal/upload",
       _formData
@@ -51,4 +51,19 @@ export class MealProvider {
       });
     });
   }
+
+
+  public GetTodayMeals(myDate: Date){
+    let myS:number = 1;
+    var res = this.http.get(
+      this.baseURL + "meal?dateTime=" + myS
+    );
+    return new Promise(resolve=>{
+      res.subscribe(data=>{
+        resolve(data);
+      })
+    })
+  }
+
+
 }

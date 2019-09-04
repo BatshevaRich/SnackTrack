@@ -5,6 +5,7 @@ import { ImageSnippet } from "../../app/classes/Image";
 import { Label } from "../../app/classes/Label";
 import { Observable } from "rxjs";
 import { OptionsPage } from "../options/options";
+import { MealProvider } from "../../providers/meal/meal";
 /**
  * Generated class for the CameraPage page.
  *
@@ -19,76 +20,54 @@ import { OptionsPage } from "../options/options";
   providers: [ApiPictureProvider]
 })
 export class CameraPage {
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    public apPic: ApiPictureProvider
-  ) {}
+    public apPic: ApiPictureProvider,
+    public meal: MealProvider
+  ) {
+    meal.GetTodayMeals(new Date(2019,9,4,1, 22, 41));
+
+  }
   selectedFile: ImageSnippet;
   loadedLabels: Label[];
   fileToUpload: File = null;
   urls: string[] = new Array();
-/**
- * processes the file, saves a base64 string in the local storage, and opens options page
- * @param $event the input file html object
- */
+  /**
+   * processes the file, saves a base64 string in the local storage, and opens options page
+   * @param $event the input file html object
+   */
   sendImage($event): void {
     const file: File = $event.target.files[0];
     var reader = new FileReader();
     reader.onload = (event: any) => {
+      localStorage.clear();
       localStorage.setItem("loadedImage", event.target.result);
     };
     reader.readAsDataURL(file);
-    this.navCtrl.setRoot(OptionsPage);//go to next page
+    this.navCtrl.setRoot(OptionsPage); //go to next page
   }
-
-  processFile($event): void {
-    const file: File = $event.target.files[0];
-    let _formData = new FormData();
-    this.fileToUpload = file;
-    _formData.append("file", this.fileToUpload);
-    var reader = new FileReader();
-    reader.onload = (event: any) => {
-      this.urls.push(event.target.result);
-      console.log(event.target.result);
-    };
-    reader.readAsDataURL(file);
-    console.log(JSON.stringify(_formData));
-    localStorage.setItem("loadedImage", JSON.stringify(_formData));
-
-    this.InsertImages(_formData); //send the images' url to the server = in order to init the table
-  }
-  InsertImages(_formData: FormData) {
-    debugger;
-    this.apPic.InsertImages(_formData).subscribe((res: any) => {
-      alert(res);
-    });
-  }
-  private onSuccess() {
-    this.selectedFile.pending = false;
-    this.selectedFile.status = "ok";
-  }
-
-  private onError() {
-    this.selectedFile.pending = false;
-    this.selectedFile.status = "fail";
-    this.selectedFile.src = "";
-  }
-
   processing: boolean;
-  uploadImage: string;
+  uploadImage: any;
+  /**
+   * func to deal with the input file
+   * @param fileLoader the input file html object
+   */
   presentActionSheet(fileLoader) {
     fileLoader.click();
-    var that = this;
+    var that = this; //parameter instead of this, because addEventListener cannot touch this items
     fileLoader.onchange = function() {
       var file = fileLoader.files[0];
       var reader = new FileReader();
-
       reader.addEventListener(
+        //after the file loads
         "load",
         function() {
           that.processing = true;
           that.getOrientation(fileLoader.files[0], function(orientation) {
+            //callback func sent to getOrientation func, this function is called from there
+            //the purpose of this function is to rotate the image if needes
             if (orientation > 1) {
               that.resetOrientation(reader.result, orientation, function(
                 resetBase64Image
@@ -102,7 +81,6 @@ export class CameraPage {
         },
         false
       );
-
       if (file) {
         reader.readAsDataURL(file);
       }
@@ -111,6 +89,11 @@ export class CameraPage {
   imageLoaded() {
     this.processing = false;
   }
+  /**
+   *
+   * @param file the input image
+   * @param callback callback function to set orientation
+   */
   getOrientation(file, callback) {
     var reader = new FileReader();
     reader.onload = function(e: any) {
@@ -140,13 +123,11 @@ export class CameraPage {
   }
   resetOrientation(srcBase64, srcOrientation, callback) {
     var img = new Image();
-
     img.onload = function() {
       var width = img.width,
         height = img.height,
         canvas = document.createElement("canvas"),
         ctx = canvas.getContext("2d");
-
       // set proper canvas dimensions before transform & export
       if (4 < srcOrientation && srcOrientation < 9) {
         canvas.width = height;
@@ -155,7 +136,6 @@ export class CameraPage {
         canvas.width = width;
         canvas.height = height;
       }
-
       // transform context before drawing image
       switch (srcOrientation) {
         case 2:
@@ -182,16 +162,16 @@ export class CameraPage {
         default:
           break;
       }
-
       // draw image
       ctx.drawImage(img, 0, 0);
-
       // export base64
       callback(canvas.toDataURL());
     };
-
     img.src = srcBase64;
   }
+  /**
+   * function to remove the picture from display
+   */
   removePic() {
     this.uploadImage = null;
   }

@@ -9,13 +9,9 @@ import {
 } from "ionic-angular";
 import { ApiPictureProvider } from "../../providers/api-picture/api-picture";
 import { Label } from "../../app/classes/Label";
-import { Observable } from "rxjs";
-import { ImageSnippet } from "../../app/classes/Image";
-import { SpinnerDialog } from "@ionic-native/spinner-dialog/ngx";
-import { NgZone } from "@angular/core";
+import { DomSanitizer } from "@angular/platform-browser";
 import { MealProvider } from "../../providers/meal/meal";
 import { filter } from "rxjs/operator/filter";
-import { stringify } from "@angular/core/src/util";
 /**
  * Generated class for the OptionsPage page.
  *
@@ -29,27 +25,37 @@ import { stringify } from "@angular/core/src/util";
   templateUrl: "options.html"
 })
 export class OptionsPage {
+  ionViewWillEnter() {
+    this.imageData = localStorage.getItem("loadedImage");
+    this.load = true;
+    this.base64Image = this.imageData;
+    console.log(this.base64Image);
+  }
   labels: Array<{ name: string; probability: number; wanted: boolean }>;
   userLabels: Array<{ name: string; wanted: boolean }>;
   counter: number;
   tags: any;
   showAll: boolean;
+  load: boolean;
   paginationLimit: number;
   loadedLabels: Label[];
   imageData = localStorage.getItem("loadedImage");
   combinedLabels: string[];
-  value = "";//for ngmodel, to clean input box
+  value = ""; //for ngmodel, to clean input box
   trues: number;
+  private base64Image: string;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public apPic: ApiPictureProvider,
     public loadingController: LoadingController,
-    private mealProvider: MealProvider
+    private mealProvider: MealProvider,
+    private domSanitizer: DomSanitizer
   ) {
+    this.load = true;
     this.loadLabelsFromAPI();
     //init arrays
-    this.labels = new Array<{  
+    this.labels = new Array<{
       name: string;
       probability: number;
       wanted: boolean;
@@ -64,6 +70,7 @@ export class OptionsPage {
     this.showAll = false;
     this.trues = 5;
     this.counter = 5;
+    this.base64Image = this.imageData;
   }
   /**
    * func to increase/decrease counter of selected labels
@@ -76,6 +83,15 @@ export class OptionsPage {
       this.counter--;
     } else {
       if (this.counter < 10) this.counter++;
+    }
+
+    this.combinedLabels = [];
+    for (let i = 0; i < this.userLabels.length; i++) {
+      if (this.userLabels[i].wanted)
+        this.combinedLabels.push(this.userLabels[i].name);
+    }
+    for (let i = 0; i < this.labels.length; i++) {
+      if (this.labels[i].wanted) this.combinedLabels.push(this.labels[i].name);
     }
     this.labels.sort((a, b) =>
       a.wanted < b.wanted ? 1 : a.wanted > b.wanted ? -1 : 0
@@ -96,9 +112,10 @@ export class OptionsPage {
           //send the local storage base64 path
           this.apPic.InsertImages(this.imageData).then(data => {
             this.tags = data;
+            console.log(this.tags.length);
           })
         );
-      }, 200);
+      }, 400);
     });
   }
   /**
@@ -110,6 +127,8 @@ export class OptionsPage {
     await this.resolveAfter2Seconds();
     this.loadedLabels = this.tags as Label[]; //this.tags is the result from webapi
     let i = 0;
+    if (this.paginationLimit > this.tags.length)
+      this.paginationLimit = this.tags.length;
     for (; i < this.paginationLimit; i++) {
       this.labels.push({
         name: this.loadedLabels[i].Name,
@@ -123,6 +142,9 @@ export class OptionsPage {
         probability: this.loadedLabels[i].Probability,
         wanted: false
       });
+      for (let i = 0; i < this.loadedLabels.length; i++) {
+        this.combinedLabels.push(this.loadedLabels[i].Name);
+      }
     }
     console.log(this.labels);
   }
@@ -136,21 +158,25 @@ export class OptionsPage {
       name: e,
       wanted: true
     });
-    this.counter = this.counter + 1;//increase number of labels
+    this.counter = this.counter + 1; //increase number of labels
+    this.combinedLabels = [];
     console.log(this.userLabels);
     for (let i = 0; i < this.userLabels.length; i++) {
       if (this.userLabels[i].wanted)
         this.combinedLabels.push(this.userLabels[i].name);
-    }//////////////////bug!!! need to deal with user changing mind
+    }
     for (let i = 0; i < this.labels.length; i++) {
       if (this.labels[i].wanted) this.combinedLabels.push(this.labels[i].name);
     }
+    alert("labels" + this.labels);
+    alert("combined" + this.combinedLabels);
     console.log(this.combinedLabels);
-    this.value = "";//ngmodel
+    this.value = ""; //ngmodel
     this.labels.sort((a, b) =>
       a.wanted < b.wanted ? 1 : a.wanted > b.wanted ? -1 : 0
     );
     console.log(this.labels);
+    console.log("combined", this.combinedLabels);
   }
 
   /**
@@ -169,18 +195,22 @@ export class OptionsPage {
    * called upon pressing the 'ok' button
    */
   uploadData() {
+    console.log(this.combinedLabels);
     let stringedLabels: string[]; //var to keep chosen strings
     // var l = this.labels.filter(l => l.wanted == true); //filter the wanted strings
     // stringedLabels = l.map(l => {
     //   //only need label names
     //   return l.name;
     // });
-    stringedLabels = this.combinedLabels.map(l => {
-      return l;
-    });
+    // stringedLabels = this.labels
+    //   .filter(l => l.wanted == true)
+    //   .map(l => {
+    //     return l.name;
+    //   });
+    stringedLabels = this.combinedLabels.filter(l=>l).map(l=> l);
     this.mealProvider.SaveToServer(
       localStorage.getItem("loadedImage"), //path
-      new Date(Date.now()), //time
+      new Date(), //time
       stringedLabels //labels
     );
   }
