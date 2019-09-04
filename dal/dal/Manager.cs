@@ -4,20 +4,37 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace dal
 {
     public static class Manager
     {
         public static string path = "https://storage.cloud.google.com/";
+        /// <summary>
+        /// func to add meal to db. gets an empty meal object
+        /// </summary>
+        /// <param name="m"></param>
         public static void addMeal(Meal m)
         {
             using (var contextdb = new dbDietDairyEntities())
             {
-                contextdb.meals.Add(Mapper.convertMealToEntity(m));
+                contextdb.meals.Add(Mapper.convertMealToEntityAsync(m));
+                try
+                {
                 contextdb.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    throw;
+                }
             }
         }
+        /// <summary>
+        /// func to return list of all meals. called by mealcontroller
+        /// </summary>
+        /// <returns></returns>
         public static List<backend.Models.Meal> getAllMeals()
         {
             List<meal> listMealsEntity = new List<meal>();
@@ -51,15 +68,40 @@ namespace dal
             listLabels.ForEach(ls => ls.Split(',').ToList().ForEach(l => labelsSet.Add(l)));
             return labelsSet.ToList();
         }
-        public static string UploadFileToStorage(string bucketName, string localPath, string objectName = null)
+        /// <summary>
+        /// func to upload file to google cloud storage.
+        /// </summary>
+        /// <param name="bucketName">the google cloud bucket name</param>
+        /// <param name="imageString">the base64 image string</param>
+        /// <param name="objectName"></param>
+        /// <returns></returns>
+        public static string UploadFileToStorage(string bucketName, string imageString, string objectName = null)
         {
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "C:\\key\\DietDiary-f95b600d05ed.json");
-            // var env = Environment.GetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS");
             var storage = StorageClient.Create();
-            File.WriteAllBytes(@"c:\yourfile", Convert.FromBase64String(localPath));
-            using (var f = File.OpenRead(localPath))
+
+            var base64Data = Regex.Match(imageString, @"data:image/(?<type>.+?),(?<data>.+)").Groups["data"].Value;
+            var binData = Convert.FromBase64String(base64Data);
+
+            BinaryWriter Writer = null;
+            string Name = "C:\\Users\\owner\\Desktop\\pic.jpg";
+            try
             {
-                objectName = objectName ?? Path.GetFileName(localPath);
+                // Create a new stream to write to the file
+                Writer = new BinaryWriter(File.OpenWrite(Name));
+
+                // Writer raw data                
+                Writer.Write(binData);
+                Writer.Flush();
+                Writer.Close();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            using (var f = File.OpenRead(Name))
+            {
+                objectName = DateTime.Now.ToString(@"MM\-dd\-yyyy-h\:mm");
                 var x = storage.UploadObject(bucketName, objectName, null, f);
                 Console.WriteLine($"Uploaded {objectName}.");
             }

@@ -22,11 +22,9 @@ namespace backend.Controllers
     public class mealController : ApiController
     {
         // GET: api/meal
-        //[Route("get")]
         [HttpGet]
         public List<Meal> Get()
         {
-            //Manager.UploadFile("dietdiaryfoodpics", "C:\\Users\\owner\\Downloads\\download (6).jpg", "bread.jpg");
             return Manager.getAllMeals();
         }
 
@@ -35,21 +33,28 @@ namespace backend.Controllers
         {
             return "value";
         }
-        //[FromBody]
-        //Meal value
+        /// <summary>
+        /// function to add the picture to storage, and add labels + imagepath to db.
+        /// calls function that deals with adding.
+        /// </summary>
+        /// <returns></returns>
         [Route("upload")]
         [HttpPost]
         // POST: api/meal
         public async Task<IHttpActionResult> InsertImagesAsync()
-        {
+        {   
+            var provider = new MultipartMemoryStreamProvider();
+            await Request.Content.ReadAsMultipartAsync(provider);
+            List<string> labelsFromFrontend = new List<string>();
             var path = HttpContext.Current.Request.Form["path"];
             var hour = HttpContext.Current.Request.Form["hour"];
             var labels = HttpContext.Current.Request.Form["labels"];
-
-            var provider = new MultipartMemoryStreamProvider();
-            await Request.Content.ReadAsMultipartAsync(provider);
-            Manager.UploadFileToStorage("dietdiaryfoodpics", path, hour);
-
+            foreach (var item in labels.Split(',').ToList())
+            {
+                labelsFromFrontend.Add(item);
+            }
+            Meal meal = new Meal() { DateOfPic = DateTime.Now, Labels = labelsFromFrontend, Path = path };
+            Manager.addMeal(meal);
             return Ok();
         }
 
