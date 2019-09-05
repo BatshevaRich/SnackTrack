@@ -17,12 +17,17 @@ namespace backend
 
             var cors = new EnableCorsAttribute("http://localhost:8100", "*", "*");
             config.EnableCors(cors);
-
+            //config.Routes.MapHttpRoute(
+            //    name: "calendar",
+            //    routeTemplate: "api/calendar/getmonth/{month}",
+            //    defaults: new { controller="calendar", action= "getmonth", month =RouteParameter.Optional }
+            //    );
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+            
         }
     }
 }

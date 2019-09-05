@@ -169,3 +169,4 @@ C:\Users\owner\Documents\GitHub\DietDiaryBackend\backend\obj\Debug\backend.cspro
 C:\Users\owner\Documents\GitHub\DietDiaryBackend\backend\obj\Debug\backend.csproj.CopyComplete
 C:\Users\owner\Documents\GitHub\DietDiaryBackend\backend\obj\Debug\backend.dll
 C:\Users\owner\Documents\GitHub\DietDiaryBackend\backend\obj\Debug\backend.pdb
+C:\Users\owner\Documents\GitHub\DietDiaryBackend\backend\obj\Debug\backend.csprojAssemblyReference.cache
