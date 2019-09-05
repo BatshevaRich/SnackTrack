@@ -12,10 +12,11 @@ namespace dal
             res.path = Manager.UploadFileToStorage("dietdiaryfoodpics", meal.Path);
             foreach (var item in meal.Labels)
             {
-                res.tags += "," + item;
+                if (res.tags.Equals(""))
+                    res.tags += item;
+                else res.tags += "," + item;
             }
             res.dateTime = meal.DateOfPic;
-
             return res;
         }
         public static Meal convertEntityToMeal(meal meal)
