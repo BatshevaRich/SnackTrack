@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-
 import {
   NavController,
   NavParams,
@@ -60,8 +59,6 @@ trues: number;
     this.base64Image = this.imageData;
     console.log(this.base64Image);
   }
-
-
   /**
    * func to increase/decrease counter of selected labels
    * also sorts list by trues/not, so the trues are in the beginnig of the list
@@ -109,6 +106,7 @@ resolveAfter2Seconds() {
       }, 400);
     });
   }
+
   /**
    * asynchronous func to load labels from webapi
    * marks as true only 5, all the rest are marked as false
@@ -138,8 +136,8 @@ resolveAfter2Seconds() {
         this.combinedLabels.push(this.loadedLabels[i].Name);
       }
     }
-    console.log(this.labels);
   }
+ 
   /**
    * func to add label to chosen labels
    * called on add input of new label
@@ -171,7 +169,6 @@ addedLabel(e: string): void {
     console.log(this.labels);
     console.log('combined', this.combinedLabels);
   }
-
   /**
    * TODO: change so shows all selected
    * func to update toggle view, either shows 5 items or all items
@@ -190,24 +187,13 @@ addedLabel(e: string): void {
 uploadData() {
     console.log(this.combinedLabels);
     let stringedLabels: string[]; // var to keep chosen strings
-    // var l = this.labels.filter(l => l.wanted == true); //filter the wanted strings
-    // stringedLabels = l.map(l => {
-    //   //only need label names
-    //   return l.name;
-    // });
-    // stringedLabels = this.labels
-    //   .filter(l => l.wanted == true)
-    //   .map(l => {
-    //     return l.name;
-    //   });
     stringedLabels = this.combinedLabels.filter(l => l).map(l => l);
     this.mealProvider.SaveToServer(
       localStorage.getItem('loadedImage'), // path
       new Date(), // time
       stringedLabels // labels
     );
-
+    //localStorage.clear();
     alert('uploaded');
-
   }
 }

@@ -18,23 +18,8 @@
       ion-toggle-text
       (ionChange)="changeToggle($event)"
     ></ion-toggle>
-  </ion-label>
-<br>
-  <ion-item *ngIf = "labels.length> 0">
-    <ion-list
-      ion-item
-      *ngFor="let label of labels | slice: 0:paginationLimit"
-      [hidden]="labels.length == 0"
-    >
-      <ion-checkbox
-        [disabled]="!label.wanted && this.counter == 10"
-        (ionChange)="itemClicked($event)"
-        [(ngModel)]="label.wanted"
-      ></ion-checkbox
-      ><ion-label>{{ label.name }} {{ label.probability }}</ion-label>
-    </ion-list>
-  </ion-item>
-  <ion-item     *ngIf="userLabels > 0">
+    
+  </ion-label><br>
   <ion-list
     ion-item
     *ngFor="let label of userLabels | slice: 0:userLabels.length"
@@ -47,8 +32,6 @@
     ></ion-checkbox
     ><ion-label>{{ label.name }} {{ label.probability }}</ion-label>
   </ion-list>
-</ion-item>
-  <ion-item   *ngIf = "labels> 0">
   <ion-list
     ion-item
     *ngFor="let label of labels | slice: 0:paginationLimit"
@@ -61,8 +44,8 @@
     ></ion-checkbox
     ><ion-label>{{ label.name }} {{ label.probability }}</ion-label>
   </ion-list>
-</ion-item>
   <br />
+
   <ion-item *ngIf="counter < 10">
     <ion-label color="primary" floating>Add Label</ion-label>
     <ion-input
@@ -70,13 +53,13 @@
       #box
       (change)="addedLabel(box.value)"
     ></ion-input>
-  </ion-item> 
+  </ion-item>
+
   <button
     ion-button
     color="primary"
     (click)="uploadData()"
     [hidden]="labels.length == 0"
-    routerLink="../home"
   >
     OK
   </button>

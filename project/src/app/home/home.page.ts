@@ -9,7 +9,6 @@ import { Router, NavigationExtras } from '@angular/router';
 import { Meal } from '../classes/Meal';
 import { CalendarService } from '../Providers/calendar.service';
 
-
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -17,19 +16,12 @@ import { CalendarService } from '../Providers/calendar.service';
 })
 
 export class HomePage implements OnInit {
-
   // @ViewChild(CalendarComponent) myCal: CalendarComponent;
-  event = {
-    title: '',
-    desc: '',
-    startTime: '',
-    endTime: '',
-    allDay: false
-  };
+  event: DayMeal;
   minDate = new Date().toISOString();
 
-   //all meals returned from server
-  eventSource: Meal[];
+   // all meals returned from server
+  eventSource=new Array<DayMeal>();
   viewTitle;
 
   calendar = {
@@ -37,20 +29,20 @@ export class HomePage implements OnInit {
     currentDate: new Date(),
   };
 
-   flag = 0;
-  constructor(private alertCtrl: AlertController, @Inject(LOCALE_ID) private locale: string , private router: Router, private calendarS: CalendarService) {
+  flag = 0;
+  constructor(private alertCtrl: AlertController, @Inject(LOCALE_ID) private locale: string , private router: Router, private calendarS: CalendarService){
     // this.loadLabelsFromAPI();
    }
-  
-   resolveAfter2Seconds(date: Date) {
+
+  resolveAfter2Seconds(date: Date) {
     return new Promise(resolve => {
       setTimeout(() => {
         resolve(
-          //send the local storage base64 path
+          // send the local storage base64 path
           this.calendarS.LoadFoodsFromServerForDay(date).then(data => {
             console.log(data);
             this.eventSource = [];
-            this.eventSource = data as Meal[];
+            this.eventSource = data as Array<DayMeal>;
             alert(this.eventSource);
           })
         );
@@ -62,71 +54,70 @@ export class HomePage implements OnInit {
    * marks as true only 5, all the rest are marked as false
    * called on page load
    */
-  async loadLabelsFromAPI(date: Date) {
+  async loadLabelsFromAPI(date: Date){
     await this.resolveAfter2Seconds(date);
 
   }
-  
+
 
 
   ngOnInit() {
-    this.resetEvent();
-    const eventCopy = {
-      title: 'this.event.title',
-      startTime:  new Date(),
-      endTime: new Date(),
-      path: 'this.event.path',
-      desc: 'this.event.desc'
-    }
- //send eventCopy to api
-    //this.eventSource.push(eventCopy);
+    // this.resetEvent();
+    // const eventCopy = {
+    //   title: 'this.event.title',
+    //   startTime:  new Date().toISOString(),
+    //   endTime: new Date().toISOString(),
+    //   path: 'this.event.path',
+    //   desc: 'this.event.desc'
+    // };
+ // send eventCopy to api
+    // this.eventSource.push(eventCopy);
   }
 
   resetEvent() {
-    this.event = {
-      title: '',
-      desc: '',
-      startTime: new Date().toISOString(),
-      endTime: new Date().toISOString(),
-      allDay: false
+    this.event= {
+      path: '',
+hourS: new Date().toISOString(),
+hourE: new Date().toISOString(),
+categories:[]
     };
   }
 
   // Create the right event format and reload source
-  addEvent() {
-    const eventCopy = {
-      title: this.event.title,
-      startTime:  new Date(this.event.startTime),
-      endTime: new Date(this.event.endTime),
-      allDay: this.event.allDay,
-      desc: this.event.desc
-    }
+  // addEvent(); {
+  //   const eventCopy = {
+  //     title: this.event.title,
+  //     startTime:  new Date(this.event.startTime),
+  //     endTime: new Date(this.event.endTime),
+  //     allDay: this.event.allDay,
+  //     desc: this.event.desc
+  //   };
 
-    if (eventCopy.allDay) {
-      const start = eventCopy.startTime;
-      const end = eventCopy.endTime;
+  //   if (eventCopy.allDay) {
+  //     const start = eventCopy.startTime;
+  //     const end = eventCopy.endTime;
 
-      eventCopy.startTime = new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), start.getUTCDate()));
-      eventCopy.endTime = new Date(Date.UTC(end.getUTCFullYear(), end.getUTCMonth(), end.getUTCDate() + 1));
-    }
-  //send eventCopy to api????????????????? opens the take picture page.... or something else?????
+  //     eventCopy.startTime = new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), start.getUTCDate()));
+  //     eventCopy.endTime = new Date(Date.UTC(end.getUTCFullYear(), end.getUTCMonth(), end.getUTCDate() + 1));
+  //   }
+  // // send eventCopy to api????????????????? opens the take picture page.... or something else?????
 
-    //this.eventSource.push(eventCopy);
-    // this.myCal.loadEvents();
-    this.resetEvent();
-  }
-   next() {
-    var swiper = document.querySelector('.swiper-container')['swiper'];
+  //   // this.eventSource.push(eventCopy);
+  //   // this.myCal.loadEvents();
+  //   this.resetEvent();
+  // }
+  next() {
+    let swiper = document.querySelector('.swiper-container')['swiper'];
     swiper.slideNext();
   }
 
-  back() {
-    var swiper = document.querySelector('.swiper-container')['swiper'];
+  back(){
+    let swiper = document.querySelector('.swiper-container')['swiper'];
     swiper.slidePrev();
   }
 
   // Change between month/week/day
-  changeMode(mode) {
+  changeMode(mode){
     this.calendar.mode = mode.detail.value;
   }
 
@@ -143,8 +134,8 @@ export class HomePage implements OnInit {
   // Calendar event was clicked
   async onEventSelected(event) {
     // Use Angular date pipe for conversion
-    const start = formatDate(event.startTime, 'medium', this.locale);
-    const end = formatDate(event.endTime, 'medium', this.locale);
+    let start = formatDate(event.hourS, 'medium', this.locale);
+    const end = formatDate(event.hourE, 'medium', this.locale);
 
     const alert = await this.alertCtrl.create({
       header: event.title,
@@ -156,7 +147,7 @@ export class HomePage implements OnInit {
   }
 
 
-  ionChange(event)  {
+  ionChange(event) {
     const navigationExtras: NavigationExtras = {
       queryParams: {
         special: JSON.stringify(event.currentTarget.attributes[3].textContent)
@@ -169,14 +160,25 @@ export class HomePage implements OnInit {
   // Time slot was clicked
   onTimeSelected(event) {
     const selected = new Date(event.selectedTime);
-    this.event.startTime = selected.toISOString();
+    this.event.hourS = selected.toISOString();
     selected.setHours(selected.getHours() + 1);
-    this.event.endTime = (selected.toISOString());
-
+    this.event.hourE = (selected.toISOString());
     alert(selected);
     this.loadLabelsFromAPI(selected);
 
-    //send event.... 
+    // send event....
     //
   }
+}
+export class DayMeal {
+  path: string;
+categories: string[];
+hourS: string;
+hourE: string;
+constructor(path: string, hourS: string, hourE: string, categories: string[]) {
+this.hourS = hourS;
+this.hourE = hourE;
+this.path = path;
+this.categories = categories;
+}
 }
