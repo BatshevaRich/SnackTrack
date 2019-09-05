@@ -1,0 +1,79 @@
+<ion-content>
+  <!-- fab placed to the bottom right -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button routerLink="../camera">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-searchbar
+    animated="true"
+    [(ngModel)]="myInput"
+    [showCancelButton]="shouldShowCancel"
+    (keyup.enter)="ionChange($event)"
+    (ionCancel)="onCancel($event)"
+    animated="true"
+    autocomplete="on"
+    spellcheck="true"
+  >
+  </ion-searchbar>
+  <!-- <ion-searchbar color="blue" autocomplete="on"  type="text" spellcheck="true" routerLink="../serch"></ion-searchbar> -->
+  <!-- <ion-icon name="calendar"></ion-icon> -->
+
+  <!-- Card for adding a new event -->
+
+  <ion-row style="background-color: blue">
+    <ion-col
+      size="3"
+      style="background-color: blue;font-size:20px;place-items:unset;"
+    >
+      {{ viewTitle }}
+    </ion-col>
+    <ion-col size="2" text-left>
+      <ion-select (ionChange)="changeMode($event)">
+        <ion-select-option value="month">Month</ion-select-option>
+        <ion-select-option value="week">Week</ion-select-option>
+        <ion-select-option value="day">Day</ion-select-option>
+      </ion-select>
+    </ion-col>
+
+    <ion-col size="2" style="background-color: blue;font-size:20px">
+    </ion-col>
+
+    <ion-col size="2" style="background-color: blue;font-size:20px">
+      <ion-header>
+        <ion-buttons slot="center" style="background-color: blue">
+          <ion-button (click)="today()">Today</ion-button>
+        </ion-buttons>
+      </ion-header>
+    </ion-col>
+
+    <!-- Move back one screen of the slides -->
+    <!-- <ion-col size="2" text-left >
+          <ion-button fill="clear" (click)="back()">
+            <ion-icon name="arrow-back" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-col> -->
+
+    <!-- Move forward one screen of the slides -->
+    <!-- <ion-col size="2" text-right style="background-color: deeppink">
+          <ion-button fill="clear" (click)="next()">
+            <ion-icon name="arrow-forward" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-col> -->
+  </ion-row>
+
+  <calendar
+    [eventSource]="eventSource"
+    [calendarMode]="calendar.mode"
+    [currentDate]="calendar.currentDate"
+    (onEventSelected)="onEventSelected($event)"
+    (onTitleChanged)="onViewTitleChanged($event)"
+    (onTimeSelected)="onTimeSelected($event)"
+    startHour="6"
+    endHour="20"
+    step="30"
+    startingDayWeek="1"
+  >
+  </calendar>
+</ion-content>

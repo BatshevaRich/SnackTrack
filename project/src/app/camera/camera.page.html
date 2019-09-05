@@ -1,0 +1,25 @@
+
+<ion-content>
+  <img>
+  
+  <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+    <ion-fab-button (click)="takePicture()">
+      <ion-icon name="camera"></ion-icon>
+      </ion-fab-button>
+      
+  </ion-fab>
+  </ion-content>
+  
+  <!-- <img [src]="currentImage" > -->
+  
+  
+  <ion-fab vertical="top" horizontal="end" slot="fixed">
+    <ion-fab-button routerLink="../home">
+      <ion-icon name="calendar" ></ion-icon>
+    </ion-fab-button>
+    <ion-fab-button routerLink="../upload">
+    <ion-icon name="cloud-upload" ></ion-icon>
+  </ion-fab-button>
+    <br>
+    
+  </ion-fab>
