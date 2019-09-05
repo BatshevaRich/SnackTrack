@@ -26,7 +26,6 @@ import { HomePage } from "../pages/home/home";
   imports: [
     BrowserModule,
     HttpClientModule,
-    HttpModule,
     CommonModule,
     IonicModule.forRoot(MyApp)
   ],
@@ -41,13 +40,9 @@ import { HomePage } from "../pages/home/home";
   providers: [
     StatusBar,
     SplashScreen,
-    { provide: ErrorHandler, useClass: IonicErrorHandler },
-    ApiPictureProvider,
     HttpClientModule,
-    CommonModule,
-    LoadPicProvider,
-    SpinnerDialog,
-    MealProvider
-  ]
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}
