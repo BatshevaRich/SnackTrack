@@ -2,6 +2,8 @@
 using Google.Cloud.Storage.V1;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -52,7 +54,18 @@ namespace dal
             List<meal> meals = new List<meal>();
             using (var contextdb = new dbDietDairyEntities())
             {
-                meals = contextdb.meals.Where(m => m.dateTime.Equals(date)).ToList();
+                // meals = contextdb.meals.Where(m => DbFunctions.TruncateTime(m.dateTime.Date) == date.Date).ToList();
+
+                //meals = contextdb.meals
+                //    .Where(m => EntityFunctions.TruncateTime(m.dateTime.Date) == EntityFunctions.TruncateTime(date.Date))
+                //    .ToList();
+
+                var query = from m in contextdb.meals
+                            where m.dateTime.Day == date.Day
+                            && m.dateTime.Month == date.Month
+                            && m.dateTime.Year == date.Year
+                            select m;
+                meals = query.ToList();
             }
             List<Meal> listMealToDay = meals.Select<meal, Meal>(m => Mapper.convertEntityToMeal(m)).ToList<Meal>();
             return listMealToDay;
