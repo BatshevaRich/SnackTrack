@@ -1,12 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
 import { Platform, MenuController, Nav } from 'ionic-angular';
-import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
-import { ListPage } from '../pages/list/list';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { OptionsPage } from '../pages/options/options';
 import { DayPage } from '../pages/day/day';
 import { CameraPage } from '../pages/camera/camera';
+import { HomePage } from '../pages/home/home';
 
 @Component({
   templateUrl: 'app.html'
@@ -14,8 +13,8 @@ import { CameraPage } from '../pages/camera/camera';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  // make HelloIonicPage the root (or first) page
-  rootPage = HelloIonicPage;
+  // make Calendar the root (or first) page
+  rootPage = CameraPage;
   pages: Array<{title: string, component: any}>;
 
   constructor(
@@ -28,11 +27,10 @@ export class MyApp {
 
     // set our app's pages
     this.pages = [
-      { title: 'Hello Ionic', component: HelloIonicPage },
-      { title: 'My First List', component: ListPage },
       { title: 'Options', component: OptionsPage},
       { title: 'Day', component:DayPage},
-      { title: 'camera', component: CameraPage }
+      { title: 'camera', component: CameraPage },
+      { title: 'Calendar', component: HomePage}
     ];
   }
 

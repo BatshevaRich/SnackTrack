@@ -17,7 +17,7 @@ export class LoadPicProvider {
   tags: Label[];
   constructor(public http: HttpClient, public apPic: ApiPictureProvider) {
     console.log('Hello LoadPicProvider Provider');
-    
+    console.log('hool');
     this.labels = new Array<{
       name: string;
       probability: number;

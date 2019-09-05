@@ -14,12 +14,14 @@ import { HttpModule } from "@angular/http";
 import { LoadPicProvider } from "../providers/load-pic/load-pic";
 import { SpinnerDialog } from "@ionic-native/spinner-dialog/ngx";
 import { MealProvider } from '../providers/meal/meal';
+import { HomePage } from "../pages/home/home";
 @NgModule({
   declarations: [
     MyApp,
     OptionsPage,
     DayPage,
-    CameraPage
+    CameraPage,
+    HomePage
   ],
   imports: [
     BrowserModule,
@@ -33,7 +35,8 @@ import { MealProvider } from '../providers/meal/meal';
     MyApp,
     OptionsPage,
     DayPage,
-    CameraPage
+    CameraPage,
+    HomePage
   ],
   providers: [
     StatusBar,
