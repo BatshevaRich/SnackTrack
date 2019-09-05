@@ -28,12 +28,15 @@ namespace backend.Controllers
         {
             return Manager.getMeals();
         }
-       
+
+        [HttpGet]
         // GET: api/meal/5
         public List<Meal> Get(DateTime date)
         {
             return Manager.getMealsToDay(date);
         }
+
+        [HttpGet]
         public List<Meal> Get(string label)
         {
             return Manager.getMealsByLabel(label);
