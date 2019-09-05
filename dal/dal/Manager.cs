@@ -6,7 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-
+using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 namespace dal
 {
     public static class Manager
@@ -53,6 +54,13 @@ namespace dal
             using (var contextdb = new dbDietDairyEntities())
             {
                 meals = contextdb.meals.Where(m => m.dateTime.Equals(date)).ToList();
+
+                var query = from m in contextdb.meals
+                            where m.dateTime.Day == date.Day
+                            && m.dateTime.Month == date.Month
+                            && m.dateTime.Year == date.Year
+                            select m;
+                meals = query.ToList();
             }
             List<Meal> listMealToDay = meals.Select<meal, Meal>(m => Mapper.convertEntityToMeal(m)).ToList<Meal>();
             return listMealToDay;
