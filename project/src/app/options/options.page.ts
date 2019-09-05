@@ -206,5 +206,8 @@ uploadData() {
       new Date(), // time
       stringedLabels // labels
     );
+
+    alert('uploaded');
+
   }
 }

@@ -34,7 +34,7 @@
       ><ion-label>{{ label.name }} {{ label.probability }}</ion-label>
     </ion-list>
   </ion-item>
-  <!-- <ion-item     *ngIf="userLabels > 0">
+  <ion-item     *ngIf="userLabels > 0">
   <ion-list
     ion-item
     *ngFor="let label of userLabels | slice: 0:userLabels.length"
@@ -61,7 +61,7 @@
     ></ion-checkbox
     ><ion-label>{{ label.name }} {{ label.probability }}</ion-label>
   </ion-list>
-</ion-item>-->
+</ion-item>
   <br />
   <ion-item *ngIf="counter < 10">
     <ion-label color="primary" floating>Add Label</ion-label>
@@ -76,6 +76,7 @@
     color="primary"
     (click)="uploadData()"
     [hidden]="labels.length == 0"
+    routerLink="../home"
   >
     OK
   </button>
