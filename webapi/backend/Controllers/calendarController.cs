@@ -5,6 +5,8 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using dal;
+using backend.Models;
 
 namespace backend.Controllers
 {
@@ -17,21 +19,14 @@ namespace backend.Controllers
         {
             return new string[] { "value1", "value2" };
         }
-        [Route("getmonth")]
+        [Route("gettoday/{date}")]
         [HttpGet]
+
         // GET: api/calendar/5
-        public string Get([FromUri] string id)
+        public List<Meal> GetToday(string date)
         {
-            return "value";
+            return Manager.getMealsToDay( DateTime.Parse( date));
         }
-        //[Route("getmonth")]
-        //[HttpGet]
-        //public void getFoodsForMonth(string month)
-        //{
-        //    int i = 0;
-        //}
-
-
 
         // POST: api/calendar
         public void Post([FromBody]string value)
