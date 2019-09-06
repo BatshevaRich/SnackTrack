@@ -67,6 +67,7 @@ export class OptionsPage {
         this.combinedLabels.push(userL.name);
       }
     });
+    
     this.trues = 0;
     this.labels.filter(clarifaiL => {
       if (clarifaiL.wanted === true) {
