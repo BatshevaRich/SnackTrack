@@ -59,6 +59,25 @@ export class OptionsPage {
    * called on click of checkbox
    * @param e the checkbox html element
    */
+
+   filterArraysByWanted() {
+    this.combinedLabels = [];
+    this.userLabels.filter(userL => {
+      if (userL.wanted === true) {
+        this.combinedLabels.push(userL.name);
+      }
+    });
+    this.trues = 0;
+    this.labels.filter(clarifaiL => {
+      if (clarifaiL.wanted === true) {
+        this.trues = this.trues + 1;
+        this.combinedLabels.push(clarifaiL.name);
+      }
+    });
+    alert(this.combinedLabels);
+    this.labels.sort((a, b) => a.wanted < b.wanted ? 1 : a.wanted > b.wanted ? -1 : 0);
+   }
+
   itemClicked(e): void {
     if (!e.checked) {
       this.counter--;
@@ -67,30 +86,7 @@ export class OptionsPage {
         this.counter++;
       }
     }
-
-    this.combinedLabels = [];
-    this.userLabels.filter(userL => { if (userL.wanted === true) { this.combinedLabels.push(userL.name) }});
-
-    alert(this.combinedLabels);
-    // for (let i = 0; i < this.userLabels.length; i++) {
-    //   if (this.userLabels[i].wanted) {
-    //     this.combinedLabels.push(this.userLabels[i].name);
-    //   }
-    // }
-    for (let i = 0; i < this.labels.length; i++) {
-      if (this.labels[i].wanted) {
-        this.combinedLabels.push(this.labels[i].name);
-      }
-    }
-    this.labels.sort((a, b) =>
-      a.wanted < b.wanted ? 1 : a.wanted > b.wanted ? -1 : 0
-    );
-    this.trues = 0;
-    for (let i = 0; i < this.labels.length; i++) {
-      if (this.labels[i].wanted) {
-        this.trues = this.trues + 1;
-      }
-    }
+    this.filterArraysByWanted();
   }
   /**
    * asynchronous func to load labels from webapi
@@ -135,8 +131,8 @@ export class OptionsPage {
         probability: this.loadedLabels[i].Probability,
         wanted: false
       });
-      for (let i = 0; i < this.loadedLabels.length; i++) {
-        this.combinedLabels.push(this.loadedLabels[i].Name);
+      for (const label of this.loadedLabels) {
+        this.combinedLabels.push(label.Name);
       }
     }
   }
@@ -146,32 +142,14 @@ export class OptionsPage {
    * called on add input of new label
    * @param e string of label value
    */
-  addedLabel(e: string): void {
+  addedLabel(added: string): void {
     this.userLabels.push({
-      name: e,
+      name: added,
       wanted: true
     });
     this.counter = this.counter + 1; // increase number of labels
-    this.combinedLabels = [];
-    console.log(this.userLabels);
-    for (let i = 0; i < this.userLabels.length; i++) {
-      if (this.userLabels[i].wanted) {
-        this.combinedLabels.push(this.userLabels[i].name);
-      }
-    }
-    for (let i = 0; i < this.labels.length; i++) {
-      if (this.labels[i].wanted) {
-        this.combinedLabels.push(this.labels[i].name);
-      }
-    }
-    alert('labels' + this.labels);
-    alert('combined' + this.combinedLabels);
-    console.log(this.combinedLabels);
+    this.filterArraysByWanted();
     this.value = ''; // ngmodel
-    this.labels.sort((a, b) =>
-      a.wanted < b.wanted ? 1 : a.wanted > b.wanted ? -1 : 0
-    );
-    console.log(this.labels);
     console.log('combined', this.combinedLabels);
   }
   /**
