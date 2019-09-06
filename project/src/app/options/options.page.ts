@@ -1,18 +1,13 @@
 import { Component } from '@angular/core';
-import {
-  NavController,
-  NavParams,
-  LoadingController
-} from '@ionic/angular';
+import { LoadingController } from '@ionic/angular';
 import { ApiPictureService } from '../Providers/api-picture.service';
 import { Label } from '../../app/classes/Label';
-import { DomSanitizer } from '@angular/platform-browser';
 import { MealService } from '../providers/meal.service';
 import { filter } from 'rxjs/operator/filter';
 @Component({
   selector: 'app-options',
   templateUrl: './options.page.html',
-  styleUrls: ['./options.page.scss'],
+  styleUrls: ['./options.page.scss']
 })
 export class OptionsPage {
   constructor(
@@ -41,23 +36,22 @@ export class OptionsPage {
     this.base64Image = this.imageData;
   }
   labels: Array<{ name: string; probability: number; wanted: boolean }>;
-userLabels: Array<{ name: string; wanted: boolean }>;
-counter: number;
-tags: any;
-showAll: boolean;
-load: boolean;
-paginationLimit: number;
-loadedLabels: Label[];
-imageData = localStorage.getItem('loadedImage');
-combinedLabels: string[];
-value = ''; // for ngmodel, to clean input box
-trues: number;
+  userLabels: Array<{ name: string; wanted: boolean }>;
+  counter: number;
+  tags: any;
+  showAll: boolean;
+  load: boolean;
+  paginationLimit: number;
+  loadedLabels: Label[];
+  imageData = localStorage.getItem('loadedImage');
+  combinedLabels: string[];
+  value = ''; // for ngmodel, to clean input box
+  trues: number;
   private base64Image: string;
   ionViewWillEnter() {
     this.imageData = localStorage.getItem('loadedImage');
     this.load = true;
     this.base64Image = this.imageData;
-    console.log(this.base64Image);
   }
   /**
    * func to increase/decrease counter of selected labels
@@ -65,35 +59,44 @@ trues: number;
    * called on click of checkbox
    * @param e the checkbox html element
    */
-itemClicked(e) : void {
-    if(!e.checked) {
+  itemClicked(e): void {
+    if (!e.checked) {
       this.counter--;
     } else {
-      if (this.counter < 10) { this.counter++; }
+      if (this.counter < 10) {
+        this.counter++;
+      }
     }
 
     this.combinedLabels = [];
-    for (let i = 0; i < this.userLabels.length; i++) {
-      if (this.userLabels[i].wanted) {
-        this.combinedLabels.push(this.userLabels[i].name);
-      }
-    }
+    this.userLabels.filter(userL => { if (userL.wanted === true) { this.combinedLabels.push(userL.name) }});
+
+    alert(this.combinedLabels);
+    // for (let i = 0; i < this.userLabels.length; i++) {
+    //   if (this.userLabels[i].wanted) {
+    //     this.combinedLabels.push(this.userLabels[i].name);
+    //   }
+    // }
     for (let i = 0; i < this.labels.length; i++) {
-      if (this.labels[i].wanted) { this.combinedLabels.push(this.labels[i].name); }
+      if (this.labels[i].wanted) {
+        this.combinedLabels.push(this.labels[i].name);
+      }
     }
     this.labels.sort((a, b) =>
       a.wanted < b.wanted ? 1 : a.wanted > b.wanted ? -1 : 0
     );
     this.trues = 0;
     for (let i = 0; i < this.labels.length; i++) {
-      if (this.labels[i].wanted) { this.trues = this.trues + 1; }
+      if (this.labels[i].wanted) {
+        this.trues = this.trues + 1;
+      }
     }
   }
   /**
    * asynchronous func to load labels from webapi
    * called by loadLabelsFromAPI func
    */
-resolveAfter2Seconds() {
+  resolveAfter2Seconds() {
     return new Promise(resolve => {
       setTimeout(() => {
         resolve(
@@ -137,13 +140,13 @@ resolveAfter2Seconds() {
       }
     }
   }
- 
+
   /**
    * func to add label to chosen labels
    * called on add input of new label
    * @param e string of label value
    */
-addedLabel(e: string): void {
+  addedLabel(e: string): void {
     this.userLabels.push({
       name: e,
       wanted: true
@@ -151,13 +154,15 @@ addedLabel(e: string): void {
     this.counter = this.counter + 1; // increase number of labels
     this.combinedLabels = [];
     console.log(this.userLabels);
-    for(let i = 0; i < this.userLabels.length; i++) {
+    for (let i = 0; i < this.userLabels.length; i++) {
       if (this.userLabels[i].wanted) {
         this.combinedLabels.push(this.userLabels[i].name);
       }
     }
     for (let i = 0; i < this.labels.length; i++) {
-      if (this.labels[i].wanted) { this.combinedLabels.push(this.labels[i].name); }
+      if (this.labels[i].wanted) {
+        this.combinedLabels.push(this.labels[i].name);
+      }
     }
     alert('labels' + this.labels);
     alert('combined' + this.combinedLabels);
@@ -174,17 +179,19 @@ addedLabel(e: string): void {
    * func to update toggle view, either shows 5 items or all items
    * @param $event toggle html element
    */
-  public changeToggle($event){
+  public changeToggle($event) {
     this.showAll = !this.showAll;
     if (this.paginationLimit === this.trues) {
       this.paginationLimit = this.userLabels.length + this.labels.length;
-    } else { this.paginationLimit = this.trues; }
+    } else {
+      this.paginationLimit = this.trues;
+    }
   }
   /**
    * func to upload labels to server
    * called upon pressing the 'ok' button
    */
-uploadData() {
+  uploadData() {
     console.log(this.combinedLabels);
     let stringedLabels: string[]; // var to keep chosen strings
     stringedLabels = this.combinedLabels.filter(l => l).map(l => l);
@@ -193,7 +200,7 @@ uploadData() {
       new Date(), // time
       stringedLabels // labels
     );
-    //localStorage.clear();
+    // localStorage.clear();
     alert('uploaded');
   }
 }

@@ -20,7 +20,7 @@
     ></ion-toggle>
     
   </ion-label><br>
-  <ion-list
+  <div
     ion-item
     *ngFor="let label of userLabels | slice: 0:userLabels.length"
     [hidden]="labels.length == 0"
@@ -31,9 +31,9 @@
       [(ngModel)]="label.wanted"
     ></ion-checkbox
     ><ion-label>{{ label.name }} {{ label.probability }}</ion-label>
-  </ion-list>
-  <ion-list
-    ion-item
+  </div><!-- ion-item -->
+  <div
+    
     *ngFor="let label of labels | slice: 0:paginationLimit"
     [hidden]="labels.length == 0"
   >
@@ -42,12 +42,12 @@
       (ionChange)="itemClicked($event)"
       [(ngModel)]="label.wanted"
     ></ion-checkbox
-    ><ion-label>{{ label.name }} {{ label.probability }}</ion-label>
-  </ion-list>
+    ><ion-label class="my-label">{{ label.name }} {{ label.probability }}</ion-label>
+  </div>
   <br />
 
   <ion-item *ngIf="counter < 10">
-    <ion-label color="primary" floating>Add Label</ion-label>
+    <label color="primary" floating>Add Label</label>
     <ion-input
       [(ngModel)]="value"
       #box
@@ -55,12 +55,12 @@
     ></ion-input>
   </ion-item>
 
-  <button
+  <ion-button
     ion-button
     color="primary"
     (click)="uploadData()"
     [hidden]="labels.length == 0"
   >
     OK
-  </button>
+  </ion-button>
 </ion-content>
