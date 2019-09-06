@@ -10,6 +10,7 @@ const routes: Routes = [
   { path: 'camera', loadChildren: './camera/camera.module#CameraPageModule' },
   { path: 'day', loadChildren: './day/day.module#DayPageModule' },
   { path: 'upload', loadChildren: './upload/upload.module#UploadPageModule' },
+
 ];
 
 @NgModule({

@@ -1,11 +1,16 @@
-import { IonicPage, NavController, NavParams } from "ionic-angular";
+import { NavController, NavParams } from "@ionic/angular";
 import { CalendarComponent } from "ionic2-calendar/calendar";
 import { Component, ViewChild, OnInit, Inject, LOCALE_ID } from "@angular/core";
-import { AlertController } from "ionic-angular";
+import { AlertController } from "@ionic/angular";
 // import { formatDate } from "@angular/common";
 // import { Variable } from '@angular/compiler/src/render3/r3_ast';
 import { Router, NavigationExtras } from "@angular/router";
 import { Meal } from "../../app/classes/Meal";
+import { LoadingController } from '@ionic/angular';
+import { ApiPictureService } from '../Providers/api-picture.service';
+import { Label } from '../../app/classes/Label';
+import { MealService } from '../providers/meal.service';
+import { filter } from 'rxjs/operator/filter';
 /**
  * Generated class for the HomePage page.
  *
@@ -13,7 +18,7 @@ import { Meal } from "../../app/classes/Meal";
  * Ionic pages and navigation.
  */
 
-@IonicPage()
+// @IonicPage()
 @Component({
   selector: "page-home",
   templateUrl: "home.html"

@@ -1,46 +1,21 @@
-import { BrowserModule } from "@angular/platform-browser";
-import { NgModule, ErrorHandler } from "@angular/core";
-import { IonicApp, IonicModule, IonicErrorHandler } from "ionic-angular";
-import { MyApp } from "./app.component";
-import { OptionsPage } from "../pages/options/options";
-import { DayPage } from "../pages/day/day";
-import { StatusBar } from "@ionic-native/status-bar";
-import { SplashScreen } from "@ionic-native/splash-screen";
-import { CameraPage } from "../pages/camera/camera";
-import { ApiPictureProvider } from "../providers/api-picture/api-picture";
-import { HttpClientModule, HttpClient } from "@angular/common/http";
-import { CommonModule } from "@angular/common";
-import { HttpModule } from "@angular/http";
-import { LoadPicProvider } from "../providers/load-pic/load-pic";
-import { SpinnerDialog } from "@ionic-native/spinner-dialog/ngx";
-import { MealProvider } from '../providers/meal/meal';
-import { HomePage } from "../pages/home/home";
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { RouteReuseStrategy } from '@angular/router';
+import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
+import { HttpClientModule } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+
 @NgModule({
-  declarations: [
-    MyApp,
-    OptionsPage,
-    DayPage,
-    CameraPage,
-    HomePage
-  ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    CommonModule,
-    IonicModule.forRoot(MyApp)
-  ],
-  bootstrap: [IonicApp],
-  entryComponents: [
-    MyApp,
-    OptionsPage,
-    DayPage,
-    CameraPage,
-    HomePage
-  ],
+  declarations: [AppComponent],
+  entryComponents: [],
+  imports: [BrowserModule, HttpClientModule, CommonModule, IonicModule.forRoot(), AppRoutingModule],
   providers: [
     StatusBar,
-    SplashScreen,
-    HttpClientModule,
+    SplashScreen, HttpClientModule,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
