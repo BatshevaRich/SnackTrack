@@ -1,5 +1,7 @@
 {
   "name": "snackTrack",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
