@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -28,11 +27,11 @@ namespace backend.Controllers
         {
             return Manager.getAllMeals();
         }
-       
+
         // GET: api/meal/5
-        public List<Meal> Get(DateTime date)
+        public List<Meal> Get(DateTime dateTime)
         {
-            return Manager.getMealsToDay(date);
+            return Manager.getMealsToDay(dateTime);
         }
         /// <summary>
         /// function to add the picture to storage, and add labels + imagepath to db.
