@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -31,9 +30,9 @@ namespace backend.Controllers
 
         [HttpGet]
         // GET: api/meal/5
-        public List<Meal> Get(DateTime date)
+        public List<Meal> Get(DateTime dateTime)
         {
-            return Manager.getMealsToDay(date);
+            return Manager.getMealsToDay(dateTime);
         }
 
         [HttpGet]
@@ -51,7 +50,7 @@ namespace backend.Controllers
         [HttpPost]
         // POST: api/meal
         public async Task<IHttpActionResult> InsertImagesAsync()
-        {   
+        {
             var provider = new MultipartMemoryStreamProvider();
             await Request.Content.ReadAsMultipartAsync(provider);
             List<string> labelsFromFrontend = new List<string>();
