@@ -26,14 +26,22 @@ namespace backend.Controllers
         [HttpGet]
         public List<Meal> Get()
         {
-            return Manager.getAllMeals();
+            return Manager.getMeals();
         }
-       
+
+        [HttpGet]
         // GET: api/meal/5
         public List<Meal> Get(DateTime date)
         {
             return Manager.getMealsToDay(date);
         }
+
+        [HttpGet]
+        public List<Meal> Get(string label)
+        {
+            return Manager.getMealsByLabel(label);
+        }
+
         /// <summary>
         /// function to add the picture to storage, and add labels + imagepath to db.
         /// calls function that deals with adding.
