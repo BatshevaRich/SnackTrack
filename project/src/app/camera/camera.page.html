@@ -1,6 +1,6 @@
 
 <ion-content>
-  <img>
+    <img [src]="currentImage" *ngIf="currentImage">
   
   <ion-fab vertical="bottom" horizontal="center" slot="fixed">
     <ion-fab-button (click)="takePicture()">

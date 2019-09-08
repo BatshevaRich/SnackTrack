@@ -1,5 +1,4 @@
 <ion-content>
-  <!-- fab placed to the bottom right -->
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button routerLink="../camera">
       <ion-icon name="add"></ion-icon>
@@ -17,11 +16,6 @@
     spellcheck="true"
   >
   </ion-searchbar>
-  <!-- <ion-searchbar color="blue" autocomplete="on"  type="text" spellcheck="true" routerLink="../serch"></ion-searchbar> -->
-  <!-- <ion-icon name="calendar"></ion-icon> -->
-
-  <!-- Card for adding a new event -->
-
   <ion-row style="background-color: blue">
     <ion-col
       size="3"
@@ -30,7 +24,7 @@
       {{ viewTitle }}
     </ion-col>
     <ion-col size="2" text-left>
-      <ion-select (ionChange)="changeMode($event)">
+      <ion-select placeholder='Change Display Format' (ionChange)="changeMode($event)">
         <ion-select-option value="month">Month</ion-select-option>
         <ion-select-option value="week">Week</ion-select-option>
         <ion-select-option value="day">Day</ion-select-option>

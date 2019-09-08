@@ -106,7 +106,7 @@ export class OptionsPage {
       }, 400);
     });
   }
-
+//ionic cordova run android --target=402000f30108aa829446
   /**
    * asynchronous func to load labels from webapi
    * marks as true only 5, all the rest are marked as false

@@ -1,4 +1,3 @@
-
 import { CalendarComponent } from 'ionic2-calendar/calendar';
 import { Component, ViewChild, OnInit, Inject, LOCALE_ID } from '@angular/core';
 import { AlertController } from '@ionic/angular';
@@ -8,7 +7,7 @@ import { NavController, NavParams } from '@ionic/angular';
 import { Router, NavigationExtras } from '@angular/router';
 import { Meal } from '../classes/Meal';
 import { CalendarService } from '../Providers/calendar.service';
-
+import {DayMeal} from '../classes/DayMeal';
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -20,8 +19,8 @@ export class HomePage implements OnInit {
   event: DayMeal;
   minDate = new Date().toISOString();
 
-   // all meals returned from server
-  eventSource=new Array<DayMeal>();
+  // all meals returned from server
+  eventSource = new Array<DayMeal>();
   viewTitle;
 
   calendar = {
@@ -30,9 +29,9 @@ export class HomePage implements OnInit {
   };
 
   flag = 0;
-  constructor(private alertCtrl: AlertController, @Inject(LOCALE_ID) private locale: string , private router: Router, private calendarS: CalendarService){
+  constructor(private alertCtrl: AlertController, @Inject(LOCALE_ID) private locale: string, private router: Router, private calendarS: CalendarService) {
     // this.loadLabelsFromAPI();
-   }
+  }
 
   resolveAfter2Seconds(date: Date) {
     return new Promise(resolve => {
@@ -54,7 +53,7 @@ export class HomePage implements OnInit {
    * marks as true only 5, all the rest are marked as false
    * called on page load
    */
-  async loadLabelsFromAPI(date: Date){
+  async loadLabelsFromAPI(date: Date) {
     await this.resolveAfter2Seconds(date);
 
   }
@@ -70,16 +69,16 @@ export class HomePage implements OnInit {
     //   path: 'this.event.path',
     //   desc: 'this.event.desc'
     // };
- // send eventCopy to api
+    // send eventCopy to api
     // this.eventSource.push(eventCopy);
   }
 
   resetEvent() {
-    this.event= {
+    this.event = {
       path: '',
-hourS: new Date().toISOString(),
-hourE: new Date().toISOString(),
-categories:[]
+      hourS: new Date().toISOString(),
+      hourE: new Date().toISOString(),
+      categories: []
     };
   }
 
@@ -107,17 +106,17 @@ categories:[]
   //   this.resetEvent();
   // }
   next() {
-    let swiper = document.querySelector('.swiper-container')['swiper'];
+    const swiper = document.querySelector('.swiper-container')['swiper'];
     swiper.slideNext();
   }
 
-  back(){
-    let swiper = document.querySelector('.swiper-container')['swiper'];
+  back() {
+    const swiper = document.querySelector('.swiper-container')['swiper'];
     swiper.slidePrev();
   }
 
   // Change between month/week/day
-  changeMode(mode){
+  changeMode(mode) {
     this.calendar.mode = mode.detail.value;
   }
 
@@ -134,7 +133,7 @@ categories:[]
   // Calendar event was clicked
   async onEventSelected(event) {
     // Use Angular date pipe for conversion
-    let start = formatDate(event.hourS, 'medium', this.locale);
+    const start = formatDate(event.hourS, 'medium', this.locale);
     const end = formatDate(event.hourE, 'medium', this.locale);
 
     const alert = await this.alertCtrl.create({
@@ -169,16 +168,4 @@ categories:[]
     // send event....
     //
   }
-}
-export class DayMeal {
-  path: string;
-categories: string[];
-hourS: string;
-hourE: string;
-constructor(path: string, hourS: string, hourE: string, categories: string[]) {
-this.hourS = hourS;
-this.hourE = hourE;
-this.path = path;
-this.categories = categories;
-}
 }
