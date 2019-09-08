@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using backend.Models;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using backend.Models;
 
 namespace dal
 {
     public static class Mapper
     {
 
-        public static meal convertMealToEntity(Meal meal)
+        public static meal convertMealToEntityAsync(Meal meal)
         {
             meal res = new meal();
-            res.path = Manager.UploadFile("image_food_to_dietdairy", meal.Path);
+            res.path = Manager.UploadFileToStorage("dietdiaryfoodpics", meal.Path);
             foreach (var item in meal.Labels)
             {
                 res.tags += "," + item;
@@ -31,4 +27,4 @@ namespace dal
             return res;
         }
     }
-} 
+}

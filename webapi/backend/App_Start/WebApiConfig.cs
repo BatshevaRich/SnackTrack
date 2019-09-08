@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Cors;
 
@@ -14,15 +15,21 @@ namespace backend
 
             // Web API routes
             config.MapHttpAttributeRoutes();
-
-            var cors = new EnableCorsAttribute("http://localhost:8100", "*", "*");
+            config.Formatters.JsonFormatter.SupportedMediaTypes
+    .Add(new MediaTypeHeaderValue("text/html"));
+            var cors = new EnableCorsAttribute("http://localhost:8101", "*", "*");
             config.EnableCors(cors);
-
+            //config.Routes.MapHttpRoute(
+            //    name: "calendar",
+            //    routeTemplate: "api/calendar/getmonth/{month}",
+            //    defaults: new { controller="calendar", action= "getmonth", month =RouteParameter.Optional }
+            //    );
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+            
         }
     }
 }

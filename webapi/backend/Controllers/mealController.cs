@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -22,26 +23,40 @@ namespace backend.Controllers
     public class mealController : ApiController
     {
         // GET: api/meal
-        //[Route("get")]
         [HttpGet]
         public List<Meal> Get()
         {
-
-            //Manager.UploadFile("dietdiaryfoodpics", "C:\\Users\\owner\\Downloads\\download (6).jpg", "bread.jpg");
-
             return Manager.getAllMeals();
         }
-
+       
         // GET: api/meal/5
-        public string Get(int id)
+        public List<Meal> Get(DateTime date)
         {
-            return "value";
+            return Manager.getMealsToDay(date);
         }
-
+        /// <summary>
+        /// function to add the picture to storage, and add labels + imagepath to db.
+        /// calls function that deals with adding.
+        /// </summary>
+        /// <returns></returns>
+        [Route("upload")]
+        [HttpPost]
         // POST: api/meal
-        public void Post([FromBody]Meal value)
-        {
-
+        public async Task<IHttpActionResult> InsertImagesAsync()
+        {   
+            var provider = new MultipartMemoryStreamProvider();
+            await Request.Content.ReadAsMultipartAsync(provider);
+            List<string> labelsFromFrontend = new List<string>();
+            var path = HttpContext.Current.Request.Form["path"];
+            var hour = HttpContext.Current.Request.Form["hour"];
+            var labels = HttpContext.Current.Request.Form["labels"];
+            foreach (var item in labels.Split(',').ToList())
+            {
+                labelsFromFrontend.Add(item);
+            }
+            Meal meal = new Meal() { DateOfPic = DateTime.Now, Labels = labelsFromFrontend, Path = path };
+            Manager.addMeal(meal);
+            return Ok();
         }
 
         // PUT: api/meal/5
