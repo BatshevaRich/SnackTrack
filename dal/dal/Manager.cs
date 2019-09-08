@@ -6,8 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Data.Entity;
-using System.Data.Entity.Core.Objects;
 namespace dal
 {
     public static class Manager
@@ -26,7 +24,7 @@ namespace dal
                 {
                 contextdb.SaveChanges();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     throw;
                 }
@@ -36,7 +34,7 @@ namespace dal
         /// func to return list of all meals. called by mealcontroller
         /// </summary>
         /// <returns></returns>
-        public static List<backend.Models.Meal> getAllMeals()
+        public static List<backend.Models.Meal> getMeals()
         {
             List<meal> listMealsEntity = new List<meal>();
             List<Meal> listMeals = new List<Meal>();
@@ -53,8 +51,6 @@ namespace dal
             List<meal> meals = new List<meal>();
             using (var contextdb = new dbDietDairyEntities())
             {
-                meals = contextdb.meals.Where(m => m.dateTime.Equals(date)).ToList();
-
                 var query = from m in contextdb.meals
                             where m.dateTime.Day == date.Day
                             && m.dateTime.Month == date.Month
@@ -65,6 +61,21 @@ namespace dal
             List<Meal> listMealToDay = meals.Select<meal, Meal>(m => Mapper.convertEntityToMeal(m)).ToList<Meal>();
             return listMealToDay;
         }
+
+        public static List<Meal> getMealsByLabel(string label)
+        {
+            List<meal> meals = new List<meal>();
+
+            using (var contextdb = new dbDietDairyEntities())
+            {
+                meals = contextdb.meals
+                    .Where(m => m.tags.StartsWith(label + ",") ||m.tags.Contains("," + label + ",") ||m.tags.EndsWith("," + label) )
+                    .ToList();
+            }
+            List<Meal> listMealToDay = meals.Select<meal, Meal>(m => Mapper.convertEntityToMeal(m)).ToList<Meal>();
+            return listMealToDay;
+        }
+
         public static List<string> GetLabels()
         {
             List<string> listLabels = new List<string>();
@@ -76,6 +87,7 @@ namespace dal
             listLabels.ForEach(ls => ls.Split(',').ToList().ForEach(l => labelsSet.Add(l)));
             return labelsSet.ToList();
         }
+        
         /// <summary>
         /// func to upload file to google cloud storage.
         /// </summary>
