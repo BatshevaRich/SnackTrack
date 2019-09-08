@@ -67,7 +67,7 @@ export class OptionsPage {
         this.combinedLabels.push(userL.name);
       }
     });
-    
+
     this.trues = 0;
     this.labels.filter(clarifaiL => {
       if (clarifaiL.wanted === true) {
@@ -106,7 +106,7 @@ export class OptionsPage {
       }, 400);
     });
   }
-
+//ionic cordova run android --target=402000f30108aa829446
   /**
    * asynchronous func to load labels from webapi
    * marks as true only 5, all the rest are marked as false
@@ -159,12 +159,11 @@ export class OptionsPage {
    * @param $event toggle html element
    */
   public changeToggle($event) {
-    this.showAll = !this.showAll;
-    if (this.paginationLimit === this.trues) {
-      this.paginationLimit = this.userLabels.length + this.labels.length;
-    } else {
+
+    if ($event.target.value === 'chosen') {
       this.paginationLimit = this.trues;
-    }
+    } else { this.paginationLimit = this.userLabels.length + this.labels.length; }
+    this.showAll = !this.showAll;
   }
   /**
    * func to upload labels to server
