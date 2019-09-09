@@ -42,7 +42,6 @@ export class HomePage implements OnInit {
             console.log(data);
             this.eventSource = [];
             this.eventSource = data as Array<DayMeal>;
-            alert(this.eventSource);
           })
         );
       }, 400);
@@ -142,7 +141,6 @@ export class HomePage implements OnInit {
       message: 'From: ' + start + '<br><br>To: ' + end,
       buttons: ['OK']
     });
-    alert.present();
   }
 
 
@@ -162,7 +160,6 @@ export class HomePage implements OnInit {
     this.event.hourS = selected.toISOString();
     selected.setHours(selected.getHours() + 1);
     this.event.hourE = (selected.toISOString());
-    alert(selected);
     this.loadLabelsFromAPI(selected);
 
     // send event....

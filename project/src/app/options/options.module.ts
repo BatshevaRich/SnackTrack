@@ -11,6 +11,7 @@ import {
 import { IonicModule } from '@ionic/angular';
 
 import { OptionsPage } from './options.page';
+import { AppComponent } from '../app.component';
 
 const routes: Routes = [
   {

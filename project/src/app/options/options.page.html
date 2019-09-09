@@ -13,58 +13,57 @@
   <ion-spinner name="bubbles" [hidden]="labels.length != 0"></ion-spinner>
   <ion-card>
     <ion-card-header>
-        <ion-img *ngIf="load" [src]="base64Image"></ion-img>
-        <ion-segment (ionChange)="changeToggle($event)">
-            <ion-segment-button value="all">
-              <ion-label>All Labels</ion-label>
-            </ion-segment-button>
-            <ion-segment-button value="chosen">
-              <ion-label>Chosen Labels</ion-label>
-            </ion-segment-button>
-          </ion-segment>
-      <ion-card-title>
-      </ion-card-title>
+      <ion-img *ngIf="load" [src]="base64Image"></ion-img>
+      <ion-card-title> </ion-card-title>
     </ion-card-header>
 
     <ion-card-content>
-      <div
-        ion-item
-        *ngFor="let label of userLabels | slice: 0:userLabels.length"
-        [hidden]="labels.length == 0"
+      <ion-chip *ngFor="let label of labels">
+        <ion-icon name="ios-restaurant" color="primary"></ion-icon>
+        <ion-label>{{ label.name }}</ion-label>
+        <!-- <ion-button ion-button style="--background:white" > -->
+        <ion-icon
+          [id]="label.name"
+          name="checkmark"
+          (click)="moveToUnwanted($event)"
+        ></ion-icon>
+        <!-- </ion-button> -->
+      </ion-chip>
+      <ion-button
+        class="buttonIcon"
+        ion-button
+        shape="round"
+        size="small"
+        color="primary"
+        (click)="add()"
       >
-        <ion-checkbox
-          [disabled]="!label.wanted && this.counter == 10"
-          (ionChange)="itemClicked($event)"
-          [(ngModel)]="label.wanted"
-        ></ion-checkbox
-        ><ion-label>{{ label.name }} {{ label.probability }}</ion-label>
-      </div>
-      <!-- ion-item -->
-      <div
-        *ngFor="let label of labels | slice: 0:paginationLimit"
-        [hidden]="labels.length == 0"
-      >
-        <ion-checkbox
-          [disabled]="!label.wanted && this.counter == 10"
-          (ionChange)="itemClicked($event)"
-          [(ngModel)]="label.wanted"
-        ></ion-checkbox
-        ><ion-label class="my-label"
-          >{{ label.name }} {{ label.probability }}</ion-label
-        >
-      </div>
+        <ion-icon name="add"></ion-icon>
+      </ion-button>
+      <!-- <ion-item > -->
+          <ion-input *ngIf="counter < 10"
+            color="primary"
+            type="text"
+            [(ngModel)]="value"
+            #box
+            (change)="addedLabel(box.value)"
+            placeholder="Add Label"
+            id="addL"
+          ></ion-input>
+        <!-- </ion-item> -->
     </ion-card-content>
   </ion-card>
   <br />
-  <ion-item *ngIf="counter < 10">
-    <ion-input color="primary"
-      [(ngModel)]="value"
-      #box
-      (change)="addedLabel(box.value)"
-      placeholder="Add Label"
-    ></ion-input>
-  </ion-item>
-
+  
+  <ion-chip *ngFor="let label of unwantedLabels">
+    <ion-icon name="ios-restaurant" color="primary"></ion-icon>
+    <ion-label>{{ label.name }}</ion-label>
+    <ion-icon
+      [id]="label.name"
+      name="close"
+      (click)="moveToWanted($event)"
+    ></ion-icon>
+  </ion-chip>
+  <br />
   <ion-button
     ion-button
     color="primary"
