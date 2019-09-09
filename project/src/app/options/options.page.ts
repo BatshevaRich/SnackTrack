@@ -27,7 +27,6 @@ export class OptionsPage {
       name: string;
       wanted: boolean;
     }>();
-    this.combinedLabels = [];
     // this.paginationLimit = 5;
     this.labels = [];
     this.showAll = false;
@@ -166,7 +165,7 @@ export class OptionsPage {
   uploadData() {
     console.log(this.labels);
     let stringedLabels: string[]; // var to keep chosen strings
-    stringedLabels = this.combinedLabels.filter(l => l).map(l => l);
+    stringedLabels = this.labels.filter(l => l.name).map(l => l.name  );
     this.mealProvider.SaveToServer(
       localStorage.getItem('loadedImage'), // path
       new Date(), // time
