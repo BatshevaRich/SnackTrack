@@ -58,11 +58,11 @@
   <br />
 
   <ion-chip *ngFor="let label of unwantedLabels">
-    <ion-icon name="ios-restaurant" color="primary"></ion-icon>
+    <!-- <ion-icon name="ios-restaurant" color="primary"></ion-icon> -->
     <ion-label>{{ label.name }}</ion-label>
     <ion-icon
       [id]="label.name"
-      name="close"
+      name="md-arrow-up"
       (click)="moveToWanted($event)"
     ></ion-icon>
   </ion-chip>
