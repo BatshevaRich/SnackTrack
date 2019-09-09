@@ -54,4 +54,15 @@ export class MealService {
       });
     });
   }
+
+
+  public GetMealsForSearch(label: string) {
+    // const myS: number = 1;
+    const res = this.http.get<Meal[]>(this.baseURL + 'meal?label=' + label);
+    return new Promise(resolve => {
+      res.subscribe(data => {
+        resolve(data);
+      });
+    });
+}
 }

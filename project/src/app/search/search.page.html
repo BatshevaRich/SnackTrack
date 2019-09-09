@@ -4,6 +4,21 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-
+<ion-content padding>
+    <ion-list ion-item *ngFor="let meal of meals">
+        <ion-card>
+            <img />
+            <ion-card-content>
+              <ion-card-title>
+                {{meal.DateOfPic}}
+                </ion-card-title>
+              <p>            
+                <ion-list ion-item *ngFor="let label of meal.Labels">
+                    <ion-label>{{label}}</ion-label>
+                </ion-list>
+              </p>
+            </ion-card-content>
+          </ion-card>
+    </ion-list>
+ 
 </ion-content>

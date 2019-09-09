@@ -145,13 +145,15 @@ export class HomePage implements OnInit {
 
 
   ionChange(event) {
+    // console.log(event.currentTarget);
     const navigationExtras: NavigationExtras = {
       queryParams: {
-        special: JSON.stringify(event.currentTarget.attributes[3].textContent)
+        special: JSON.stringify(event.target.value)
+        // special: JSON.stringify(event.currentTarget.attributes[3].textContent)
       }
     };
     event.target.value = '';
-    this.router.navigate(['serch'], navigationExtras);
+    this.router.navigate(['search'], navigationExtras);
   }
 
   // Time slot was clicked
