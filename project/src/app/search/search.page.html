@@ -7,7 +7,7 @@
 <ion-content padding>
     <ion-list ion-item *ngFor="let meal of meals">
         <ion-card>
-            <img />
+            <img [src]="meal.Path"/>
             <ion-card-content>
               <ion-card-title>
                 {{meal.DateOfPic}}
