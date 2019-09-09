@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 import { ApiPictureService } from '../Providers/api-picture.service';
 import { Label } from '../../app/classes/Label';
@@ -10,12 +10,13 @@ import { filter } from 'rxjs/operator/filter';
   styleUrls: ['./options.page.scss']
 })
 export class OptionsPage {
-  @ViewChild('box', null) userInput;
+
   constructor(
     public apPic: ApiPictureService,
     public loadingController: LoadingController,
     private mealProvider: MealService
-  ) {
+  ) 
+  {
     this.load = true;
     this.loadLabelsFromAPI();
     // init arrays
@@ -24,21 +25,21 @@ export class OptionsPage {
       probability: number;
       wanted: boolean;
     }>();
-    this.unwantedLabels = new Array<{
+    this.userLabels = new Array<{
       name: string;
-      probability: number;
       wanted: boolean;
     }>();
     this.combinedLabels = [];
-    // this.paginationLimit = 5;
+    this.paginationLimit = 5;
     this.labels = [];
     this.showAll = false;
     this.trues = 5;
     this.counter = 5;
     this.base64Image = this.imageData;
   }
+  
   labels: Array<{ name: string; probability: number; wanted: boolean }>;
-  unwantedLabels: Array<{ name: string; probability: number; wanted: boolean }>;
+  userLabels: Array<{ name: string; wanted: boolean }>;
   counter: number;
   tags: any;
   showAll: boolean;
@@ -50,6 +51,7 @@ export class OptionsPage {
   value = ''; // for ngmodel, to clean input box
   trues: number;
   private base64Image: string;
+
   ionViewWillEnter() {
     this.imageData = localStorage.getItem('loadedImage');
     this.load = true;
@@ -64,7 +66,7 @@ export class OptionsPage {
 
    filterArraysByWanted() {
     this.combinedLabels = [];
-    this.unwantedLabels.filter(userL => {
+    this.userLabels.filter(userL => {
       if (userL.wanted === true) {
         this.combinedLabels.push(userL.name);
       }
@@ -80,6 +82,17 @@ export class OptionsPage {
     alert(this.combinedLabels);
     this.labels.sort((a, b) => a.wanted < b.wanted ? 1 : a.wanted > b.wanted ? -1 : 0);
    }
+
+  itemClicked(e): void {
+    if (!e.checked) {
+      this.counter--;
+    } else {
+      if (this.counter < 10) {
+        this.counter++;
+      }
+    }
+    this.filterArraysByWanted();
+  }
   /**
    * asynchronous func to load labels from webapi
    * called by loadLabelsFromAPI func
@@ -107,14 +120,26 @@ export class OptionsPage {
     await this.resolveAfter2Seconds();
     this.loadedLabels = this.tags as Label[]; // this.tags is the result from webapi
     let i = 0;
-    for (; i < this.loadedLabels.length; i++) {
+    if (this.paginationLimit > this.tags.length) {
+      this.paginationLimit = this.tags.length;
+    }
+    for (; i < this.paginationLimit; i++) {
       this.labels.push({
         name: this.loadedLabels[i].Name,
         probability: this.loadedLabels[i].Probability,
         wanted: true
       });
     }
-    this.counter = i;
+    for (; i < this.loadedLabels.length; i++) {
+      this.labels.push({
+        name: this.loadedLabels[i].Name,
+        probability: this.loadedLabels[i].Probability,
+        wanted: false
+      });
+      for (const label of this.loadedLabels) {
+        this.combinedLabels.push(label.Name);
+      }
+    }
   }
 
   /**
@@ -123,29 +148,26 @@ export class OptionsPage {
    * @param e string of label value
    */
   addedLabel(added: string): void {
-    this.labels.push({
+    this.userLabels.push({
       name: added,
-      probability: 1,
       wanted: true
     });
     this.counter = this.counter + 1; // increase number of labels
-    // this.filterArraysByWanted();
+    this.filterArraysByWanted();
     this.value = ''; // ngmodel
+    console.log('combined', this.combinedLabels);
   }
-  add(){
-    this.userInput.setFocus();
-  }
-  moveToUnwanted($event){
-    console.log($event);
-    this.unwantedLabels.push({name: $event.toElement.id,probability: 1,wanted: false});
-    console.log(this.unwantedLabels);
-    this.labels = this.labels.filter(item => item.name != $event.toElement.id);
-  }
-  moveToWanted($event){
-    console.log($event);
-    this.labels.push({name: $event.toElement.id,probability: 1,wanted: true});
-    console.log(this.labels);
-    this.unwantedLabels = this.unwantedLabels.filter(item => item.name != $event.toElement.id);
+  /**
+   * TODO: change so shows all selected
+   * func to update toggle view, either shows 5 items or all items
+   * @param $event toggle html element
+   */
+  public changeToggle($event) {
+
+    if ($event.target.value === 'chosen') {
+      this.paginationLimit = this.trues;
+    } else { this.paginationLimit = this.userLabels.length + this.labels.length; }
+    this.showAll = !this.showAll;
   }
   /**
    * func to upload labels to server
