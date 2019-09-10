@@ -12,6 +12,7 @@ export class CameraPage implements OnInit {
   constructor(private camera: Camera) { }
 
   ngOnInit() {
+    // this.takePicture();
   }
   takePicture() {
     const options: CameraOptions = {
@@ -25,7 +26,7 @@ export class CameraPage implements OnInit {
       this.currentImage = 'data:image/jpeg;base64,' + imageData;
     }, (err) => {
       // Handle error
-      console.log("Camera issue:" + err);
+      console.log('Camera issue:' + err);
     });
   }
 }

@@ -8,27 +8,29 @@ import { Meal } from '../classes/Meal';
   templateUrl: './search.page.html',
   styleUrls: ['./search.page.scss'],
 })
-export class SearchPage implements OnInit {
+export class SearchPage {
 
-  meals: Meal[];
+  meals: Meal[]=[];
   data: any;
   myMeal: any;
 
   load: any;
-  ngOnInit() {
+  ionViewDidLoad() {
+
   }
   constructor(private route: ActivatedRoute, private router: Router, public mealService: MealService) {
-    this.route.queryParams.subscribe(params => {
-      if (params && params.special) {
-        this.data = JSON.parse(params.special);
-        console.log(params);
-        this.mealService.GetMealsForSearch(this.data).then((mealk: Meal[]) => {
-        this.meals = mealk;
+      console.log(this.meals);
+      this.route.queryParams.subscribe(params => {
+        if (params && params.special) {
+          this.data = JSON.parse(params.special);
+          console.log(params);
+          this.mealService.GetMealsForSearch(this.data).then((mealk: Meal[]) => {
+            this.meals = mealk;
+            console.log(this.meals);
+          });
+        }
       });
-    }
-  });
-}
-
+  }
 
 
 

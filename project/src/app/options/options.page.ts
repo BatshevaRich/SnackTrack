@@ -52,31 +52,7 @@ export class OptionsPage {
     this.load = true;
     this.base64Image = this.imageData;
   }
-  /**
-   * func to increase/decrease counter of selected labels
-   * also sorts list by trues/not, so the trues are in the beginnig of the list
-   * called on click of checkbox
-   * @param e the checkbox html element
-   */
 
-  filterArraysByWanted() {
-    this.combinedLabels = [];
-    this.unwantedLabels.filter(userL => {
-      if (userL.wanted === true) {
-        this.combinedLabels.push(userL.name);
-      }
-    });
-
-    this.trues = 0;
-    this.labels.filter(clarifaiL => {
-      if (clarifaiL.wanted === true) {
-        this.trues = this.trues + 1;
-        this.combinedLabels.push(clarifaiL.name);
-      }
-    });
-    alert(this.combinedLabels);
-    this.labels.sort((a, b) => a.wanted < b.wanted ? 1 : a.wanted > b.wanted ? -1 : 0);
-  }
   /**
    * asynchronous func to load labels from webapi
    * called by loadLabelsFromAPI func
