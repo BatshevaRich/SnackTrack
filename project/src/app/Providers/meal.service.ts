@@ -30,6 +30,8 @@ export class MealService {
 
  // baseURL = 'http://ce6dc86e.ngrok.io/api/';
    baseURL = 'http://localhost:54640/api/';
+  // baseURL = 'http://b40029a0.ngrok.io/api/';
+  // baseURL = 'http://localhost:54640/api/';
   public SaveToServer(path: string, hour: Date, labels: string[]): any {
     let _formData = new FormData();
     let meal = new Meal(path, hour, labels);
