@@ -1,6 +1,6 @@
 import { CalendarComponent } from 'ionic2-calendar/calendar';
 import { Component, ViewChild, OnInit, Inject, LOCALE_ID } from '@angular/core';
-import { AlertController } from '@ionic/angular';
+import { AlertController, Events } from '@ionic/angular';
 import { formatDate } from '@angular/common';
 import { Variable } from '@angular/compiler/src/render3/r3_ast';
 import { NavController, NavParams } from '@ionic/angular';
@@ -8,6 +8,8 @@ import { Router, NavigationExtras } from '@angular/router';
 import { Meal } from '../classes/Meal';
 import { CalendarService } from '../Providers/calendar.service';
 import {DayMeal} from '../classes/DayMeal';
+import { MealService } from '../Providers/meal.service';
+import { NgZone } from '@angular/core';
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -16,22 +18,27 @@ import {DayMeal} from '../classes/DayMeal';
 
 export class HomePage implements OnInit {
   // @ViewChild(CalendarComponent) myCal: CalendarComponent;
-  event: DayMeal;
+  event = {
+    path: '',
+    startTime: '',
+    endTime: '',
+    cat:['','','','']
+  };
   minDate = new Date().toISOString();
 
   // all meals returned from server
-  eventSource = new Array<DayMeal>();
+  eventSource =[];
   viewTitle;
 
   calendar = {
     mode: 'month',
     currentDate: new Date(),
   };
-
+allMeal=[];
   flag = 0;
-  constructor(private alertCtrl: AlertController, @Inject(LOCALE_ID) private locale: string, private router: Router, private calendarS: CalendarService) {
-    // this.loadLabelsFromAPI();
-  }
+  constructor(public e:Events, private zone:NgZone, private alertCtrl: AlertController, @Inject(LOCALE_ID) private locale: string, private router: Router, private calendarS: CalendarService, private mealS: MealService) {
+    this.retrieveAllMeal();
+this.e.subscribe('updateScreen',()=>{this.zone.run(()=>{console.log('cd');});});  }
 
   resolveAfter2Seconds(date: Date) {
     return new Promise(resolve => {
@@ -47,6 +54,21 @@ export class HomePage implements OnInit {
       }, 400);
     });
   }
+  converaMeal(){
+    for(let i=0;i<this.allMeal.length;i++){
+      this.addMealToEventSource(this.allMeal[i]);
+    }
+  }
+  addMealToEventSource(eve){
+    let eventCopy = {
+      path: eve.Path,
+      startTime:new Date(eve.DateOfPic),
+      endTime: new Date(eve.DateOfPic),
+      cat:eve.Labels
+    }
+    this.eventSource.push(eventCopy);
+  }
+
   /**
    * asynchronous func to load labels from webapi
    * marks as true only 5, all the rest are marked as false
@@ -56,28 +78,30 @@ export class HomePage implements OnInit {
     await this.resolveAfter2Seconds(date);
 
   }
-
-
-
+  retrieveAllMeal(){
+    // this.allMeal=[];
+    this.mealS.GetAllMeals().subscribe(ss=>
+      {this.allMeal=ss;
+       }
+        ,err=>{console.log(err);});
+  }
+  async s() {
+    await this.retrieveAllMeal();
+  }
   ngOnInit() {
-    // this.resetEvent();
-    // const eventCopy = {
-    //   title: 'this.event.title',
-    //   startTime:  new Date().toISOString(),
-    //   endTime: new Date().toISOString(),
-    //   path: 'this.event.path',
-    //   desc: 'this.event.desc'
-    // };
-    // send eventCopy to api
-    // this.eventSource.push(eventCopy);
+
+
+  }
+  ionViewWillEnter(){
+     this.converaMeal();
   }
 
   resetEvent() {
     this.event = {
-      path: '',
-      hourS: new Date().toISOString(),
-      hourE: new Date().toISOString(),
-      categories: []
+        path: '',
+        startTime: '',
+        endTime: '',
+        cat:['','','','']
     };
   }
 
@@ -132,15 +156,18 @@ export class HomePage implements OnInit {
   // Calendar event was clicked
   async onEventSelected(event) {
     // Use Angular date pipe for conversion
-    const start = formatDate(event.hourS, 'medium', this.locale);
-    const end = formatDate(event.hourE, 'medium', this.locale);
-
+    let start = formatDate(event.startTime, 'medium', this.locale);
+    let end = formatDate(event.endTime, 'medium', this.locale);
+    let i=0;
+    let s='';
+   for(i=0;i<event.cat.length;i++)
+    s=s+event.cat[i]+','+' ';
     const alert = await this.alertCtrl.create({
-      header: event.title,
-      subHeader: event.desc,
-      message: 'From: ' + start + '<br><br>To: ' + end,
+      header: event.path,
+      message: 'From: ' + start + '<br><br>To: ' + end+ '<br><br>To: '+ s,
       buttons: ['OK']
     });
+    alert.present();
   }
 
 
@@ -155,15 +182,16 @@ export class HomePage implements OnInit {
     event.target.value = '';
     this.router.navigate(['search'], navigationExtras);
   }
-
+eventDemo:any;
   // Time slot was clicked
   onTimeSelected(event) {
-    const selected = new Date(event.selectedTime);
-    this.event.hourS = selected.toISOString();
-    selected.setHours(selected.getHours() + 1);
-    this.event.hourE = (selected.toISOString());
-    this.loadLabelsFromAPI(selected);
 
+    const selected = new Date(event.selectedTime);
+    this.event.startTime = selected.toISOString();
+    selected.setHours(selected.getHours() + 1);
+    this.event.endTime = (selected.toISOString());
+    // this.loadLabelsFromAPI(selected);
+    
     // send event....
     //
   }

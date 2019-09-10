@@ -28,8 +28,8 @@ export class MealService {
     console.log('Hello MealProvider Provider');
   }
 
-  baseURL = 'http://ce6dc86e.ngrok.io/api/';
-  // baseURL = 'http://localhost:54640/api/';
+ // baseURL = 'http://ce6dc86e.ngrok.io/api/';
+   baseURL = 'http://localhost:54640/api/';
   public SaveToServer(path: string, hour: Date, labels: string[]): any {
     let _formData = new FormData();
     let meal = new Meal(path, hour, labels);
@@ -65,4 +65,23 @@ export class MealService {
       });
     });
 }
+// public GetAllMeals():Observable<Meal[]>
+//    {
+//     const myS: number = 1;
+//     var res = this.http.get(this.baseURL + '/meal');
+//     // return new Promise(resolve => {
+//     //   res.subscribe(data => {
+//     //     resolve(data);
+//     //   });
+//     // });
+
+//     let v=this.http.get<Meal[]>(this.baseURL+"meal")
+//      return v;
+//   }
+
+  public GetAllMeals():Observable<Meal[]>
+   {
+    return this.http.get<Meal[]>(this.baseURL + 'meal');
+   }
+   
 }
