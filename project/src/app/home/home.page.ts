@@ -8,6 +8,10 @@ import { Router, NavigationExtras } from '@angular/router';
 import { Meal } from '../classes/Meal';
 import { CalendarService } from '../Providers/calendar.service';
 import {DayMeal} from '../classes/DayMeal';
+import { LabelsService } from '../Providers/labels.service';
+import {AutoCompleteLabelsService} from '../Providers/auto-complete-labels.service';
+
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -18,7 +22,7 @@ export class HomePage implements OnInit {
   // @ViewChild(CalendarComponent) myCal: CalendarComponent;
   event: DayMeal;
   minDate = new Date().toISOString();
-
+  
   // all meals returned from server
   eventSource = new Array<DayMeal>();
   viewTitle;
@@ -29,8 +33,25 @@ export class HomePage implements OnInit {
   };
 
   flag = 0;
-  constructor(private alertCtrl: AlertController, @Inject(LOCALE_ID) private locale: string, private router: Router, private calendarS: CalendarService) {
+  searchText=""
+  constructor(private alertCtrl: AlertController, @Inject(LOCALE_ID) private locale: string, private router: Router,
+    public autoCompleteLabelsService: AutoCompleteLabelsService, private calendarS: CalendarService ) {
     // this.loadLabelsFromAPI();
+  }
+
+  ngOnInit() {
+    
+
+      // this.resetEvent();
+      // const eventCopy = {
+      //   title: 'this.event.title',
+      //   startTime:  new Date().toISOString(),
+      //   endTime: new Date().toISOString(),
+      //   path: 'this.event.path',
+      //   desc: 'this.event.desc'
+      // };
+      // send eventCopy to api
+      // this.eventSource.push(eventCopy);
   }
 
   resolveAfter2Seconds(date: Date) {
@@ -59,18 +80,7 @@ export class HomePage implements OnInit {
 
 
 
-  ngOnInit() {
-    // this.resetEvent();
-    // const eventCopy = {
-    //   title: 'this.event.title',
-    //   startTime:  new Date().toISOString(),
-    //   endTime: new Date().toISOString(),
-    //   path: 'this.event.path',
-    //   desc: 'this.event.desc'
-    // };
-    // send eventCopy to api
-    // this.eventSource.push(eventCopy);
-  }
+ 
 
   resetEvent() {
     this.event = {
@@ -144,25 +154,25 @@ export class HomePage implements OnInit {
   }
 
 
-  ionChange(event) {
+  onSelected() {
     // console.log(event.currentTarget);
     const navigationExtras: NavigationExtras = {
       queryParams: {
-        special: JSON.stringify(event.target.value)
+        special: JSON.stringify(this.searchText)
         // special: JSON.stringify(event.currentTarget.attributes[3].textContent)
       }
     };
-    event.target.value = '';
+    this.searchText = '';
     this.router.navigate(['search'], navigationExtras);
   }
 
   // Time slot was clicked
   onTimeSelected(event) {
-    const selected = new Date(event.selectedTime);
-    this.event.hourS = selected.toISOString();
-    selected.setHours(selected.getHours() + 1);
-    this.event.hourE = (selected.toISOString());
-    this.loadLabelsFromAPI(selected);
+    // const selected = new Date(event.selectedTime);
+    // this.event.hourS = selected.toISOString();
+    // selected.setHours(selected.getHours() + 1);
+    // this.event.hourE = (selected.toISOString());
+    // this.loadLabelsFromAPI(selected);
 
     // send event....
     //

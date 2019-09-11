@@ -5,10 +5,16 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgCalendarModule  } from 'ionic2-calendar';
 import { HomePage } from './home.page';
+import{PipesModule}from '../pipes/pipes.module'
+import { AutoCompleteModule } from 'ionic4-auto-complete';
+
+
+import { from } from 'rxjs';
 
 @NgModule({
   imports: [
     CommonModule,
+    AutoCompleteModule,
     FormsModule,
     IonicModule,
     NgCalendarModule,
@@ -17,7 +23,8 @@ import { HomePage } from './home.page';
         path: '',
         component: HomePage
       }
-    ])
+    ]),
+PipesModule
   ],
   declarations: [HomePage]
 })

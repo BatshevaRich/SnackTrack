@@ -5,7 +5,7 @@
     </ion-fab-button>
   </ion-fab>
 
-  <ion-searchbar
+ <!-- <ion-searchbar
     animated="true"
     [(ngModel)]="myInput"
     [showCancelButton]="shouldShowCancel"
@@ -15,7 +15,17 @@
     autocomplete="on"
     spellcheck="true"
   >
-  </ion-searchbar>
+  </ion-searchbar>-->
+
+    
+    <ion-auto-complete
+     [(ngModel)]="searchText"
+     (keyup.enter)="onSelected()" 
+     (itemSelected)="onSelected()"
+     [dataProvider]="autoCompleteLabelsService">
+    </ion-auto-complete>
+
+
   <ion-row style="background-color: blue">
     <ion-col
       size="3"
