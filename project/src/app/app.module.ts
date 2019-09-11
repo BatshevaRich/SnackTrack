@@ -30,4 +30,4 @@ import { NgbModalModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

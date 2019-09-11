@@ -23,9 +23,9 @@ import { Body } from '@angular/http/src/body';
 })
 export class ApiPictureService {
   labels: Label[];
-  // baseURL = 'http://localhost:54640/api/'
+  baseURL = 'http://localhost:54640/api/'
 // baseURL = 'https://helpless-mayfly-52.localtunnel.me/api/'
-  baseURL = 'http://b40029a0.ngrok.io/api/';
+  // baseURL = 'http://b40029a0.ngrok.io/api/';
   fileToUpload: File;
   constructor(public httpClient: HttpClient) {}
 
