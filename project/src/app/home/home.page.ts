@@ -9,6 +9,7 @@ import {
   isSameMonth,
   addHours
 } from 'date-fns';
+import {AutoCompleteLabelsService} from '../Providers/auto-complete-labels.service';
 import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
@@ -18,6 +19,7 @@ import {
   CalendarEvent
 } from 'angular-calendar';
 import { MealService } from '../Providers/meal.service';
+import { Router } from '@angular/router';
 const colors: any = {
   red: {
     primary: Image,
@@ -107,10 +109,11 @@ export class HomePage {
 
   activeDayIsOpen: boolean = true;
   mealsFromServer: [];
-  constructor(private modal: NgbModal, private mealService: MealService) {
+  constructor( private router: Router,private modal: NgbModal, private mealService: MealService, public autoCompleteLabelsService: AutoCompleteLabelsService,) {
     this.loadLabelsFromAPI();
     this.mealsFromServer = [];
   }
+  searchText = '';
   parseDate(value): Date {
     if (value.indexOf('-') > -1) {
       const str = value.split('-');
@@ -246,6 +249,17 @@ export class HomePage {
 
   closeOpenMonthViewDay() {
     this.activeDayIsOpen = false;
+  }
+  onSelected() {
+    // console.log(event.currentTarget);
+    const navigationExtras: NavigationExtras = {
+      queryParams: {
+        special: JSON.stringify(this.searchText)
+        // special: JSON.stringify(event.currentTarget.attributes[3].textContent)
+      }
+    };
+    this.searchText = '';
+    this.router.navigate(['search'], navigationExtras);
   }
 }
 

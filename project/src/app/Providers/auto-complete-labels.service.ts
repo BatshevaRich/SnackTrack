@@ -1,33 +1,30 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {map} from 'rxjs/operators';
-import {Observable, of} from 'rxjs'; 
+import {Observable, of} from 'rxjs';
 import {AutoCompleteService} from 'ionic4-auto-complete';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AutoCompleteLabelsService implements AutoCompleteService
-{
+export class AutoCompleteLabelsService implements AutoCompleteService {
   labelAttribute = 'name';
-  private labels:any[] = [];
- private baseURL="http://localhost:54640/api/"
- 
-  constructor(private http:HttpClient) { }
+  private labels: any[] = [];
+ private baseURL ='http://localhost:54640/api/'
 
-  getResults(keyword:string):Observable<any[]> 
-  { 
-    let observable:Observable<any>; 
-    if (this.labels.length === 0) { 
-      observable = this.http.get(this.baseURL+'Labels');
-     }
-      else {
-         observable = of(this.labels); 
-        } 
-        return observable.pipe(
-           map((result) => { 
-             return result.filter( (item) => { 
-               return item.toLowerCase().indexOf( keyword.toLowerCase())>-1; 
+  constructor(private http: HttpClient) { }
+
+  getResults(keyword: string): Observable<any[]> {
+    let observable: Observable<any>;
+    if (this.labels.length === 0) {
+      observable = this.http.get(this.baseURL + 'Labels');
+     } else {
+         observable = of(this.labels);
+        }
+    return observable.pipe(
+           map((result) => {
+             return result.filter( (item) => {
+               return item.toLowerCase().indexOf( keyword.toLowerCase()) > -1;
               } ); }
-  ) ); } 
+  ) ); }
             }
