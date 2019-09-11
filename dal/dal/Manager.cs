@@ -122,7 +122,7 @@ namespace dal
             }
             using (var f = File.OpenRead(Name))
             {
-                objectName = DateTime.Now.ToString(@"MM\-dd\-yyyy-h\:mm");
+                objectName = DateTime.Now.ToString(@"MM\-dd\-yyyy-h\:mm") +".jpg";
                 var x = storage.UploadObject(bucketName, objectName, null, f);
                 Console.WriteLine($"Uploaded {objectName}.");
             }
