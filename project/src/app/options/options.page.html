@@ -4,13 +4,15 @@
   </ion-toolbar>
 </ion-header>
 <!--
-  Generated template for the OptionsPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
+    Generated template for the OptionsPage page.
+    See http://ionicframework.com/docs/components/#navigation for more info on
+    Ionic pages and navigation.
+  -->
 <ion-content>
-  <ion-spinner name="bubbles" [hidden]="labels.length != 0"></ion-spinner>
+  <ion-spinner
+    name="bubbles"
+    [hidden]="labels.length != 0 || unwantedLabels.length != 0"
+  ></ion-spinner>
   <ion-card>
     <ion-card-header>
       <ion-img *ngIf="load" [src]="base64Image"></ion-img>
@@ -24,7 +26,7 @@
         <!-- <ion-button ion-button style="--background:white" > -->
         <ion-icon
           [id]="label.name"
-          name="checkmark"
+          name="close"
           (click)="moveToUnwanted($event)"
         ></ion-icon>
         <!-- </ion-button> -->
@@ -40,26 +42,27 @@
         <ion-icon name="add"></ion-icon>
       </ion-button>
       <!-- <ion-item > -->
-          <ion-input *ngIf="counter < 10"
-            color="primary"
-            type="text"
-            [(ngModel)]="value"
-            #box
-            (change)="addedLabel(box.value)"
-            placeholder="Add Label"
-            id="addL"
-          ></ion-input>
-        <!-- </ion-item> -->
+      <ion-input
+        *ngIf="counter < 10"
+        color="primary"
+        type="text"
+        [(ngModel)]="value"
+        #box
+        (change)="addedLabel(box.value)"
+        placeholder="Add Label"
+        id="addL"
+      ></ion-input>
+      <!-- </ion-item> -->
     </ion-card-content>
   </ion-card>
   <br />
-  
+
   <ion-chip *ngFor="let label of unwantedLabels">
-    <ion-icon name="ios-restaurant" color="primary"></ion-icon>
+    <!-- <ion-icon name="ios-restaurant" color="primary"></ion-icon> -->
     <ion-label>{{ label.name }}</ion-label>
     <ion-icon
       [id]="label.name"
-      name="close"
+      name="md-arrow-up"
       (click)="moveToWanted($event)"
     ></ion-icon>
   </ion-chip>

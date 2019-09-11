@@ -9,9 +9,7 @@
         <ion-card>
             <img [src]="meal.Path"/>
             <ion-card-content>
-              <ion-card-title>
-                {{meal.DateOfPic}}
-                </ion-card-title>
+                  {{meal.DateOfPic|date: 'dd/MM/yyyy  - hh:mm'}}
             </ion-card-content>
           </ion-card>
     </ion-list>
