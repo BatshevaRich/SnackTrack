@@ -31,6 +31,7 @@
     "cordova-plugin-camera": "^4.1.0",
     "core-js": "^2.5.4",
     "ionic2-calendar": "^0.5.4",
+    "ionic4-auto-complete": "^2.1.1",
     "rxjs": "~6.5.1",
     "rxjs-compat": "^6.5.3",
     "tslib": "^1.9.0",

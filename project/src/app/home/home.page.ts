@@ -167,4 +167,16 @@ export class HomePage implements OnInit {
     // send event....
     //
   }
+  sendImage($event): void {
+    const file: File = $event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (event: any) => {
+      localStorage.clear();
+      localStorage.setItem('loadedImage', event.target.result);
+    };
+    reader.readAsDataURL(file);
+    this.router.navigate(['/options']);
+    // this.navCtrl.navigateRoot("/options"); // go to next page
+  }
+
 }

@@ -10,10 +10,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { Camera } from '@ionic-native/camera/ngx';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AutoCompleteModule } from 'ionic4-auto-complete';
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, HttpClientModule, CommonModule, IonicModule.forRoot(), AppRoutingModule],
+  imports: [BrowserModule, HttpClientModule, CommonModule, IonicModule.forRoot(), AppRoutingModule,AutoCompleteModule],
   providers: [
     StatusBar,
     SplashScreen, HttpClientModule, Camera,

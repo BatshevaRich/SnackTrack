@@ -1,9 +1,9 @@
 <ion-content>
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <!-- <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button routerLink="../camera">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
-  </ion-fab>
+  </ion-fab> -->
 
   <ion-searchbar
     animated="true"
@@ -41,7 +41,46 @@
         </ion-buttons>
       </ion-header>
     </ion-col>
+    <!-- <ion-fab top right edge>
+      <button ion-fab mini><ion-icon name="add"></ion-icon></button>
+      <ion-fab-list>
+        <button ion-fab><ion-icon name="logo-facebook"></ion-icon></button>
+        <button ion-fab><ion-icon name="logo-twitter"></ion-icon></button>
+        <button ion-fab><ion-icon name="logo-vimeo"></ion-icon></button>
+        <button ion-fab><ion-icon name="logo-googleplus"></ion-icon></button>
+      </ion-fab-list>
+    </ion-fab> -->
+    <ion-fab vertical="bottom" horizontal="end">
+      <ion-fab-button>
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-list side="top">
+         
+        <ion-fab-button routerLink="../camera">
+          <ion-icon name="camera"></ion-icon>
+        </ion-fab-button>
 
+        <label style="size: 5000px" for="file-input">
+          <ion-fab-button >
+           <ion-icon name="link"></ion-icon>
+          </ion-fab-button>
+        </label>
+        <input  
+        type="file" 
+        id="file-input" 
+        accept="image/*" 
+        capture="camera"
+        (change)="sendImage($event)" 
+        style="display: none"/>‏ 
+        
+      </ion-fab-list>
+    </ion-fab>
+   
+    <!-- <ion-fab>
+        <ion-input
+           type="file" accept="image/*" capture="camera"(change)="sendImage($event)" id="fileInput">
+        </ion-input>
+       </ion-fab> -->
     <!-- Move back one screen of the slides -->
     <!-- <ion-col size="2" text-left >
           <ion-button fill="clear" (click)="back()">
@@ -70,4 +109,7 @@
     startingDayWeek="1"
   >
   </calendar>
+
+
+  
 </ion-content>
