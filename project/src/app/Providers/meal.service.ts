@@ -81,9 +81,12 @@ export class MealService {
 //      return v;
 //   }
 
-  public GetAllMeals():Observable<Meal[]>
-   {
-    return this.http.get<Meal[]>(this.baseURL + 'meal');
+  public GetAllMeals() {
+    const res = this.http.get(this.baseURL + 'meal');
+    return new Promise(resolve => {
+      res.subscribe(data => {
+        resolve(data);
+      });
+    });
    }
-   
 }
