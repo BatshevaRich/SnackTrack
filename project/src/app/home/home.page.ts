@@ -1,171 +1,265 @@
-import { CalendarComponent } from 'ionic2-calendar/calendar';
-import { Component, ViewChild, OnInit, Inject, LOCALE_ID } from '@angular/core';
-import { AlertController } from '@ionic/angular';
-import { formatDate } from '@angular/common';
-import { Variable } from '@angular/compiler/src/render3/r3_ast';
-import { NavController, NavParams } from '@ionic/angular';
-import { Router, NavigationExtras } from '@angular/router';
-import { Meal } from '../classes/Meal';
-import { CalendarService } from '../Providers/calendar.service';
-import {DayMeal} from '../classes/DayMeal';
+import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef } from '@angular/core';
+import {
+  startOfDay,
+  endOfDay,
+  subDays,
+  addDays,
+  endOfMonth,
+  isSameDay,
+  isSameMonth,
+  addHours
+} from 'date-fns';
+import {AutoCompleteLabelsService} from '../Providers/auto-complete-labels.service';
+import { Subject } from 'rxjs';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {
+  CalendarEventAction,
+  CalendarEventTimesChangedEvent,
+  CalendarView,
+  CalendarEvent
+} from 'angular-calendar';
+import { MealService } from '../Providers/meal.service';
+import { Router } from '@angular/router';
+const colors: any = {
+  red: {
+    primary: Image,
+    secondary: Image
+  },
+  blue: {
+    primary: '#1e90ff',
+    secondary: '#D1E8FF'
+  },
+  yellow: {
+    primary: '#e3bc08',
+    secondary: '#FDF1BA'
+  }
+};
+
 @Component({
   selector: 'app-home',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-
-export class HomePage implements OnInit {
-  // @ViewChild(CalendarComponent) myCal: CalendarComponent;
-  event: DayMeal;
-  minDate = new Date().toISOString();
-
-  // all meals returned from server
-  eventSource = new Array<DayMeal>();
-  viewTitle;
-
-  calendar = {
-    mode: 'month',
-    currentDate: new Date(),
+export class HomePage {
+  @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
+  view: CalendarView = CalendarView.Month;
+  CalendarView = CalendarView;
+  viewDate: Date = new Date();
+  modalData: {
+    action: string;
+    event: CalendarEvent;
   };
+  actions: CalendarEventAction[] = [
+    {
+      label: '<i class="fa fa-fw fa-pencil"></i>',
+      onClick: ({ event }: { event: CalendarEvent }): void => {
+        this.handleEvent('Edited', event);
+      }
+    },
+    {
+      label: '<i class="fa fa-fw fa-times"></i>',
+      onClick: ({ event }: { event: CalendarEvent }): void => {
+        this.events = this.events.filter(iEvent => iEvent !== event);
+        this.handleEvent('Deleted', event);
+      }
+    }
+  ];
+  refresh: Subject<any> = new Subject();
+  events: CalendarEvent[] = [
+    // {
+    //   start: subDays(startOfDay(new Date()), 1),
+    //   end: addDays(new Date(), 1),
+    //   title: 'A 3 day event',
+    //   color: colors.red,
+    //   actions: this.actions,
+    //   allDay: true,
+    //   resizable: {
+    //     beforeStart: true,
+    //     afterEnd: true
+    //   },
+    //   draggable: true
+    // },
+    // {
+    //   start: startOfDay(new Date()),
+    //   title: 'An event with no end date',
+    //   color: colors.yellow,
+    //   actions: this.actions
+    // },
+    // {
+    //   start: subDays(endOfMonth(new Date()), 3),
+    //   end: addDays(endOfMonth(new Date()), 3),
+    //   title: 'A long event that spans 2 months',
+    //   color: colors.blue,
+    //   allDay: true
+    // },
+    // {
+    //   start: addHours(startOfDay(new Date()), 2),
+    //   end: new Date(),
+    //   title: 'A draggable and resizable event',
+    //   color: colors.yellow,
+    //   actions: this.actions,
+    //   resizable: {
+    //     beforeStart: true,
+    //     afterEnd: true
+    //   },
+    //   draggable: true
+    // }
+  ];
 
-  flag = 0;
-  constructor(private alertCtrl: AlertController, @Inject(LOCALE_ID) private locale: string, private router: Router, private calendarS: CalendarService) {
-    // this.loadLabelsFromAPI();
+  activeDayIsOpen: boolean = true;
+  mealsFromServer: [];
+  constructor( private router: Router,private modal: NgbModal, private mealService: MealService, public autoCompleteLabelsService: AutoCompleteLabelsService,) {
+    this.loadLabelsFromAPI();
+    this.mealsFromServer = [];
+  }
+  searchText = '';
+  parseDate(value): Date {
+    if (value.indexOf('-') > -1) {
+      const str = value.split('-');
+      const year = Number(str[0]);
+      const month = Number(str[1]) - 1;
+      const s = str[2].split('T');
+      const time = s[1];
+      const date = Number(s[0]);
+      return new Date(year, month, date);
+    }
+    return new Date();
+  }
+  parseTime(value): number {
+    if (value.indexOf('-') > -1) {
+      const str = value.split('T');
+      const time = str[1];
+      const h = time.split(':');
+      return Number(h[0]);
+    }
+  }
+  convertMealsToEvent() {
+    this.mealsFromServer = this.mealsFromServer as [];
+    for (let index = 0; index < this.mealsFromServer.length; index++) {
+      // alert(this.mealsFromServer[0].DateOfPic);
+      colors.red.primary = new Image();
+      colors.red.primary.src = this.mealsFromServer[index].Path;
+      colors.red.secondary = new Image();
+      colors.red.secondary.src = this.mealsFromServer[index].Path;
+      const endate = new Date(this.parseDate(this.mealsFromServer[index].DateOfPic));
+
+      this.events.push({
+        start: addHours(startOfDay(this.parseDate(this.mealsFromServer[index].DateOfPic)), 2),
+        // start: subDays(startOfDay(new Date()), index),
+        end: addHours(startOfDay(this.parseDate(this.mealsFromServer[index].DateOfPic)), 4),
+        title: this.mealsFromServer[index].Labels[0],
+        color: colors.red,
+        actions: this.actions,
+        allDay: true,
+        resizable: {
+          beforeStart: true,
+          afterEnd: true
+        },
+        draggable: true
+      },
+      );
+    }
+
   }
 
-  resolveAfter2Seconds(date: Date) {
+  resolveAfter2Seconds() {
     return new Promise(resolve => {
       setTimeout(() => {
         resolve(
           // send the local storage base64 path
-          this.calendarS.LoadFoodsFromServerForDay(date).then(data => {
+          this.mealService.GetAllMeals().then(data => {
             console.log(data);
-            this.eventSource = [];
-            this.eventSource = data as Array<DayMeal>;
+            this.mealsFromServer = [];
+            this.mealsFromServer = data as [];
+            this.convertMealsToEvent();
           })
         );
       }, 400);
     });
   }
-  /**
-   * asynchronous func to load labels from webapi
-   * marks as true only 5, all the rest are marked as false
-   * called on page load
-   */
-  async loadLabelsFromAPI(date: Date) {
-    await this.resolveAfter2Seconds(date);
+  async loadLabelsFromAPI() {
+    await this.resolveAfter2Seconds();
+    console.log(this.mealsFromServer);
+    // this.convertMealsToEvent();
 
   }
 
-
-
-  ngOnInit() {
-    // this.resetEvent();
-    // const eventCopy = {
-    //   title: 'this.event.title',
-    //   startTime:  new Date().toISOString(),
-    //   endTime: new Date().toISOString(),
-    //   path: 'this.event.path',
-    //   desc: 'this.event.desc'
-    // };
-    // send eventCopy to api
-    // this.eventSource.push(eventCopy);
+  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+    if (isSameMonth(date, this.viewDate)) {
+      if (
+        (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
+        events.length === 0
+      ) {
+        this.activeDayIsOpen = false;
+      } else {
+        this.activeDayIsOpen = true;
+      }
+      this.viewDate = date;
+    }
   }
 
-  resetEvent() {
-    this.event = {
-      path: '',
-      hourS: new Date().toISOString(),
-      hourE: new Date().toISOString(),
-      categories: []
-    };
-  }
-
-  // Create the right event format and reload source
-  // addEvent(); {
-  //   const eventCopy = {
-  //     title: this.event.title,
-  //     startTime:  new Date(this.event.startTime),
-  //     endTime: new Date(this.event.endTime),
-  //     allDay: this.event.allDay,
-  //     desc: this.event.desc
-  //   };
-
-  //   if (eventCopy.allDay) {
-  //     const start = eventCopy.startTime;
-  //     const end = eventCopy.endTime;
-
-  //     eventCopy.startTime = new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), start.getUTCDate()));
-  //     eventCopy.endTime = new Date(Date.UTC(end.getUTCFullYear(), end.getUTCMonth(), end.getUTCDate() + 1));
-  //   }
-  // // send eventCopy to api????????????????? opens the take picture page.... or something else?????
-
-  //   // this.eventSource.push(eventCopy);
-  //   // this.myCal.loadEvents();
-  //   this.resetEvent();
-  // }
-  next() {
-    const swiper = document.querySelector('.swiper-container')['swiper'];
-    swiper.slideNext();
-  }
-
-  back() {
-    const swiper = document.querySelector('.swiper-container')['swiper'];
-    swiper.slidePrev();
-  }
-
-  // Change between month/week/day
-  changeMode(mode) {
-    this.calendar.mode = mode.detail.value;
-  }
-
-  // Focus today
-  today() {
-    this.calendar.currentDate = new Date();
-  }
-
-  // Selected date reange and hence title changed
-  onViewTitleChanged(title) {
-    this.viewTitle = title;
-  }
-
-  // Calendar event was clicked
-  async onEventSelected(event) {
-    // Use Angular date pipe for conversion
-    const start = formatDate(event.hourS, 'medium', this.locale);
-    const end = formatDate(event.hourE, 'medium', this.locale);
-
-    const alert = await this.alertCtrl.create({
-      header: event.title,
-      subHeader: event.desc,
-      message: 'From: ' + start + '<br><br>To: ' + end,
-      buttons: ['OK']
+  eventTimesChanged({
+    event,
+    newStart,
+    newEnd
+  }: CalendarEventTimesChangedEvent): void {
+    this.events = this.events.map(iEvent => {
+      if (iEvent === event) {
+        return {
+          ...event,
+          start: newStart,
+          end: newEnd
+        };
+      }
+      return iEvent;
     });
+    this.handleEvent('Dropped or resized', event);
   }
 
+  handleEvent(action: string, event: CalendarEvent): void {
+    this.modalData = { event, action };
+    this.modal.open(this.modalContent, { size: 'lg' });
+  }
 
-  ionChange(event) {
+  addEvent(): void {
+    this.events = [
+      ...this.events,
+      {
+        title: 'New event',
+        start: startOfDay(new Date()),
+        end: endOfDay(new Date()),
+        color: colors.red,
+        draggable: true,
+        resizable: {
+          beforeStart: true,
+          afterEnd: true
+        }
+      }
+    ];
+  }
+
+  deleteEvent(eventToDelete: CalendarEvent) {
+    this.events = this.events.filter(event => event !== eventToDelete);
+  }
+
+  setView(view: CalendarView) {
+    this.view = view;
+  }
+
+  closeOpenMonthViewDay() {
+    this.activeDayIsOpen = false;
+  }
+  onSelected() {
     // console.log(event.currentTarget);
     const navigationExtras: NavigationExtras = {
       queryParams: {
-        special: JSON.stringify(event.target.value)
+        special: JSON.stringify(this.searchText)
         // special: JSON.stringify(event.currentTarget.attributes[3].textContent)
       }
     };
-    event.target.value = '';
+    this.searchText = '';
     this.router.navigate(['search'], navigationExtras);
-  }
-
-  // Time slot was clicked
-  onTimeSelected(event) {
-    const selected = new Date(event.selectedTime);
-    this.event.hourS = selected.toISOString();
-    selected.setHours(selected.getHours() + 1);
-    this.event.hourE = (selected.toISOString());
-    this.loadLabelsFromAPI(selected);
-
-    // send event....
-    //
   }
   sendImage($event): void {
     const file: File = $event.target.files[0];
@@ -180,3 +274,4 @@ export class HomePage implements OnInit {
   }
 
 }
+
