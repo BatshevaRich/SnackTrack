@@ -19,7 +19,7 @@ import {
   CalendarEvent
 } from 'angular-calendar';
 import { MealService } from '../Providers/meal.service';
-import { Router } from '@angular/router';
+import { Router, NavigationExtras } from '@angular/router';
 const colors: any = {
   red: {
     primary: Image,
