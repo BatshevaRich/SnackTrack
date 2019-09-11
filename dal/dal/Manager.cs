@@ -2,8 +2,6 @@
 using Google.Cloud.Storage.V1;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Core.Objects;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -49,7 +47,7 @@ namespace dal
         }
 
         public static List<Meal> getMealsToDay(DateTime date)
-        {
+        {   
             List<meal> meals = new List<meal>();
             using (var contextdb = new dbDietDairyEntities())
             {
@@ -112,7 +110,7 @@ namespace dal
                 // Create a new stream to write to the file
                 Writer = new BinaryWriter(File.OpenWrite(Name));
 
-                // Writer raw data
+                // Writer raw data                
                 Writer.Write(binData);
                 Writer.Flush();
                 Writer.Close();
