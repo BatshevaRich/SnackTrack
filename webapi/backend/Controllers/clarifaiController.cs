@@ -18,7 +18,8 @@ namespace backend.Controllers
         [Route("getasync")]
         [HttpGet]
         public async Task<List<Label>> GetAsync()
-        {//basic get function, does not get any parameters.
+        {
+            //basic get function, does not get any parameters.
             //only for testing purposes.
             var res = await CLARIFAI_API_URL.PublicModels.FoodModel.Predict(
                     new ClarifaiURLImage("https://www.kingarthurflour.com/sites/default/files/recipe_legacy/1496-3-large.jpg"),

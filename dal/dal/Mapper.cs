@@ -10,6 +10,7 @@ namespace dal
         {
             meal res = new meal();
             res.path = Manager.UploadFileToStorage("dietdiaryfoodpics", meal.Path);
+            res.tags = "";
             foreach (var item in meal.Labels)
             {
                 if (res.tags.Equals(""))

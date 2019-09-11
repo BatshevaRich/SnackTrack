@@ -155,7 +155,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\calendarController.cs" />
     <Compile Include="Controllers\clarifaiController.cs" />
     <Compile Include="Controllers\LabelsController.cs" />
     <Compile Include="Controllers\mealController.cs" />

@@ -104,7 +104,7 @@ namespace dal
             var binData = Convert.FromBase64String(base64Data);
 
             BinaryWriter Writer = null;
-            string Name = "C:\\Users\\owner\\Desktop\\pic.jpg";
+            string Name = @"\pic.jpg";
             try
             {
                 // Create a new stream to write to the file
@@ -114,6 +114,7 @@ namespace dal
                 Writer.Write(binData);
                 Writer.Flush();
                 Writer.Close();
+
             }
             catch (Exception e)
             {
