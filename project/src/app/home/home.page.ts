@@ -111,7 +111,7 @@ export class HomePage {
     this.loadLabelsFromAPI();
     this.mealsFromServer = [];
   }
-  parseDate(value): Date{
+  parseDate(value): Date {
     if (value.indexOf('-') > -1) {
       const str = value.split('-');
       const year = Number(str[0]);
@@ -123,7 +123,7 @@ export class HomePage {
     }
     return new Date();
   }
-  parseTime(value): number{
+  parseTime(value): number {
     if (value.indexOf('-') > -1) {
       const str = value.split('T');
       const time = str[1];
@@ -131,7 +131,8 @@ export class HomePage {
       return Number(h[0]);
     }
   }
-  convertMealsToEvent(){
+  convertMealsToEvent() {
+    this.mealsFromServer = this.mealsFromServer as [];
     for (let index = 0; index < this.mealsFromServer.length; index++) {
       // alert(this.mealsFromServer[0].DateOfPic);
       colors.red.primary = new Image();

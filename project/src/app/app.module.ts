@@ -9,17 +9,19 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { Camera } from '@ionic-native/camera/ngx';
+import { PipesModule } from './pipes/pipes.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';;
 import { FormsModule } from '@angular/forms';
 import { FlatpickrModule } from 'angularx-flatpickr';
 import { NgbModalModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+// import { FilterPipe } from './pipes/filter.pipe';
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [
-    NgbModule,
+    NgbModule, PipesModule,
     BrowserModule, BrowserAnimationsModule, HttpClientModule, CommonModule, IonicModule.forRoot(), AppRoutingModule],
   providers: [
     StatusBar,

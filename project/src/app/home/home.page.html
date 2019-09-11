@@ -1,66 +1,22 @@
+<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab-button routerLink="../camera">
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
 <ion-content>
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button routerLink="../camera">
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
- 
-  <ion-searchbar
-    animated="true"
-    [(ngModel)]="myInput"
-    [showCancelButton]="shouldShowCancel"
-    (keyup.enter)="ionChange($event)"
-    (ionCancel)="onCancel($event)"
-    animated="true"
-    autocomplete="on"
-    spellcheck="true"
-  >
-  </ion-searchbar>
-  <!-- <ion-row style="background-color: blue">
-    <ion-col
-      size="3"
-      style="background-color: blue;font-size:20px;place-items:unset;"
-    >
-      {{ viewTitle }}
-    </ion-col>
-    <ion-col size="2" >
-      <ion-select placeholder='Change Display Format' (ionChange)="changeMode($event)">
-        <ion-select-option value="month">Month</ion-select-option>
-        <ion-select-option value="week">Week</ion-select-option>
-        <ion-select-option value="day">Day</ion-select-option>
-      </ion-select>
-    </ion-col>
+<ion-auto-complete
+[(ngModel)]="searchText"
+(keyup.enter)="onSelected()" 
+(itemSelected)="onSelected()"
+[dataProvider]="autoCompleteLabelsService">
+</ion-auto-complete>
 
-    <ion-col size="2" style="background-color: blue;font-size:20px">
-    </ion-col>
 
-    <ion-col size="2" style="background-color: blue;font-size:20px">
-      <ion-header>
-        <ion-buttons slot="center" style="background-color: blue">
-          <ion-button (click)="today()">Today</ion-button>
-        </ion-buttons>
-      </ion-header>
-    </ion-col> -->
-
-    <!-- Move back one screen of the slides -->
-    <!-- <ion-col size="2" text-left >
-          <ion-button fill="clear" (click)="back()">
-            <ion-icon name="arrow-back" slot="icon-only"></ion-icon>
-          </ion-button>
-        </ion-col> -->
-
-    <!-- Move forward one screen of the slides -->
-    <!-- <ion-col size="2" text-right style="background-color: deeppink">
-          <ion-button fill="clear" (click)="next()">
-            <ion-icon name="arrow-forward" slot="icon-only"></ion-icon>
-          </ion-button>
-        </ion-col> -->
-  <!-- </ion-row> -->
   <div class="row text-center">
     <div class="col-md-4">
       <ion-buttons>
         <ion-button
-        color="primary"
+          color="primary"
           mwlCalendarPreviousView
           [view]="view"
           [(viewDate)]="viewDate"
@@ -145,7 +101,4 @@
       (eventClicked)="handleEvent('Clicked', $event.event)"
       (eventTimesChanged)="eventTimesChanged($event)"
     >
-    </mwl-calendar-day-view>
-  </div>
-
-</ion-content>
+    </mwl-calendar-day-view></div></ion-content>

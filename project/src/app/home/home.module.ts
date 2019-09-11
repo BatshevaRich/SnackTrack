@@ -7,6 +7,10 @@ import { NgCalendarModule  } from 'ionic2-calendar';
 import { HomePage } from './home.page';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import{PipesModule}from '../pipes/pipes.module'
+import { AutoCompleteModule } from 'ionic4-auto-complete';
+import { from } from 'rxjs';
+
 @NgModule({
   imports: [
     CalendarModule.forRoot({
@@ -14,6 +18,7 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
       useFactory: adapterFactory
     }),
     CommonModule,
+    AutoCompleteModule,
     FormsModule,
     IonicModule,
     // NgCalendarModule,
@@ -22,7 +27,8 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
         path: '',
         component: HomePage
       }
-    ])
+    ]),
+PipesModule
   ],
   declarations: [HomePage]
 })
