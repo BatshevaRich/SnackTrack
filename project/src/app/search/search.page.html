@@ -1,8 +1,8 @@
-<ion-header>
+<!-- <ion-header>
   <ion-toolbar>
     <ion-title>search</ion-title>
   </ion-toolbar>
-</ion-header>
+</ion-header> -->
 
 <ion-content padding>
     <ion-list ion-item *ngFor="let meal of meals">
@@ -13,5 +13,5 @@
             </ion-card-content>
           </ion-card>
     </ion-list>
- 
+ <p *ngIf=[result]>you didn't eat any {{data}} yet</p>
 </ion-content>

@@ -13,7 +13,7 @@ export class SearchPage {
   meals: Meal[]=[];
   data: any;
   myMeal: any;
-
+result:boolean;
   load: any;
   ionViewDidLoad() {
 
@@ -30,6 +30,9 @@ export class SearchPage {
           });
         }
       });
+      if(this.meals==[])
+        this.result=true;
+     
   }
 
 

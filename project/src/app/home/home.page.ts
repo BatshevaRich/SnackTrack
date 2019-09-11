@@ -143,12 +143,19 @@ export class HomePage {
       colors.red.secondary = new Image();
       colors.red.secondary.src = this.mealsFromServer[index].Path;
       const endate = new Date(this.parseDate(this.mealsFromServer[index].DateOfPic));
-
+let s="";
+let i;
+for( i=0;i<this.mealsFromServer[index].Labels.length-1;i++)
+{
+  s=s+this.mealsFromServer[index].Labels[i]+', ';
+}
+s=s+this.mealsFromServer[index].Labels[i];
       this.events.push({
         start: addHours(startOfDay(this.parseDate(this.mealsFromServer[index].DateOfPic)), 2),
         // start: subDays(startOfDay(new Date()), index),
         end: addHours(startOfDay(this.parseDate(this.mealsFromServer[index].DateOfPic)), 4),
-        title: this.mealsFromServer[index].Labels[0],
+        title:s,
+          
         color: colors.red,
         actions: this.actions,
         allDay: true,

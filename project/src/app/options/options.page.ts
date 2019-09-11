@@ -4,6 +4,9 @@ import { ApiPictureService } from '../Providers/api-picture.service';
 import { Label } from '../../app/classes/Label';
 import { MealService } from '../providers/meal.service';
 import { filter } from 'rxjs/operator/filter';
+// import { Route } from '@angular/compiler/src/core';
+import { Router, NavigationExtras } from '@angular/router';
+
 @Component({
   selector: 'app-options',
   templateUrl: './options.page.html',
@@ -12,7 +15,8 @@ import { filter } from 'rxjs/operator/filter';
 export class OptionsPage {
   @ViewChild('box', null) userInput;
   constructor(
-    public apPic: ApiPictureService,
+    private router: Router,
+        public apPic: ApiPictureService,
     public loadingController: LoadingController,
     private mealProvider: MealService
   ) {
@@ -149,5 +153,16 @@ export class OptionsPage {
     );
     // localStorage.clear();
     alert('uploaded');
+  }
+  sendImage($event): void {
+    const file: File = $event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (event: any) => {
+      localStorage.clear();
+      localStorage.setItem('loadedImage', event.target.result);
+    };
+    reader.readAsDataURL(file);
+    this.router.navigate(['/options']);
+    // this.navCtrl.navigateRoot("/options"); // go to next page
   }
 }
