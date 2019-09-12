@@ -52,6 +52,15 @@
         placeholder="Add Label"
         id="addL"
       ></ion-input>
+      <ion-button
+  expand="block"
+    ion-button
+    color="primary"
+    (click)="uploadData()"
+    [hidden]="labels.length == 0"
+  >
+    Save To Calendar
+  </ion-button>
       <!-- </ion-item> -->
     </ion-card-content>
   </ion-card>
@@ -67,14 +76,7 @@
     ></ion-icon>
   </ion-chip>
   <br />
-  <ion-button
-    ion-button
-    color="primary"
-    (click)="uploadData()"
-    [hidden]="labels.length == 0"
-  >
-    OK
-  </ion-button>
+  
 </ion-content>
 
 

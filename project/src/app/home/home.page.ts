@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef, OnInit } from '@angular/core';
 import {
   startOfDay,
   endOfDay,
@@ -9,17 +9,18 @@ import {
   isSameMonth,
   addHours
 } from 'date-fns';
-import {AutoCompleteLabelsService} from '../Providers/auto-complete-labels.service';
+import { AutoCompleteLabelsService } from '../Providers/auto-complete-labels.service';
 import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   CalendarEventAction,
   CalendarEventTimesChangedEvent,
   CalendarView,
-  CalendarEvent
+  CalendarEvent,
 } from 'angular-calendar';
 import { MealService } from '../Providers/meal.service';
 import { Router, NavigationExtras } from '@angular/router';
+import { CalendarEventActionsComponent } from 'angular-calendar/modules/common/calendar-event-actions.component';
 const colors: any = {
   red: {
     primary: Image,
@@ -41,7 +42,8 @@ const colors: any = {
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage {
+export class HomePage implements OnInit {
+  @ViewChild('box', null) userInput;
   @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
@@ -52,7 +54,7 @@ export class HomePage {
   };
   actions: CalendarEventAction[] = [
     {
-      label: '<i class="fa fa-fw fa-pencil"></i>',
+      label: '<i></i>',
       onClick: ({ event }: { event: CalendarEvent }): void => {
         this.handleEvent('Edited', event);
       }
@@ -106,12 +108,25 @@ export class HomePage {
     //   draggable: true
     // }
   ];
-
-  activeDayIsOpen: boolean = true;
+  ngOnInit() {
+    var that  = this;
+    setTimeout(function () {  // still buggy need to wait for dom to load.
+      // const date: Date = new Date();
+      // const events: CalendarEvent[] = [];
+      // that.dayClicked({date, events});
+      that.loaded = 0;
+      // that.userInput.dayClicked();
+    }, 3000);
+  }
+  loaded: number;
+  activeDayIsOpen: boolean = false;
   mealsFromServer: [];
-  constructor( private router: Router,private modal: NgbModal, private mealService: MealService, public autoCompleteLabelsService: AutoCompleteLabelsService,) {
+  constructor(private router: Router, private modal: NgbModal, private mealService: MealService, public autoCompleteLabelsService: AutoCompleteLabelsService, ) {
+    this.loaded = -1;
     this.loadLabelsFromAPI();
     this.mealsFromServer = [];
+    // this.dayClicked();
+      
   }
   searchText = '';
   parseDate(value): Date {
@@ -143,19 +158,17 @@ export class HomePage {
       colors.red.secondary = new Image();
       colors.red.secondary.src = this.mealsFromServer[index].Path;
       const endate = new Date(this.parseDate(this.mealsFromServer[index].DateOfPic));
-let s="";
-let i;
-for( i=0;i<this.mealsFromServer[index].Labels.length-1;i++)
-{
-  s=s+this.mealsFromServer[index].Labels[i]+', ';
-}
-s=s+this.mealsFromServer[index].Labels[i];
+      let s = "";
+      let i;
+      for (i = 0; i < this.mealsFromServer[index].Labels.length - 1; i++) {
+        s = s + this.mealsFromServer[index].Labels[i] + ', ';
+      }
+      s = s + this.mealsFromServer[index].Labels[i];
       this.events.push({
         start: addHours(startOfDay(this.parseDate(this.mealsFromServer[index].DateOfPic)), 2),
         // start: subDays(startOfDay(new Date()), index),
         end: addHours(startOfDay(this.parseDate(this.mealsFromServer[index].DateOfPic)), 4),
-        title:s,
-          
+        title: s,
         color: colors.red,
         actions: this.actions,
         allDay: true,
@@ -167,6 +180,7 @@ s=s+this.mealsFromServer[index].Labels[i];
       },
       );
     }
+    
 
   }
 
@@ -180,6 +194,8 @@ s=s+this.mealsFromServer[index].Labels[i];
             this.mealsFromServer = [];
             this.mealsFromServer = data as [];
             this.convertMealsToEvent();
+            // this.loaded = true;
+            // this.userInput.onClick();
           })
         );
       }, 400);
@@ -188,11 +204,24 @@ s=s+this.mealsFromServer[index].Labels[i];
   async loadLabelsFromAPI() {
     await this.resolveAfter2Seconds();
     console.log(this.mealsFromServer);
+    
     // this.convertMealsToEvent();
 
   }
-
+  imagesToLoad: string[]= [];
+  labelsToLoad: string[] = [];
+  dateToLoad: Date;
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+    this.imagesToLoad = [];
+    for (let index = 0; index < this.mealsFromServer.length; index++) {
+      const d = this.parseDate(this.mealsFromServer[index].DateOfPic);
+      if(d.getDate() == date.getDate()){
+        this.dateToLoad = d.toLocaleDateString();
+        this.imagesToLoad.push(this.mealsFromServer[index].Path);
+      }
+    }
+console.log(this.imagesToLoad);
+
     if (isSameMonth(date, this.viewDate)) {
       if (
         (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||

@@ -4,16 +4,15 @@
   </ion-fab-button>
 </ion-fab> -->
 <ion-content>
-<ion-auto-complete
-[(ngModel)]="searchText"
-(keyup.enter)="onSelected()" 
-(itemSelected)="onSelected()"
-[dataProvider]="autoCompleteLabelsService">
-</ion-auto-complete>
-
-
-  <div class="row text-center">
-    <div class="col-md-4">
+  <ion-auto-complete
+    [(ngModel)]="searchText"
+    (keyup.enter)="onSelected()"
+    (itemSelected)="onSelected()"
+    [dataProvider]="autoCompleteLabelsService"
+  >
+  </ion-auto-complete>
+  <ion-row>
+    <ion-col>
       <ion-buttons>
         <ion-button
           color="primary"
@@ -22,32 +21,33 @@
           [(viewDate)]="viewDate"
           (viewDateChange)="closeOpenMonthViewDay()"
         >
-          Previous
+          <ion-icon name="arrow-dropleft-circle"></ion-icon>
         </ion-button>
         <ion-button
+          color="primary"
           class="btn btn-outline-secondary"
           mwlCalendarToday
           [(viewDate)]="viewDate"
         >
-          Today
+          <ion-icon name="arrow-dropdown-circle"></ion-icon>
         </ion-button>
         <ion-button
-          class="btn btn-primary"
           mwlCalendarNextView
           [view]="view"
           [(viewDate)]="viewDate"
           (viewDateChange)="closeOpenMonthViewDay()"
         >
-          Next
+          <ion-icon name="arrow-dropright-circle" item-end large></ion-icon>
         </ion-button>
       </ion-buttons>
-    </div>
-    <div class="col-md-4">
+    </ion-col>
+    <ion-col>
       <h3>{{ viewDate | calendarDate: view + "ViewTitle":"en" }}</h3>
-    </div>
-    <div class="col-md-4">
+    </ion-col>
+    <ion-col class="col-md-4">
       <ion-buttons class="btn-group">
         <ion-button
+          color="primary"
           class="btn btn-primary"
           (click)="setView(CalendarView.Month)"
           [class.active]="view === CalendarView.Month"
@@ -55,6 +55,7 @@
           Month
         </ion-button>
         <ion-button
+          color="primary"
           class="btn btn-primary"
           (click)="setView(CalendarView.Week)"
           [class.active]="view === CalendarView.Week"
@@ -62,6 +63,7 @@
           Week
         </ion-button>
         <ion-button
+          color="primary"
           class="btn btn-primary"
           (click)="setView(CalendarView.Day)"
           [class.active]="view === CalendarView.Day"
@@ -69,11 +71,13 @@
           Day
         </ion-button>
       </ion-buttons>
-    </div>
-  </div>
+    </ion-col>
+  </ion-row>
   <br />
   <div [ngSwitch]="view">
     <mwl-calendar-month-view
+      #box
+      id="calendarMonth"
       *ngSwitchCase="CalendarView.Month"
       [viewDate]="viewDate"
       [events]="events"
@@ -101,30 +105,41 @@
       (eventClicked)="handleEvent('Clicked', $event.event)"
       (eventTimesChanged)="eventTimesChanged($event)"
     >
-    </mwl-calendar-day-view></div></ion-content>
-    <ion-fab vertical="bottom" horizontal="end">
-        <ion-fab-button>
-          <ion-icon name="add"></ion-icon>
-        </ion-fab-button>
-        <ion-fab-list side="top">
-           
-          <ion-fab-button routerLink="../camera">
-            <ion-icon name="camera"></ion-icon>
-          </ion-fab-button>
-  
-          <label style="size: 5000px" for="file-input">
-            <ion-fab-button >
-             <ion-icon name="link"></ion-icon>
-            </ion-fab-button>
-          </label>
-          <input  
-          type="file" 
-          id="file-input" 
-          accept="image/*" 
-          capture="camera"
-          (change)="sendImage($event)" 
-          style="display: none"/>‏ 
-          
-        </ion-fab-list>
-      </ion-fab>
-     
+    </mwl-calendar-day-view></div
+></ion-content>
+<ion-card [hidden]="imagesToLoad.Length>0">
+  <ion-card-header>
+    Foods for: {{dateToLoad}}
+    <!-- <ion-img *ngIf="load" [src]="base64Image"></ion-img> -->
+    <ion-card-title> </ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <span >
+      <ion-avatar *ngFor="let i of imagesToLoad">
+    <ion-img  [src] =i></ion-img> </ion-avatar>
+  </span></ion-card-content>
+</ion-card>
+<ion-fab vertical="bottom" horizontal="end">
+  <ion-fab-button>
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-list side="top">
+    <ion-fab-button routerLink="../camera">
+      <ion-icon name="camera"></ion-icon>
+    </ion-fab-button>
+
+    <label style="size: 5000px" for="file-input">
+      <ion-fab-button>
+        <ion-icon name="link"></ion-icon>
+      </ion-fab-button>
+    </label>
+    <input
+      type="file"
+      id="file-input"
+      accept="image/*"
+      capture="camera"
+      (change)="sendImage($event)"
+      style="display: none"
+    />‏
+  </ion-fab-list>
+</ion-fab>

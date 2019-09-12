@@ -10,17 +10,18 @@ import { Meal } from '../classes/Meal';
 })
 export class SearchPage {
 
-  meals: Meal[]=[];
+  meals: Meal[] = [];
   data: any;
   myMeal: any;
-result:boolean;
+display: boolean;
   load: any;
   ionViewDidLoad() {
 
   }
   constructor(private route: ActivatedRoute, private router: Router, public mealService: MealService) {
-      console.log(this.meals);
-      this.route.queryParams.subscribe(params => {
+    this.display = false;
+    console.log(this.meals);
+    this.route.queryParams.subscribe(params => {
         if (params && params.special) {
           this.data = JSON.parse(params.special);
           console.log(params);
@@ -30,9 +31,10 @@ result:boolean;
           });
         }
       });
-      if(this.meals==[])
-        this.result=true;
-     
+      if (this.meals == []) {
+        this.display=true;
+      }
+
   }
 
 
