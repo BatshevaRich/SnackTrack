@@ -1,12 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, NavController } from '@ionic/angular';
 import { ApiPictureService } from '../Providers/api-picture.service';
 import { Label } from '../../app/classes/Label';
 import { MealService } from '../providers/meal.service';
 import { filter } from 'rxjs/operator/filter';
 // import { Route } from '@angular/compiler/src/core';
 import { Router, NavigationExtras } from '@angular/router';
-
 @Component({
   selector: 'app-options',
   templateUrl: './options.page.html',
@@ -15,6 +14,7 @@ import { Router, NavigationExtras } from '@angular/router';
 export class OptionsPage {
   @ViewChild('box', null) userInput;
   constructor(
+    private navControl: NavController,
     private router: Router,
         public apPic: ApiPictureService,
     public loadingController: LoadingController,
@@ -151,14 +151,15 @@ export class OptionsPage {
       new Date(), // time
       stringedLabels // labels
     );
-    // localStorage.clear();
-    alert('uploaded');
+    localStorage.clear();
+    // location.assign('/home');
+    this.router.navigate(['/home']);
   }
   sendImage($event): void {
     const file: File = $event.target.files[0];
     const reader = new FileReader();
     reader.onload = (event: any) => {
-      localStorage.clear();
+      // localStorage.clear();
       localStorage.setItem('loadedImage', event.target.result);
     };
     reader.readAsDataURL(file);
