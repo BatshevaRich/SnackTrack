@@ -7,6 +7,10 @@ import { CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView, Cale
 import { MealService } from '../Providers/meal.service';
 import { Router, NavigationExtras } from '@angular/router';
 import { CalendarEventActionsComponent } from 'angular-calendar/modules/common/calendar-event-actions.component';
+import { PopoverController } from '@ionic/angular'
+import { ViewDayMealPage } from '../view-day-meal/view-day-meal.page';
+
+
 const colors: any = {
   red: {
     primary: Image,
@@ -105,7 +109,7 @@ export class HomePage implements OnInit {
   didNotLoad: boolean;
   activeDayIsOpen: boolean = false;
   mealsFromServer: [];
-  constructor(private router: Router, private modal: NgbModal, private mealService: MealService, public autoCompleteLabelsService: AutoCompleteLabelsService, ) {
+  constructor(private router: Router, private modal: NgbModal, private mealService: MealService, public autoCompleteLabelsService: AutoCompleteLabelsService,public popoverCtrl: PopoverController ) {
     this.didNotLoad = true;
     // await this.loadLabelsFromAPI();
     this.mealsFromServer = [];
@@ -287,5 +291,22 @@ export class HomePage implements OnInit {
     reader.readAsDataURL(file);
     this.router.navigate(['/options']);
     // this.navCtrl.navigateRoot("/options"); // go to next page
+  }
+
+  // presentPopover(myEvent) {
+  //   let popover = this.popoverCtrl.create(ViewDayMealPage);
+  //   popover.present({
+  //     ev: myEvent
+  //   });
+  // }
+  async presentPopover({ date, events }: { date: Date; events: CalendarEvent[] }) {
+    const popover =await this.popoverCtrl.create({
+      component: ViewDayMealPage,
+      componentProps:{
+        dateToday:date
+      },
+    });
+    popover.style.cssText='--max-height:45%;--width:95%';
+    popover.present();
   }
 }

@@ -2,7 +2,7 @@
   <ion-auto-complete [(ngModel)]="searchText" (keyup.enter)="onSelected()" (itemSelected)="onSelected()"
     [dataProvider]="autoCompleteLabelsService">
   </ion-auto-complete>
-
+  
   <ion-row >
     <ion-col>
       <ion-button fill="clear" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
@@ -25,7 +25,7 @@
   </ion-button>
   <div [ngSwitch]="view">
     <mwl-calendar-month-view #box id="calendarMonth" *ngSwitchCase="CalendarView.Month" [viewDate]="viewDate"
-      [events]="events" [refresh]="refresh" [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)"
+      [events]="events" [refresh]="refresh" [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="presentPopover($event.day)"
       (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
     </mwl-calendar-month-view>
     <span>{{events}}</span>

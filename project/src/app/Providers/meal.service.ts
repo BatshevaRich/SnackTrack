@@ -48,8 +48,7 @@ export class MealService {
   }
 
   public GetTodayMeals(myDate: Date) {
-    const myS: number = 1;
-    var res = this.http.get(this.baseURL + 'meal?dateTime=' + myS);
+    var res = this.http.get(this.baseURL + 'meal?dateTime=' + myDate.toDateString());
     return new Promise(resolve => {
       res.subscribe(data => {
         resolve(data);
@@ -82,7 +81,7 @@ export class MealService {
 //   }
 
   public GetAllMeals() {
-    const res = this.http.get(this.baseURL + 'meal');
+const res = this.http.get(this.baseURL + 'meal');
     return new Promise(resolve => {
       res.subscribe(data => {
         resolve(data);

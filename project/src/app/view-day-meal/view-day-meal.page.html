@@ -1,0 +1,23 @@
+<ion-grid class="popover-page" >  
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{today|date:'d MMMM, y'}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+ <ion-list>
+    <ion-item *ngFor="let m of mealsToday" lines="full">
+        <ion-thumbnail slot="start">
+          <img [src]="m.Path">
+        </ion-thumbnail>
+        <ion-label>
+          <h3>{{m.DateOfPic|date:'shortTime'}}</h3>
+          <p class="ion-text-wrap">{{m.Labels}}</p>
+        </ion-label>
+      </ion-item>
+  </ion-list> 
+  <ion-label *ngIf='mealsToday.length==0'>You didn't eat anything today</ion-label>
+</ion-content>
+</ion-grid>
