@@ -25,19 +25,31 @@ display: boolean;
         if (params && params.special) {
           this.data = JSON.parse(params.special);
           console.log(params);
-          this.mealService.GetMealsForSearch(this.data).then((mealk: Meal[]) => {
-            this.meals = mealk;
-            console.log(this.meals);
-          });
-        }
-      });
+          this.loadLabelsFromAPI();
+          };
+        });
       if (this.meals == []) {
         this.display=true;
       }
 
   }
 
-
+  resolveAfter2Seconds() {
+    return new Promise(resolve => {
+      // setTimeout(() => {
+        resolve(
+          // send the local storage base64 path
+          this.mealService.GetMealsForSearch(this.data).then((mealk: Meal[]) => {
+            this.meals = mealk;
+            console.log(this.meals);
+            return mealk;
+      // }, 400);
+    }));
+  })}
+  async loadLabelsFromAPI() {
+    this.meals = await this.resolveAfter2Seconds() as Meal[];
+    this.display=true;
+  }
 
   // resolveAfter2Seconds() {
   //   return new Promise(resolve => {

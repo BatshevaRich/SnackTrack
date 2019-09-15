@@ -16,12 +16,13 @@ export class OptionsPage {
   constructor(
     private navControl: NavController,
     private router: Router,
-        public apPic: ApiPictureService,
+    public apPic: ApiPictureService,
     public loadingController: LoadingController,
     private mealProvider: MealService
   ) {
     this.load = true;
     this.loadLabelsFromAPI();
+    // apPic.GetLabels();
     // init arrays
     this.labels = new Array<{
       name: string;
@@ -55,23 +56,23 @@ export class OptionsPage {
     this.imageData = localStorage.getItem('loadedImage');
     this.load = true;
     this.base64Image = this.imageData;
+    this.click = false;
   }
-
+click: boolean;
   /**
    * asynchronous func to load labels from webapi
    * called by loadLabelsFromAPI func
    */
   resolveAfter2Seconds() {
     return new Promise(resolve => {
-      setTimeout(() => {
+      // setTimeout(() => {
         resolve(
           // send the local storage base64 path
           this.apPic.InsertImages(this.imageData).then(data => {
-            this.tags = data;
-            console.log(this.tags.length);
+            return data;
           })
         );
-      }, 400);
+      // }, 400);
     });
   }
   // ionic cordova run android --target=402000f30108aa829446
@@ -81,16 +82,22 @@ export class OptionsPage {
    * called on page load
    */
   async loadLabelsFromAPI() {
-    await this.resolveAfter2Seconds();
+    this.tags = await this.resolveAfter2Seconds();
     this.loadedLabels = this.tags as Label[]; // this.tags is the result from webapi
     let i = 0;
-    for (; i < this.loadedLabels.length; i++) {
+    for (; i < 5; i++) {
       this.labels.push({
         name: this.loadedLabels[i].Name,
         wanted: true
       });
     }
-    this.counter = i;
+    for(; i< this.loadedLabels.length; i++){
+      this.unwantedLabels.push({
+        name: this.loadedLabels[i].Name,
+        wanted: true
+      })
+    }
+    this.counter = 5;
   }
 
   /**
@@ -118,8 +125,11 @@ export class OptionsPage {
       }
     }
     this.value = ''; // ngmodel
+    this.click = false;
   }
   add() {
+    this.click = true;
+    // document.getElementById('addL').setFocus();
     this.userInput.setFocus();
   }
   moveToUnwanted($event) {
@@ -145,7 +155,7 @@ export class OptionsPage {
   uploadData() {
     console.log(this.labels);
     let stringedLabels: string[]; // var to keep chosen strings
-    stringedLabels = this.labels.filter(l => l.name).map(l => l.name  );
+    stringedLabels = this.labels.filter(l => l.name).map(l => l.name);
     this.mealProvider.SaveToServer(
       localStorage.getItem('loadedImage'), // path
       new Date(), // time
