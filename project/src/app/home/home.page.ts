@@ -9,6 +9,8 @@ import {
   isSameMonth,
   addHours
 } from 'date-fns';
+import { Title }     from '@angular/platform-browser';
+
 import { AutoCompleteLabelsService } from '../Providers/auto-complete-labels.service';
 import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -35,6 +37,7 @@ const colors: any = {
     secondary: '#FDF1BA'
   }
 };
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-home',
@@ -108,25 +111,28 @@ export class HomePage implements OnInit {
     //   draggable: true
     // }
   ];
-  ngOnInit() {
-    var that  = this;
-    setTimeout(function () {  // still buggy need to wait for dom to load.
-      // const date: Date = new Date();
-      // const events: CalendarEvent[] = [];
-      // that.dayClicked({date, events});
-      that.loaded = 0;
-      // that.userInput.dayClicked();
-    }, 3000);
+  async ngOnInit() {
+    this.loadLabelsFromAPI();
+    // var that  = this;
+    // setTimeout(function () {  // still buggy need to wait for dom to load.
+    //   // const date: Date = new Date();
+    //   // const events: CalendarEvent[] = [];
+    //   // that.dayClicked({date, events});
+    //   // that.userInput.dayClicked();
+    //   this.loadLabelsFromAPI();
+    // }, 3000);
   }
-  loaded: number;
+  didNotLoad: boolean;
   activeDayIsOpen: boolean = false;
   mealsFromServer: [];
-  constructor(private router: Router, private modal: NgbModal, private mealService: MealService, public autoCompleteLabelsService: AutoCompleteLabelsService, ) {
-    this.loaded = -1;
-    this.loadLabelsFromAPI();
+  constructor(private titleService: Title,private storage: Storage,private router: Router, private modal: NgbModal, private mealService: MealService, public autoCompleteLabelsService: AutoCompleteLabelsService, ) {
+    this.didNotLoad = true;
+    // await this.loadLabelsFromAPI();
     this.mealsFromServer = [];
     // this.dayClicked();
-      
+  }
+  someMethod(){
+    this.titleService.setTitle ('An Awesome Title');  
   }
   searchText = '';
   parseDate(value): Date {
@@ -152,7 +158,7 @@ export class HomePage implements OnInit {
   convertMealsToEvent() {
     this.mealsFromServer = this.mealsFromServer as [];
     for (let index = 0; index < this.mealsFromServer.length; index++) {
-      // alert(this.mealsFromServer[0].DateOfPic);
+// alert(this.mealsFromServer[0].DateOfPic);
       colors.red.primary = new Image();
       colors.red.primary.src = this.mealsFromServer[index].Path;
       colors.red.secondary = new Image();
@@ -183,10 +189,17 @@ export class HomePage implements OnInit {
     
 
   }
+  setValue(key: string, value: any) {
 
+    // this.storage.remove("key");
+    this.storage.set(key, value).then((response) => {
+    }).catch((error) => {
+      console.log('set error for ' + key + ' ', error);
+    });
+    this.storage.set(key,value);
+  }
   resolveAfter2Seconds() {
     return new Promise(resolve => {
-      setTimeout(() => {
         resolve(
           // send the local storage base64 path
           this.mealService.GetAllMeals().then(data => {
@@ -194,15 +207,14 @@ export class HomePage implements OnInit {
             this.mealsFromServer = [];
             this.mealsFromServer = data as [];
             this.convertMealsToEvent();
-            // this.loaded = true;
+            this.didNotLoad = false;
             // this.userInput.onClick();
           })
         );
-      }, 400);
     });
   }
   async loadLabelsFromAPI() {
-    await this.resolveAfter2Seconds();
+    this.resolveAfter2Seconds();
     console.log(this.mealsFromServer);
     
     // this.convertMealsToEvent();
@@ -216,6 +228,7 @@ export class HomePage implements OnInit {
     for (let index = 0; index < this.mealsFromServer.length; index++) {
       const d = this.parseDate(this.mealsFromServer[index].DateOfPic);
       if(d.getDate() == date.getDate()){
+        alert("dayClicked");
         this.dateToLoad = d.toLocaleDateString();
         this.imagesToLoad.push(this.mealsFromServer[index].Path);
       }
@@ -298,16 +311,22 @@ console.log(this.imagesToLoad);
     this.router.navigate(['search'], navigationExtras);
   }
   sendImage($event): void {
-    const file: File = $event.target.files[0];
+        const file: File = $event.target.files[0];
+
     const reader = new FileReader();
     reader.onload = (event: any) => {
-      localStorage.clear();
-      localStorage.setItem('loadedImage', event.target.result);
+
+      // localStorage.clear();
+      // localStorage.setItem('loadedImage', event.target.result);
+      this.setValue("img",event.target.result);
+
     };
     reader.readAsDataURL(file);
     this.router.navigate(['/options']);
     // this.navCtrl.navigateRoot("/options"); // go to next page
   }
-
+  ss(){
+    alert("today");
+  }
+  
 }
-
