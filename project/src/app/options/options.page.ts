@@ -1,9 +1,12 @@
-import { Component, ViewChild } from '@angular/core';
-import { LoadingController } from '@ionic/angular';
+import { Component, ViewChild, Inject, LOCALE_ID } from '@angular/core';
+import { LoadingController, AlertController } from '@ionic/angular';
 import { ApiPictureService } from '../Providers/api-picture.service';
 import { Label } from '../../app/classes/Label';
 import { MealService } from '../providers/meal.service';
 import { filter } from 'rxjs/operator/filter';
+
+import { Router } from '@angular/router';
+import {Storage} from '@ionic/storage';
 @Component({
   selector: 'app-options',
   templateUrl: './options.page.html',
@@ -11,11 +14,15 @@ import { filter } from 'rxjs/operator/filter';
 })
 export class OptionsPage {
   @ViewChild('box', null) userInput;
-  constructor(
+  constructor(private storage: Storage,
+    private alertCtrl: AlertController,
+    @Inject(LOCALE_ID) private locale: string,
+    private router: Router,
     public apPic: ApiPictureService,
     public loadingController: LoadingController,
     private mealProvider: MealService
   ) {
+    this.getN();
     this.load = true;
     this.loadLabelsFromAPI();
     // init arrays
@@ -149,5 +156,14 @@ export class OptionsPage {
     );
     // localStorage.clear();
     alert('uploaded');
-  }
+  }  
+  currentImage:any;
+
+  getN(){
+    this.storage.get("img").then((val) => {
+    console.log('Your age is ', val);
+    console.log('get ' +"img"+ ' ',val);
+this.currentImage=val;
+  });
+ }
 }

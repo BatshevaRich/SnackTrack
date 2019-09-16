@@ -109,7 +109,7 @@ export class HomePage {
 
   activeDayIsOpen: boolean = true;
   mealsFromServer: [];
-  constructor( private router: Router,private modal: NgbModal, private mealService: MealService, public autoCompleteLabelsService: AutoCompleteLabelsService,) {
+  constructor( private storage: Storage,private router: Router,private modal: NgbModal, private mealService: MealService, public autoCompleteLabelsService: AutoCompleteLabelsService,) {
     this.loadLabelsFromAPI();
     this.mealsFromServer = [];
   }
@@ -261,12 +261,20 @@ export class HomePage {
     this.searchText = '';
     this.router.navigate(['search'], navigationExtras);
   }
+  setValue(key: string, value: any) {
+    // this.storage.remove("key");
+    this.storage.set(key, value).then((response) => {
+    }).catch((error) => {
+      console.log('set error for ' + key + ' ', error);
+    });
+    this.storage.set(key,value);
+  }
+
   sendImage($event): void {
     const file: File = $event.target.files[0];
     const reader = new FileReader();
     reader.onload = (event: any) => {
-      localStorage.clear();
-      localStorage.setItem('loadedImage', event.target.result);
+      this.setValue("img",event.target.result);
     };
     reader.readAsDataURL(file);
     this.router.navigate(['/options']);
