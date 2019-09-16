@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>options</ion-title>
+    <ion-title>Choose Labels</ion-title>
   </ion-toolbar>
 </ion-header>
 <!--
@@ -9,13 +9,13 @@
     Ionic pages and navigation.
   -->
 <ion-content>
-  <ion-spinner
+  <ion-spinner class="loader"
     name="bubbles"
     [hidden]="labels.length != 0 || unwantedLabels.length != 0"
   ></ion-spinner>
   <ion-card>
-    <ion-card-header>
-      <ion-img *ngIf="load" [src]="base64Image"></ion-img>
+    <ion-card-header >
+      <ion-img  class="_img"*ngIf="load" [src]="base64Image"></ion-img>
       <ion-card-title> </ion-card-title>
     </ion-card-header>
 
@@ -38,12 +38,13 @@
         size="small"
         color="primary"
         (click)="add()"
+        *ngIf="counter < 10 && !click"
       >
         <ion-icon name="add"></ion-icon>
       </ion-button>
       <!-- <ion-item > -->
       <ion-input
-        *ngIf="counter < 10"
+        [hidden]="click == false"
         color="primary"
         type="text"
         [(ngModel)]="value"
@@ -52,6 +53,15 @@
         placeholder="Add Label"
         id="addL"
       ></ion-input>
+      <ion-button
+  expand="block"
+    ion-button
+    color="primary"
+    (click)="uploadData()"
+    [hidden]="labels.length == 0"
+  >
+    Save To Calendar
+  </ion-button>
       <!-- </ion-item> -->
     </ion-card-content>
   </ion-card>
@@ -67,12 +77,34 @@
     ></ion-icon>
   </ion-chip>
   <br />
-  <ion-button
-    ion-button
-    color="primary"
-    (click)="uploadData()"
-    [hidden]="labels.length == 0"
-  >
-    OK
-  </ion-button>
+  
 </ion-content>
+
+
+<ion-fab vertical="bottom" horizontal="end">
+  <ion-fab-button>
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-list side="top">
+     
+    <ion-fab-button routerLink="../camera">
+      <ion-icon name="camera"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-button routerLink="../home">
+      <ion-icon name="calendar"></ion-icon>
+    </ion-fab-button>
+    <label style="size: 5000px" for="file-input">
+      <ion-fab-button >
+       <ion-icon name="link"></ion-icon>
+      </ion-fab-button>
+    </label>
+    <input  
+    type="file" 
+    id="file-input" 
+    accept="image/*" 
+    capture="camera"
+    (change)="sendImage($event)" 
+    style="display: none"/>‏ 
+    
+  </ion-fab-list>
+</ion-fab>

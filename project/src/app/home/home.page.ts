@@ -1,25 +1,16 @@
-import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef } from '@angular/core';
-import {
-  startOfDay,
-  endOfDay,
-  subDays,
-  addDays,
-  endOfMonth,
-  isSameDay,
-  isSameMonth,
-  addHours
-} from 'date-fns';
-import {AutoCompleteLabelsService} from '../Providers/auto-complete-labels.service';
+import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef, OnInit } from '@angular/core';
+import { startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMonth, addHours } from 'date-fns';
+import { AutoCompleteLabelsService } from '../Providers/auto-complete-labels.service';
 import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import {
-  CalendarEventAction,
-  CalendarEventTimesChangedEvent,
-  CalendarView,
-  CalendarEvent
-} from 'angular-calendar';
+import { CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView, CalendarEvent} from 'angular-calendar';
 import { MealService } from '../Providers/meal.service';
 import { Router, NavigationExtras } from '@angular/router';
+import { CalendarEventActionsComponent } from 'angular-calendar/modules/common/calendar-event-actions.component';
+import { PopoverController } from '@ionic/angular'
+import { ViewDayMealPage } from '../view-day-meal/view-day-meal.page';
+
+
 const colors: any = {
   red: {
     primary: Image,
@@ -41,7 +32,8 @@ const colors: any = {
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage {
+export class HomePage implements OnInit {
+  @ViewChild('box', null) userInput;
   @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
@@ -52,7 +44,7 @@ export class HomePage {
   };
   actions: CalendarEventAction[] = [
     {
-      label: '<i class="fa fa-fw fa-pencil"></i>',
+      label: '<i></i>',
       onClick: ({ event }: { event: CalendarEvent }): void => {
         this.handleEvent('Edited', event);
       }
@@ -106,12 +98,21 @@ export class HomePage {
     //   draggable: true
     // }
   ];
+  async ngOnInit() {
 
-  activeDayIsOpen: boolean = true;
+    console.log(document.getElementById("calendarMonth"));
+    let result = await this.loadLabelsFromAPI();
+    console.log("result " + result);
+    this.events = await this.convertMealsToEvent(result);
+    console.log(this.events);
+  }
+  didNotLoad: boolean;
+  activeDayIsOpen: boolean = false;
   mealsFromServer: [];
   constructor( private storage: Storage,private router: Router,private modal: NgbModal, private mealService: MealService, public autoCompleteLabelsService: AutoCompleteLabelsService,) {
     this.loadLabelsFromAPI();
     this.mealsFromServer = [];
+    // this.dayClicked();
   }
   searchText = '';
   parseDate(value): Date {
@@ -134,8 +135,9 @@ export class HomePage {
       return Number(h[0]);
     }
   }
-  convertMealsToEvent() {
-    this.mealsFromServer = this.mealsFromServer as [];
+  async convertMealsToEvent(result) {
+    this.mealsFromServer = result as [];
+    let eventMeals: CalendarEvent[] = [];
     for (let index = 0; index < this.mealsFromServer.length; index++) {
       // alert(this.mealsFromServer[0].DateOfPic);
       colors.red.primary = new Image();
@@ -143,12 +145,17 @@ export class HomePage {
       colors.red.secondary = new Image();
       colors.red.secondary.src = this.mealsFromServer[index].Path;
       const endate = new Date(this.parseDate(this.mealsFromServer[index].DateOfPic));
-
-      this.events.push({
+      let s = "";
+      let i;
+      for (i = 0; i < this.mealsFromServer[index].Labels.length - 1; i++) {
+        s = s + this.mealsFromServer[index].Labels[i] + ', ';
+      }
+      s = s + this.mealsFromServer[index].Labels[i];
+      eventMeals.push({
         start: addHours(startOfDay(this.parseDate(this.mealsFromServer[index].DateOfPic)), 2),
         // start: subDays(startOfDay(new Date()), index),
         end: addHours(startOfDay(this.parseDate(this.mealsFromServer[index].DateOfPic)), 4),
-        title: this.mealsFromServer[index].Labels[0],
+        title: s,
         color: colors.red,
         actions: this.actions,
         allDay: true,
@@ -160,32 +167,43 @@ export class HomePage {
       },
       );
     }
-
+    return eventMeals;
   }
-
   resolveAfter2Seconds() {
     return new Promise(resolve => {
-      setTimeout(() => {
-        resolve(
-          // send the local storage base64 path
-          this.mealService.GetAllMeals().then(data => {
-            console.log(data);
-            this.mealsFromServer = [];
-            this.mealsFromServer = data as [];
-            this.convertMealsToEvent();
-          })
-        );
-      }, 400);
+      resolve(
+        // send the local storage base64 path
+        this.mealService.GetAllMeals().then(data => {
+          console.log(data);
+          this.mealsFromServer = [];
+          this.mealsFromServer = data as [];
+          // this.didNotLoad = false;
+          // this.userInput.onClick();
+        })
+      );
     });
   }
   async loadLabelsFromAPI() {
     await this.resolveAfter2Seconds();
     console.log(this.mealsFromServer);
+    return this.mealsFromServer;
     // this.convertMealsToEvent();
 
   }
-
+  imagesToLoad: string[] = [];
+  labelsToLoad: string[] = [];
+  dateToLoad: string;
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+    this.imagesToLoad = [];
+    for (let index = 0; index < this.mealsFromServer.length; index++) {
+      const d = this.parseDate(this.mealsFromServer[index].DateOfPic);
+      if (d.getDate() == date.getDate()) {
+        this.dateToLoad = d.toLocaleDateString();
+        this.imagesToLoad.push(this.mealsFromServer[index].Path);
+      }
+    }
+    console.log(this.imagesToLoad);
+
     if (isSameMonth(date, this.viewDate)) {
       if (
         (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
@@ -197,6 +215,7 @@ export class HomePage {
       }
       this.viewDate = date;
     }
+    console.log(this.events);
   }
 
   eventTimesChanged({
@@ -281,5 +300,20 @@ export class HomePage {
     // this.navCtrl.navigateRoot("/options"); // go to next page
   }
 
+  // presentPopover(myEvent) {
+  //   let popover = this.popoverCtrl.create(ViewDayMealPage);
+  //   popover.present({
+  //     ev: myEvent
+  //   });
+  // }
+  async presentPopover({ date, events }: { date: Date; events: CalendarEvent[] }) {
+    const popover =await this.popoverCtrl.create({
+      component: ViewDayMealPage,
+      componentProps:{
+        dateToday:date
+      },
+    });
+    popover.style.cssText='--max-height:45%;--width:95%';
+    popover.present();
+  }
 }
-

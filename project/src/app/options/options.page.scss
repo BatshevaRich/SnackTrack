@@ -1,18 +1,71 @@
-ion-spinner {
-    stroke:green;
-    fill: #8b0000;
-    position: fixed;
-    z-index: 999;
-    height: 5em;
-    width: em;
-    overflow: show;
+body { background: #0dc5c1; }
+.loader {
+  overflow: hidden;
+  font-size: 10px;
+  margin: 50px auto;
+  text-indent: -9999em;
+  width: 11em;
+  height: 11em;
+  border-radius: 50%;
+  background: #FFF;
+  background: linear-gradient(to right, #FFF 10%, rgba(255, 255, 255, 0) 42%);
+  position: relative;
+  animation: load3 1.4s infinite linear;
+  transform: translateZ(0);
+
+  &:before {
+    width: 50%;
+    height: 50%;
+    background: #FFF;
+    border-radius: 100% 0 0 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: '';
+  }
+
+  &:after {
+    background: #0dc5c1;
+    width: 75%;
+    height: 75%;
+    border-radius: 50%;
+    content: '';
     margin: auto;
+    position: absolute;
     top: 0;
     left: 0;
     bottom: 0;
     right: 0;
-    transform: scale(3);
+    opacity: 0.5;
+  }
+}
+
+@-webkit-keyframes load3 {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes load3 {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 .chipBack{
     // --background: primary;
 }
+
+._img{
+    // border: 2px solid #07e5d8;
+// border-radius: 10%;
+box-shadow: 0 2px 5px #000;
+height: 100%;
+width: 100%;
+    }
+    

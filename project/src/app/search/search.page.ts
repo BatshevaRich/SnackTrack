@@ -10,29 +10,46 @@ import { Meal } from '../classes/Meal';
 })
 export class SearchPage {
 
-  meals: Meal[]=[];
+  meals: Meal[] = [];
   data: any;
   myMeal: any;
-
+display: boolean;
   load: any;
   ionViewDidLoad() {
 
   }
   constructor(private route: ActivatedRoute, private router: Router, public mealService: MealService) {
-      console.log(this.meals);
-      this.route.queryParams.subscribe(params => {
+    this.display = false;
+    console.log(this.meals);
+    this.route.queryParams.subscribe(params => {
         if (params && params.special) {
           this.data = JSON.parse(params.special);
           console.log(params);
+          this.loadLabelsFromAPI();
+          };
+        });
+      if (this.meals == []) {
+        this.display=true;
+      }
+
+  }
+
+  resolveAfter2Seconds() {
+    return new Promise(resolve => {
+      // setTimeout(() => {
+        resolve(
+          // send the local storage base64 path
           this.mealService.GetMealsForSearch(this.data).then((mealk: Meal[]) => {
             this.meals = mealk;
             console.log(this.meals);
-          });
-        }
-      });
+            return mealk;
+      // }, 400);
+    }));
+  })}
+  async loadLabelsFromAPI() {
+    this.meals = await this.resolveAfter2Seconds() as Meal[];
+    this.display=true;
   }
-
-
 
   // resolveAfter2Seconds() {
   //   return new Promise(resolve => {
