@@ -23,7 +23,7 @@ export class OptionsPage {
     public loadingController: LoadingController,
     private mealProvider: MealService
   ) {
-    this.getN();
+    
     this.load = true;
     this.loadLabelsFromAPI();
     // apPic.GetLabels();
@@ -41,7 +41,9 @@ export class OptionsPage {
     this.showAll = false;
     this.trues = 5;
     this.counter = 5;
-    this.base64Image = this.imageData;
+    // this.getN();
+
+    // this.base64Image = this.imageData;
   }
   labels: Array<{ name: string; wanted: boolean }>;
   unwantedLabels: Array<{ name: string; wanted: boolean }>;
@@ -50,34 +52,39 @@ export class OptionsPage {
   showAll: boolean;
   load: boolean;
   paginationLimit: number;
-  loadedLabels: Label[];
-  imageData = localStorage.getItem('loadedImage');
+  loadedLabels: Label[];imageData:any;
+  // imageData = localStorage.getItem('loadedImage');
   combinedLabels: string[];
   value = ''; // for ngmodel, to clean input box
   trues: number;
   private base64Image: string;
   ionViewWillEnter() {
-    this.imageData = localStorage.getItem('loadedImage');
+    // this.imageData = localStorage.getItem('loadedImage');
     this.load = true;
-    this.base64Image = this.imageData;
+    //this.base64Image = this.imageData;
     this.click = false;
   }
 click: boolean;
+
   /**
    * asynchronous func to load labels from webapi
    * called by loadLabelsFromAPI func
    */
-  resolveAfter2Seconds() {
-    return new Promise(resolve => {
-      // setTimeout(() => {
-        resolve(
+  resolveAfter2Seconds() {   
+     return   this.storage.get("img").then((val) => {
+          this.currentImage=val;
+          this.imageData=val;
+          this.base64Image=val;
+          return new Promise(resolve => {
+             // setTimeout(() => {
+              resolve(
           // send the local storage base64 path
-          this.apPic.InsertImages(this.imageData).then(data => {
+          this.apPic.InsertImages(val).then(data => {
             return data;
           })
         );
       // }, 400);
-    });
+    });});
   }
   // ionic cordova run android --target=402000f30108aa829446
   /**
@@ -86,7 +93,7 @@ click: boolean;
    * called on page load
    */
   async loadLabelsFromAPI() {
-    this.tags = await this.resolveAfter2Seconds();
+this.tags = await this.resolveAfter2Seconds();
     this.loadedLabels = this.tags as Label[]; // this.tags is the result from webapi
     let i = 0;
     for (; i < 5; i++) {
@@ -171,22 +178,23 @@ click: boolean;
   }
   currentImage:any;
 
-  getN(){
-    this.storage.get("img").then((val) => {
-    console.log('Your age is ', val);
-    console.log('get ' +"img"+ ' ',val);
-this.currentImage=val;
+
+ setValue(key: string, value: any) {
+  // this.storage.remove("key");
+  this.storage.set(key, value).then((response) => {
+  }).catch((error) => {
+    console.log('set error for ' + key + ' ', error);
   });
- }
-  sendImage($event): void {
-    const file: File = $event.target.files[0];
-    const reader = new FileReader();
-    reader.onload = (event: any) => {
-      // localStorage.clear();
-      localStorage.setItem('loadedImage', event.target.result);
-    };
-    reader.readAsDataURL(file);
-    this.router.navigate(['/options']);
-    // this.navCtrl.navigateRoot("/options"); // go to next page
-  }
+  this.storage.set(key,value);
+}
+ sendImage($event): void {
+  const file: File = $event.target.files[0];
+  const reader = new FileReader();
+  reader.onload = (event: any) => {
+    this.setValue("img",event.target.result);
+  };
+  reader.readAsDataURL(file);
+  this.router.navigate(['/options']);
+  // this.navCtrl.navigateRoot("/options"); // go to next page
+}
 }

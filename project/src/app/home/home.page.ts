@@ -144,7 +144,6 @@ export class HomePage implements OnInit {
     this.mealsFromServer = result as [];
     let eventMeals: CalendarEvent[] = [];
     for (let index = 0; index < this.mealsFromServer.length; index++) {
-      // alert(this.mealsFromServer[0].DateOfPic);
       colors.red.primary = new Image();
       colors.red.primary.src = this.mealsFromServer[index].Path;
       colors.red.secondary = new Image();
@@ -299,10 +298,9 @@ export class HomePage implements OnInit {
     const reader = new FileReader();
     reader.onload = (event: any) => {
       this.setValue("img",event.target.result);
+    this.router.navigate(['/options']);
     };
     reader.readAsDataURL(file);
-    this.router.navigate(['/options']);
-    // this.navCtrl.navigateRoot("/options"); // go to next page
   }
 
   // presentPopover(myEvent) {

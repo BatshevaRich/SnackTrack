@@ -1,7 +1,12 @@
 
 <ion-content>
     <img [src]="currentImage" *ngIf="currentImage">
-  
+    <ion-fab vertical="bottom" horizontal="center" slot="fixed" *ngIf="currentImage">
+      <ion-fab-button (click)="sendI()">
+        <ion-icon name="send"></ion-icon>
+        </ion-fab-button>
+        
+    </ion-fab>
   <ion-fab vertical="bottom" horizontal="center" slot="fixed">
     <ion-fab-button (click)="takePicture()">
       <ion-icon name="camera"></ion-icon>
