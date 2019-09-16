@@ -17,13 +17,15 @@ import { FormsModule } from '@angular/forms';
 import { FlatpickrModule } from 'angularx-flatpickr';
 import { NgbModalModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ViewDayMealPageModule } from './view-day-meal/view-day-meal.module';
+import {IonicStorageModule} from '@ionic/storage';
 // import { FilterPipe } from './pipes/filter.pipe';
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [
     NgbModule, PipesModule,
-    BrowserModule, BrowserAnimationsModule, HttpClientModule, CommonModule, IonicModule.forRoot(), AppRoutingModule,ViewDayMealPageModule],
+    BrowserModule, BrowserAnimationsModule, HttpClientModule, CommonModule, IonicModule.forRoot(),IonicStorageModule.forRoot(),AppRoutingModule,ViewDayMealPageModule],
   providers: [
     StatusBar,
     SplashScreen, HttpClientModule, Camera,

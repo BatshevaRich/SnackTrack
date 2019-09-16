@@ -9,7 +9,7 @@ import { Router, NavigationExtras } from '@angular/router';
 import { CalendarEventActionsComponent } from 'angular-calendar/modules/common/calendar-event-actions.component';
 import { PopoverController } from '@ionic/angular'
 import { ViewDayMealPage } from '../view-day-meal/view-day-meal.page';
-
+import { Storage } from '@ionic/storage';
 
 const colors: any = {
   red: {
@@ -109,7 +109,12 @@ export class HomePage implements OnInit {
   didNotLoad: boolean;
   activeDayIsOpen: boolean = false;
   mealsFromServer: [];
-  constructor( private storage: Storage,private router: Router,private modal: NgbModal, private mealService: MealService, public autoCompleteLabelsService: AutoCompleteLabelsService,) {
+  constructor( private storage: Storage,
+    private router: Router,
+    private modal: NgbModal,
+     private mealService: MealService,
+      public autoCompleteLabelsService: AutoCompleteLabelsService,
+      public popoverCtrl:PopoverController) {
     this.loadLabelsFromAPI();
     this.mealsFromServer = [];
     // this.dayClicked();

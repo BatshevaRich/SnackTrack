@@ -37,20 +37,6 @@
       (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
     </mwl-calendar-day-view> -->
   </div>
-  <!-- </ion-content> -->
-  <ion-card [hidden]="imagesToLoad.Length>0">
-    <ion-card-header>
-      Foods for: {{dateToLoad}}
-      <!-- <ion-img *ngIf="load" [src]="base64Image"></ion-img> -->
-      <ion-card-title> </ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <span>
-        <ion-avatar *ngFor="let i of imagesToLoad">
-          <ion-img [src]=i></ion-img>
-        </ion-avatar>
-      </span></ion-card-content>
-  </ion-card>
   <ion-fab vertical="bottom" horizontal="end">
     <ion-fab-button>
       <ion-icon name="add"></ion-icon>

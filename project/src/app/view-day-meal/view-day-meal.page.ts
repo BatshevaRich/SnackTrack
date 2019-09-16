@@ -14,6 +14,7 @@ export class ViewDayMealPage implements OnInit{
   today:Date;
 mealsToday:Meal[];
   constructor(public navParams:NavParams,public popoverCtrl: PopoverController,public mealService:MealService) {
+    this.mealsToday = [];
       }
 
       ngOnInit() {
@@ -22,10 +23,10 @@ mealsToday:Meal[];
             resolve(
               // send the local storage base64 path
               this.mealService.GetTodayMeals(this.today).then(data => {
-                console.log(data);
+                // console.log(data);
                 this.mealsToday = [];
                 this.mealsToday = data as Meal[];
-                console.log(this.mealsToday);
+                // console.log(this.mealsToday);
                 // this.didNotLoad = false;
                 // this.userInput.onClick();
               })

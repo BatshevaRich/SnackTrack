@@ -8,10 +8,7 @@ import {
   RequestOptions,
   ResponseContentType
 } from '@angular/http';
-// import "rxjs/add/operator/catch";
-// import "rxjs/add/operator/debounceTime";
-// import "rxjs/add/operator/distinctUntilChanged";
-// import "rxjs/add/operator/map";
+
 import {
   HttpClient,
   HttpHeaders,
@@ -19,7 +16,10 @@ import {
   HttpErrorResponse
 } from '@angular/common/http';
 import { Body } from '@angular/http/src/body';
-
+// import "rxjs/add/operator/catch";
+// import "rxjs/add/operator/debounceTime";
+// import "rxjs/add/operator/distinctUntilChanged";
+// import "rxjs/add/operator/map";
 @Injectable({
   providedIn: 'root'
 })
