@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Label } from '../../app/classes/Label';
 import { Meal } from '../../app/classes/Meal';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import {
   Http,
   Response,
@@ -24,14 +24,18 @@ import { Body } from '@angular/http/src/body';
   providedIn: 'root'
 })
 export class MealService {
-  constructor(public http: HttpClient) {
-    console.log('Hello MealProvider Provider');
-  }
-
- // baseURL = 'http://ce6dc86e.ngrok.io/api/';
-   baseURL = 'http://localhost:54640/api/';
+  // baseURL = 'http://ce6dc86e.ngrok.io/api/';
+  baseURL = 'http://localhost:54640/api/';
   // baseURL = 'http://b40029a0.ngrok.io/api/';
   // baseURL = 'http://localhost:54640/api/';
+  listAllMeal:Meal[];
+  constructor(public http: HttpClient) {
+    console.log('Hello MealProvider Provider');
+    this.listAllMeal=[];
+  }
+
+ 
+
   public SaveToServer(path: string, hour: Date, labels: string[]): any {
     let _formData = new FormData();
     let meal = new Meal(path, hour, labels);
@@ -66,19 +70,6 @@ export class MealService {
       });
     });
 }
-// public GetAllMeals():Observable<Meal[]>
-//    {
-//     const myS: number = 1;
-//     var res = this.http.get(this.baseURL + '/meal');
-//     // return new Promise(resolve => {
-//     //   res.subscribe(data => {
-//     //     resolve(data);
-//     //   });
-//     // });
-
-//     let v=this.http.get<Meal[]>(this.baseURL+"meal")
-//      return v;
-//   }
 
   public GetAllMeals() {
 const res = this.http.get(this.baseURL + 'meal');
@@ -88,4 +79,13 @@ const res = this.http.get(this.baseURL + 'meal');
       });
     });
    }
+   getResults(): Observable<Meal[]> {
+    let observable: Observable<Meal[]>;
+    if (this.listAllMeal.length === 0) {
+      observable = this.http.get<Meal[]>(this.baseURL + 'meal');
+     } else {
+         observable = of(this.listAllMeal);
+        }
+    return observable;
+ }
 }
