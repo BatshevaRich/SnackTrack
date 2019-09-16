@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { Storage } from '@ionic/storage';
+import { Router, NavigationExtras } from '@angular/router';
+
 @Component({
   selector: 'app-camera',
   templateUrl: './camera.page.html',
@@ -9,7 +12,7 @@ export class CameraPage implements OnInit {
 
   currentImage: any;
 
-  constructor(private camera: Camera) { }
+  constructor(private camera: Camera,public storage:Storage,public router:Router) { }
 
   ngOnInit() {
     // this.takePicture();
@@ -28,5 +31,24 @@ export class CameraPage implements OnInit {
       // Handle error
       console.log('Camera issue:' + err);
     });
+  }
+  setValue(key: string, value: any) {
+    // this.storage.remove("key");
+    this.storage.set(key, value).then((response) => {
+    }).catch((error) => {
+      console.log('set error for ' + key + ' ', error);
+    });
+    this.storage.set(key,value);
+  }
+  
+  sendImage($event): void {
+    const file: File = $event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (event: any) => {
+      this.setValue("img",event.target.result);
+    };
+    reader.readAsDataURL(file);
+    this.router.navigate(['/options']);
+    // this.navCtrl.navigateRoot("/options"); // go to next page
   }
 }

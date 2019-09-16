@@ -56,11 +56,11 @@ export class ApiPictureService {
     let _formData = new FormData();
     this.fileToUpload = file;
     _formData.append('file', file);
-    console.log(file);
     const res = this.httpClient.post(
       this.baseURL + 'clarifai/InsertImages/',
       _formData
     );
+
     return new Promise(resolve => {
       res.subscribe(data => {
         resolve(data);

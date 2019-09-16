@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>options</ion-title>
+    <ion-title>Choose Labels</ion-title>
   </ion-toolbar>
 </ion-header>
 <!--
@@ -9,13 +9,13 @@
     Ionic pages and navigation.
   -->
 <ion-content>
-  <ion-spinner
+  <ion-spinner class="loader"
     name="bubbles"
     [hidden]="labels.length != 0 || unwantedLabels.length != 0"
   ></ion-spinner>
   <ion-card>
-    <ion-card-header>
-      <ion-img *ngIf="load" [src]="base64Image"></ion-img>
+    <ion-card-header >
+      <ion-img  class="_img"*ngIf="load" [src]="base64Image"></ion-img>
       <ion-card-title> </ion-card-title>
     </ion-card-header>
 
@@ -38,12 +38,13 @@
         size="small"
         color="primary"
         (click)="add()"
+        *ngIf="counter < 10 && !click"
       >
         <ion-icon name="add"></ion-icon>
       </ion-button>
       <!-- <ion-item > -->
       <ion-input
-        *ngIf="counter < 10"
+        [hidden]="click == false"
         color="primary"
         type="text"
         [(ngModel)]="value"
