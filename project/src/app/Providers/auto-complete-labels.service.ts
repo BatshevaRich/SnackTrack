@@ -27,4 +27,4 @@ export class AutoCompleteLabelsService implements AutoCompleteService {
                return item.toLowerCase().indexOf( keyword.toLowerCase()) > -1;
               } ); }
   ) ); }
-            }
+ }

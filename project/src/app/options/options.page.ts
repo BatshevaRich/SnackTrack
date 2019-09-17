@@ -41,9 +41,7 @@ export class OptionsPage {
     this.showAll = false;
     this.trues = 5;
     this.counter = 5;
-    // this.getN();
 
-    // this.base64Image = this.imageData;
   }
   labels: Array<{ name: string; wanted: boolean }>;
   unwantedLabels: Array<{ name: string; wanted: boolean }>;
@@ -164,11 +162,11 @@ this.tags = await this.resolveAfter2Seconds();
    * called upon pressing the 'ok' button
    */
   uploadData() {
-    console.log(this.labels);
     let stringedLabels: string[]; // var to keep chosen strings
     stringedLabels = this.labels.filter(l => l.name).map(l => l.name);
     this.mealProvider.SaveToServer(
-      localStorage.getItem('loadedImage'), // path
+      // localStorage.getItem('loadedImage')
+      this.base64Image, // path
       new Date(), // time
       stringedLabels // labels
     );

@@ -1,116 +1,10 @@
-<!-- <ion-title style="color: aqua;font-size: 10px;">fmcdknck</ion-title> -->
-<ion-header><ion-row>
-<ion-col size="2">
-   
-  </ion-col>
-</ion-row>
-  </ion-header>
-<!--   
-  <ion-fab-button>  
-      <ion-icon hidden name="search" (click)="s.hidden=false"></ion-icon>
-    </ion-fab-button> -->
-<ion-content style="width: 100%" >
-  <ion-row>
-    <ion-col size="0.4"></ion-col>
-    <ion-col size="11.8">
-
-    <ion-auto-complete #s  [(ngModel)]="searchText" (keyup.enter)="onSelected()" (itemSelected)="onSelected()"
-      [dataProvider]="autoCompleteLabelsService">
-    </ion-auto-complete>
-  </ion-col>
-    <ion-col size="0.1"></ion-col>
-
-  </ion-row>
-    <ion-row >
-      <ion-col size="2" >
-        <ion-button fill="clear" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
-          (viewDateChange)="closeOpenMonthViewDay()" >
-          <ion-icon name="arrow-back" style="color:#6ed150;background-color: white;"></ion-icon>
-        </ion-button>
-      </ion-col>
-      <ion-col size="8" align-self: center>
-        <h3>{{ viewDate | calendarDate: view + "ViewTitle":"en" }}</h3>
-      </ion-col>
-     
-    </ion-row>
-<!--   
-    <ion-button fill="clear" class="btn btn-outline-secondary" mwlCalendarToday [(viewDate)]="viewDate">
-      <ion-icon name="arrow-dropdown-circle"></ion-icon>
-    </ion-button> -->
-    <div [ngSwitch]="view">
-      <mwl-calendar-month-view
-      [cellTemplate]="cellTemplateId" 
-               #box id="calendarMonth" 
-         *ngSwitchCase="CalendarView.Month" 
-         [viewDate]="viewDate"
-        [events]="events"
-         [refresh]="refresh" 
-         [activeDayIsOpen]="activeDayIsOpen" 
-         (dayClicked)="dayClicked($event.day)"
-        (eventClicked)="handleEvent('Clicked', $event.event)"
-         (eventTimesChanged)="eventTimesChanged($event)">
-      </mwl-calendar-month-view>
-      <!--  -->
-      <!-- <ng-template #customCellTemplate let-day="day" let-locale="locale">
-          <div class="cal-cell-top">
-             </div>
-        </ng-template>  -->
-   
-      <!-- <div class="cell-totals">
-        <span *ngFor="let group of day.events" class="badge badge-{{ group[0] }}">
-          {{ group.title}}
-        </span>
-      </div> -->
-  
-      
-      <!-- <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate" [events]="events"
-        [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)"
-        (eventTimesChanged)="eventTimesChanged($event)">
-      </mwl-calendar-week-view>
-      <mwl-calendar-day-view *ngSwitchCase="CalendarView.Day" [viewDate]="viewDate" [events]="events" [refresh]="refresh"
-        (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
-      </mwl-calendar-day-view> -->
-    </div>
-    <!-- </ion-content> -->
-    <!-- <ion-card [hidden]="imagesToLoad.Length>0">
-      <ion-card-header >
-        Foods for: {{dateToLoad}}
-        <ion-card-title> </ion-card-title>
-      </ion-card-header>
-      <ion-card-content> -->
-        <!-- <span>
-          <ion-avatar *ngFor="let i of imagesToLoad">
-            <ion-img [src]=i></ion-img>
-          </ion-avatar>
-        </span></ion-card-content>
-    </ion-card>
-  </ion-content> -->
-
-    <ion-fab vertical="bottom" horizontal="end">
-      <ion-fab-button color="dark"  size="medium">
-        <ion-icon name="add"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-list side="top">
-        <ion-fab-button routerLink="../camera" color="medium">
-          <ion-icon name="camera"></ion-icon>
-        </ion-fab-button>
-  
-        <label  for="file-input">
-          <ion-fab-button color="medium" size="small">
-            <ion-icon name="link"></ion-icon>
-          </ion-fab-button>
-        </label>
-        <input type="file" id="file-input" accept="image/*" capture="camera" (change)="sendImage($event)"
-          style="display: none" />‏
-      </ion-fab-list>
-    </ion-fab>
 <ion-header >
   <ion-toolbar >
     <ion-title><ion-img  style="width:50px;"src="https://storage.cloud.google.com/dietdiaryfoodpics/Document-page-001.jpg"></ion-img></ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-row>
-  <ion-col size="0.4"></ion-col>
+  <ion-col size="1"></ion-col>
   <ion-col size="10">
       <ion-auto-complete [(ngModel)]="searchText" (keyup.enter)="onSelected()" (itemSelected)="onSelected()"
       [dataProvider]="autoCompleteLabelsService">
@@ -138,47 +32,34 @@
     </ion-col>
   </ion-row>
   <ion-content style="width: 100%">
-
-  <div [ngSwitch]="view">
-    <mwl-calendar-month-view 
-        [cellTemplate]="customCellTemplate"
-    #box id="calendarMonth" 
-    *ngSwitchCase="CalendarView.Month" 
-    [viewDate]="viewDate"
-      [events]="events" 
-      [refresh]="refresh" [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="presentPopover($event.day)"
-      (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
-    </mwl-calendar-month-view>
+  <div [ngSwitch]="view" style="width:100%;height:10%;">
+      <mwl-calendar-month-view 
+      #box id="calendarMonth" 
+      [cellTemplate]="customCellTemplate"
+  
+      *ngSwitchCase="CalendarView.Month" 
+      [viewDate]="viewDate"
+        [events]="events" 
+        [refresh]="refresh" [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="presentPopover($event.day)"
+        (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
+      </mwl-calendar-month-view>
+    </div>
 
     <ng-template #customCellTemplate let-day="day" let-locale="locale">
-      <ion-col>
-        <ion-row >
-        <div text-align: center>
-          <span class="cal-day-number"  style="color:blue;font-weight:bold;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;font-size: 15px">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
-        </div>
-      </ion-row>
-      <ion-row>
-        <div>      
-              <span class="w3-badge " *ngIf="day.badgeTotal > 0"></span>
+      
+            <div  align="right" class="cal-day-number"  style="font-weight: bold;font-size:20px; color:#10AAA2 ;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+              {{ day.date | calendarDate:'monthViewDayNumber':locale }}
 
-          <!-- <span  
-            *ngFor="let group of day.eventGroups"
-            class="badge badge-pill badge-primary">
-            {{ group[1].length }}
-          </span> -->
-        </div>
-      </ion-row>
-      </ion-col>
-      </ng-template>
-    <!-- <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate" [events]="events"
-      [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)"
-      (eventTimesChanged)="eventTimesChanged($event)">
-    </mwl-calendar-week-view>
-    <mwl-calendar-day-view *ngSwitchCase="CalendarView.Day" [viewDate]="viewDate" [events]="events" [refresh]="refresh"
-      (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
-    </mwl-calendar-day-view> -->
+            </div>
+            <div>
+            <ion-badge>1</ion-badge>
+            
+
+          </div>
+        </ng-template>
     
-  </div>
+
+    
 </ion-content>
   <ion-fab vertical="bottom" horizontal="end" >
     <ion-fab-button color="dark" size="medium">
@@ -188,7 +69,6 @@
       <ion-fab-button routerLink="../camera" color="medium" size="small">
         <ion-icon name="camera"></ion-icon>
       </ion-fab-button>
-
       <label  for="file-input" >
         <ion-fab-button color="medium" size="small">
           <ion-icon name="link"></ion-icon>
@@ -198,3 +78,6 @@
         style="display: none" />‏
     </ion-fab-list>
   </ion-fab>
+  <ion-fab-button (click)="takePicture($event)" color="medium" size="small">
+    <ion-icon name="camera"></ion-icon>
+  </ion-fab-button>

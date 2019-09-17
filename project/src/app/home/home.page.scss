@@ -1,10 +1,9 @@
 
 
 //background icon
-ion-icon { zoom: 100% ; }
 //month
-h3 { color: #6ed150; font-family: 'Raleway',sans-serif; font-size: 100%; font-weight: 700; line-height: 36px; margin: 0 0 24px; text-align: center; }
-
+h3 { color: #6ed150; font-family: 'Raleway',sans-serif; font-size: 30px; font-weight: 700; line-height: 36px; margin: 0 0 24px; text-align: center; }
+div { color: #6ed150; font-family: 'Raleway',sans-serif; font-size: 10px; font-weight: 700; line-height: 36px; margin: 0 0 24px; text-align: center; }
 
 pre {
   background-color: red;
@@ -329,8 +328,17 @@ ion-fab-button[data-desc]::after {
   color: white;
   box-shadow: 0 3px 5px -1px rgba(0,0,0,0.2), 0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12);
 }
-ion-icon { zoom: 105%;color: #6DD44F; }
+ion-icon { zoom: 100%;color: rgb(83, 94, 80); }
 h3 { color: #6DD44F; font-family: 'Raleway',sans-serif;  }
 // ; line-height: 36px; margin: 0 0 24px; text-align: center;font-weight: 800 font-size: 110%;
 // h3 { color: #ff4411; font-size: 48px; font-family: 'Signika', sans-serif; padding-bottom: 10px; }
 // h3 { color: #ff4411; font-family: 'Righteous', cursive; font-size: 48px; font-weight: normal; line-height: 60px; margin: 10px 0 20px; text-transform: uppercase; text-shadow: 2px 2px 0 #000; margin: 10px 0 24px; text-align: center; }
+
+//event on the calendar
+ion-badge {
+  height:20px;
+  width:20Px;
+  border-radius: 10px;
+  color:#6DD44F;
+  background-color: #6DD44F;
+}
