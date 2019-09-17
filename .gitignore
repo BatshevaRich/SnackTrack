@@ -1,1 +1,4 @@
 node_modules
+project/config.xml
+project/package-lock.json
+project/package.json

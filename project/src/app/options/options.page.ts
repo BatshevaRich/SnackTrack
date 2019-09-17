@@ -4,8 +4,7 @@ import { ApiPictureService } from '../Providers/api-picture.service';
 import { Label } from '../../app/classes/Label';
 import { MealService } from '../providers/meal.service';
 import { filter } from 'rxjs/operator/filter';
-import {Storage} from '@ionic/storage';
-// import { Route } from '@angular/compiler/src/core';
+import { Storage } from '@ionic/storage';
 import { Router, NavigationExtras } from '@angular/router';
 @Component({
   selector: 'app-options',
@@ -13,38 +12,27 @@ import { Router, NavigationExtras } from '@angular/router';
   styleUrls: ['./options.page.scss']
 })
 export class OptionsPage {
-  @ViewChild('box', null) userInput;
   constructor(private storage: Storage,
-    private alertCtrl: AlertController,
-    @Inject(LOCALE_ID) private locale: string,
-    private navControl: NavController,
-    private router: Router,
-    public apPic: ApiPictureService,
-    public loadingController: LoadingController,
-    private mealProvider: MealService
+              private alertCtrl: AlertController,
+              @Inject(LOCALE_ID) private locale: string,
+              private navControl: NavController,
+              private router: Router,
+              public apPic: ApiPictureService,
+              public loadingController: LoadingController,
+              private mealProvider: MealService
   ) {
-    
+
     this.load = true;
     this.loadLabelsFromAPI();
-    // apPic.GetLabels();
-    // init arrays
-    this.labels = new Array<{
-      name: string;
-      wanted: boolean;
-    }>();
-    this.unwantedLabels = new Array<{
-      name: string;
-      wanted: boolean;
-    }>();
-    // this.paginationLimit = 5;
+    this.labels = new Array<{ name: string; wanted: boolean; }>();
+    this.unwantedLabels = new Array<{ name: string; wanted: boolean; }>();
     this.labels = [];
     this.showAll = false;
     this.trues = 5;
     this.counter = 5;
-    // this.getN();
-
     // this.base64Image = this.imageData;
   }
+  @ViewChild('box', null) userInput;
   labels: Array<{ name: string; wanted: boolean }>;
   unwantedLabels: Array<{ name: string; wanted: boolean }>;
   counter: number;
@@ -52,39 +40,19 @@ export class OptionsPage {
   showAll: boolean;
   load: boolean;
   paginationLimit: number;
-  loadedLabels: Label[];imageData:any;
+  loadedLabels: Label[]; imageData: any;
   // imageData = localStorage.getItem('loadedImage');
   combinedLabels: string[];
   value = ''; // for ngmodel, to clean input box
   trues: number;
   private base64Image: string;
+  click: boolean;
+  currentImage: any;
   ionViewWillEnter() {
     // this.imageData = localStorage.getItem('loadedImage');
     this.load = true;
-    //this.base64Image = this.imageData;
+    // this.base64Image = this.imageData;
     this.click = false;
-  }
-click: boolean;
-
-  /**
-   * asynchronous func to load labels from webapi
-   * called by loadLabelsFromAPI func
-   */
-  resolveAfter2Seconds() {   
-     return   this.storage.get("img").then((val) => {
-          this.currentImage=val;
-          this.imageData=val;
-          this.base64Image=val;
-          return new Promise(resolve => {
-             // setTimeout(() => {
-              resolve(
-          // send the local storage base64 path
-          this.apPic.InsertImages(val).then(data => {
-            return data;
-          })
-        );
-      // }, 400);
-    });});
   }
   // ionic cordova run android --target=402000f30108aa829446
   /**
@@ -93,20 +61,27 @@ click: boolean;
    * called on page load
    */
   async loadLabelsFromAPI() {
-this.tags = await this.resolveAfter2Seconds();
+    // this.tags = await this.resolveAfter2Seconds();
+    this.tags = await this.storage.get('img').then((val) => {
+      this.currentImage = val;
+      this.imageData = val;
+      this.base64Image = val;
+      return new Promise(resolve => {
+        resolve(
+          // send the local storage base64 path
+          this.apPic.InsertImages(val).then(data => {
+            return data;
+          })
+        );
+      });
+    });
     this.loadedLabels = this.tags as Label[]; // this.tags is the result from webapi
     let i = 0;
     for (; i < 5; i++) {
-      this.labels.push({
-        name: this.loadedLabels[i].Name,
-        wanted: true
-      });
+      this.labels.push({ name: this.loadedLabels[i].Name, wanted: true });
     }
-    for(; i< this.loadedLabels.length; i++){
-      this.unwantedLabels.push({
-        name: this.loadedLabels[i].Name,
-        wanted: true
-      })
+    for (; i < this.loadedLabels.length; i++) {
+      this.unwantedLabels.push({ name: this.loadedLabels[i].Name, wanted: true });
     }
     this.counter = 5;
   }
@@ -119,20 +94,12 @@ this.tags = await this.resolveAfter2Seconds();
   addedLabel(added: string): void {
     if (!this.labels.some(l => l.name === added)) {
       if (!this.unwantedLabels.some(l => l.name === added)) {
-        this.labels.push({
-          name: added,
-          wanted: true
-        });
+        this.labels.push({ name: added, wanted: true });
         this.counter = this.counter + 1;
-        // this.unwantedLabels = this.unwantedLabels.filter(item => item.name !== added);
       } else {
-        this.labels.push({
-          name: added,
-          wanted: true
-        });
+        this.labels.push({ name: added, wanted: true });
         this.counter = this.counter + 1; // increase number of labels
         this.unwantedLabels = this.unwantedLabels.filter(item => item.name !== added);
-        // this.filterArraysByWanted();
       }
     }
     this.value = ''; // ngmodel
@@ -140,7 +107,6 @@ this.tags = await this.resolveAfter2Seconds();
   }
   add() {
     this.click = true;
-    // document.getElementById('addL').setFocus();
     this.userInput.setFocus();
   }
   moveToUnwanted($event) {
@@ -172,29 +138,25 @@ this.tags = await this.resolveAfter2Seconds();
       new Date(), // time
       stringedLabels // labels
     );
-    localStorage.clear();
-    // location.assign('/home');
+    // localStorage.clear();
     this.router.navigate(['/home']);
   }
-  currentImage:any;
 
-
- setValue(key: string, value: any) {
-  // this.storage.remove("key");
-  this.storage.set(key, value).then((response) => {
-  }).catch((error) => {
-    console.log('set error for ' + key + ' ', error);
-  });
-  this.storage.set(key,value);
-}
- sendImage($event): void {
-  const file: File = $event.target.files[0];
-  const reader = new FileReader();
-  reader.onload = (event: any) => {
-    this.setValue("img",event.target.result);
-  };
-  reader.readAsDataURL(file);
-  this.router.navigate(['/options']);
-  // this.navCtrl.navigateRoot("/options"); // go to next page
-}
+  setValue(key: string, value: any) {
+    // this.storage.remove("key");
+    this.storage.set(key, value).then((response) => {
+    }).catch((error) => {
+      console.log('set error for ' + key + ' ', error);
+    });
+    this.storage.set(key, value);
+  }
+  sendImage($event): void {
+    const file: File = $event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (event: any) => {
+      this.setValue('img', event.target.result);
+    };
+    reader.readAsDataURL(file);
+    this.router.navigate(['/options']);
+  }
 }

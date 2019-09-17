@@ -36,6 +36,7 @@
     "calendar-utils": "0.0.59",
     "cordova-android": "^8.0.0",
     "cordova-plugin-camera": "^4.1.0",
+    "cordova-sqlite-storage": "^3.3.0",
     "core-js": "^2.5.4",
     "date-fns": "^1.30.1",
     "flatpickr": "^4.6.2",
