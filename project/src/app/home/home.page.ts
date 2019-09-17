@@ -10,6 +10,7 @@ import { CalendarEventActionsComponent } from 'angular-calendar/modules/common/c
 import { PopoverController } from '@ionic/angular'
 import { ViewDayMealPage } from '../view-day-meal/view-day-meal.page';
 import { Storage } from '@ionic/storage';
+import { Meal } from '../classes/Meal';
 
 const colors: any = {
   red: {
@@ -98,26 +99,22 @@ export class HomePage implements OnInit {
     //   draggable: true
     // }
   ];
-  async ngOnInit() {
-
+  ngOnInit()
+   {
     console.log(document.getElementById("calendarMonth"));
-    let result = await this.loadLabelsFromAPI();
-    console.log("result " + result);
-    this.events = await this.convertMealsToEvent(result);
+    this.resolveAfter2Seconds();
     console.log(this.events);
   }
   didNotLoad: boolean;
   activeDayIsOpen: boolean = false;
-  mealsFromServer: [];
+  mealsFromServer: Meal[];
   constructor( private storage: Storage,
     private router: Router,
     private modal: NgbModal,
      private mealService: MealService,
       public autoCompleteLabelsService: AutoCompleteLabelsService,
       public popoverCtrl:PopoverController) {
-    this.loadLabelsFromAPI();
     this.mealsFromServer = [];
-    // this.dayClicked();
   }
   searchText = '';
   parseDate(value): Date {
@@ -140,8 +137,7 @@ export class HomePage implements OnInit {
       return Number(h[0]);
     }
   }
-  async convertMealsToEvent(result) {
-    this.mealsFromServer = result as [];
+  async convertMealsToEvent() {
     let eventMeals: CalendarEvent[] = [];
     for (let index = 0; index < this.mealsFromServer.length; index++) {
       colors.red.primary = new Image();
@@ -171,29 +167,31 @@ export class HomePage implements OnInit {
       },
       );
     }
-    return eventMeals;
+    this.events=eventMeals;
+    //return eventMeals;
   }
   resolveAfter2Seconds() {
-    return new Promise(resolve => {
-      resolve(
-        // send the local storage base64 path
-        this.mealService.GetAllMeals().then(data => {
-          console.log(data);
-          this.mealsFromServer = [];
-          this.mealsFromServer = data as [];
-          // this.didNotLoad = false;
-          // this.userInput.onClick();
-        })
-      );
-    });
+    // return new Promise(resolve => {
+    //   resolve(
+    //     // send the local storage base64 path
+    //     this.mealService.GetAllMeals().then(data => {
+    //       console.log(data);
+    //       this.mealsFromServer = [];
+    //       this.mealsFromServer = data as [];
+    //       // this.didNotLoad = false;
+    //       // this.userInput.onClick();
+    //     })
+    //   );
+    // });
+    this.mealService.getResults().subscribe(meals=>
+      { 
+        this.mealsFromServer=meals;
+        this.convertMealsToEvent();
+      } ,
+      err=>{console.log(err);}
+     );
   }
-  async loadLabelsFromAPI() {
-    await this.resolveAfter2Seconds();
-    console.log(this.mealsFromServer);
-    return this.mealsFromServer;
-    // this.convertMealsToEvent();
-
-  }
+  
   imagesToLoad: string[] = [];
   labelsToLoad: string[] = [];
   dateToLoad: string;
