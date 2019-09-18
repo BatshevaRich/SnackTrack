@@ -17,6 +17,13 @@
     <WebStackScaffolding_IsReferencingScriptLibrariesSelected>True</WebStackScaffolding_IsReferencingScriptLibrariesSelected>
     <WebStackScaffolding_LayoutPageFile />
     <WebStackScaffolding_IsAsyncSelected>False</WebStackScaffolding_IsAsyncSelected>
+    <GoogleCloudPublishChoice>Gce</GoogleCloudPublishChoice>
+    <GoogleComputeEnginePublishInstanceName>appsnacktrack</GoogleComputeEnginePublishInstanceName>
+    <GoogleComputeEnginePublishInstanceZone>europe-west4-a</GoogleComputeEnginePublishInstanceZone>
+    <GoogleComputeEnginePublishInstanceUserName>snack</GoogleComputeEnginePublishInstanceUserName>
+    <GoogleComputeEnginePublishOpenWebsite>True</GoogleComputeEnginePublishOpenWebsite>
+    <GoogleComputeEnginePublishLaunchRemoteDebugger>False</GoogleComputeEnginePublishLaunchRemoteDebugger>
+    <GoogleComputeEnginePublishSiteName>Default Web Site</GoogleComputeEnginePublishSiteName>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>

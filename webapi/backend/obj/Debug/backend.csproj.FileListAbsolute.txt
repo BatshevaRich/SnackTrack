@@ -882,3 +882,4 @@ C:\Users\יהודית לנאל\Desktop\new finish\SnackTrackBackend\webapi\backe
 C:\Users\יהודית לנאל\Desktop\new finish\SnackTrackBackend\webapi\backend\obj\Debug\backend.csproj.CopyComplete
 C:\Users\יהודית לנאל\Desktop\new finish\SnackTrackBackend\webapi\backend\obj\Debug\backend.dll
 C:\Users\יהודית לנאל\Desktop\new finish\SnackTrackBackend\webapi\backend\obj\Debug\backend.pdb
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\webapi\backend\bin\Google.Protobuf.pdb
