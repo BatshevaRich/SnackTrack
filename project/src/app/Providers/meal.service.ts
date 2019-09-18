@@ -32,6 +32,13 @@ export class MealService {
   constructor(public http: HttpClient) {
     console.log('Hello MealProvider Provider');
     this.listAllMeal=[];
+    this.http.get<Meal[]>(this.baseURL + 'meal').subscribe(meals=>
+      { 
+        console.log("load meal-servis");
+        this.listAllMeal=meals;
+      } ,
+      err=>{console.log(err);}
+     );
   }
 
  
