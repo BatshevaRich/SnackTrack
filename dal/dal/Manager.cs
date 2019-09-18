@@ -37,7 +37,7 @@ namespace dal
                 connection.Open();
                 MySqlCommand cmd = connection.CreateCommand();
                 cmd.CommandText = "INSERT INTO meals(dateTime, path, tags) VALUES(@date, @path, @tag)";
-                cmd.Parameters.Add("@date", MySqlDbType.String).Value = mm.dateTime.ToString();
+                cmd.Parameters.Add("@date", MySqlDbType.String).Value = mm.dateTime.ToString("dd/MM/yyyy HH:mm:ss");
                 cmd.Parameters.Add("@path", MySqlDbType.String).Value = mm.path;
                 cmd.Parameters.Add("@tag", MySqlDbType.String).Value = mm.tags;
                 cmd.ExecuteNonQuery();
@@ -76,6 +76,7 @@ namespace dal
             List<meal> meals = new List<meal>();
             using (var connection = new MySqlConnection(csb.ConnectionString))
             {
+                connection.Open();
                 MySqlCommand cmd = connection.CreateCommand();
                 cmd.CommandText = "SELECT * from meals where dateTime = '" + date.ToString() + "'";
                 MySqlDataReader reader = cmd.ExecuteReader();
@@ -143,7 +144,7 @@ namespace dal
         /// <param name="imageString">the base64 image string</param>
         /// <param name="objectName"></param>
         /// <returns></returns>
-        public static string UploadFileToStorage(string bucketName, string imageString, string objectName = null)
+        public static string UploadFileToStorage(string bucketName, string imageString,DateTime DateOfPic, string objectName = null)
         {
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "C:\\key\\DietDiary-f95b600d05ed.json");
             var storage = StorageClient.Create();
@@ -166,7 +167,7 @@ namespace dal
             }
             using (var f = File.OpenRead(Name))
             {
-                objectName = DateTime.Now.ToString(@"MM\-dd\-yyyy-h\:mm") + ".jpg";
+                objectName = DateOfPic.ToString(@"MM\-dd\-yyyy-h\:mm") + ".jpg";
                 var x = storage.UploadObject(bucketName, objectName, null, f);
                 Console.WriteLine($"Uploaded {objectName}.");
             }

@@ -62,7 +62,7 @@ namespace backend.Controllers
             {
                 labelsFromFrontend.Add(item);
             }
-            Meal meal = new Meal() { DateOfPic = DateTime.Now, Labels = labelsFromFrontend, Path = path };
+            Meal meal = new Meal() { DateOfPic = DateTime.Parse(hour), Labels = labelsFromFrontend, Path = path };
             Manager.addMeal(meal);
             return Ok();
         }

@@ -11,7 +11,7 @@ namespace dal
             meal res = new meal();
             try
             {
-res.path = Manager.UploadFileToStorage("dietdiaryfoodpics", meal.Path);
+res.path = Manager.UploadFileToStorage("dietdiaryfoodpics", meal.Path,meal.DateOfPic);
             }
             catch (System.Exception e)
             {
