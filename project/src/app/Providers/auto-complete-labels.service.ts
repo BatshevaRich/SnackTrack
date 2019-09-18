@@ -25,10 +25,20 @@ export class AutoCompleteLabelsService implements AutoCompleteService {
       err=>{console.log(err);}
      );
   }
-  getResults(keyword: string):
-   string[]{
-  return this.labels.filter((label)=>{
-    return label.toLowerCase().indexOf( keyword.toLowerCase()) > -1;
-      });
+
+  getResults(keyword: string): Observable<any[]> {
+    let observable: Observable<any>;
+    if (this.labels.length === 0) {
+      observable = this.http.get(this.baseURL + 'Labels');
+    } else {
+      observable = of(this.labels);
     }
+    return observable.pipe(
+      map((result) => {
+        return result.filter((item) => {
+          return item.toLowerCase().indexOf(keyword.toLowerCase()) > -1;
+        });
+      }
+      ));
   }
+}
