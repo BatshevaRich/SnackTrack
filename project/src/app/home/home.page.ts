@@ -138,7 +138,8 @@ export class HomePage implements OnInit {
   constructor(public popoverCtrl:PopoverController,
     private camera: Camera,
     
-    private titleService: Title,private storage: Storage,private router: Router, private modal: NgbModal, private mealService: MealService, public autoCompleteLabelsService: AutoCompleteLabelsService, ) {
+    private titleService: Title,private storage: Storage,private router: Router, private modal: NgbModal,
+     private mealService: MealService, public autoCompleteLabelsService: AutoCompleteLabelsService ) {
     this.didNotLoad = true;
     // await this.loadLabelsFromAPI();
     this.mealsFromServer = [];
@@ -171,7 +172,31 @@ export class HomePage implements OnInit {
   currentImage: any;
 
 
-  takePicture(event) {
+  // takePicture($event) {
+  //   const options: CameraOptions = {
+  //     quality: 100,
+  //     destinationType: this.camera.DestinationType.DATA_URL,
+  //     encodingType: this.camera.EncodingType.JPEG,
+  //     mediaType: this.camera.MediaType.PICTURE
+  //   };
+
+  //   this.camera.getPicture(options).then((imageData) => {
+  //     this.currentImage = 'data:image/jpeg;base64,' + imageData;
+  //     alert(imageData);
+  //     this.sendImage($event);
+  //   // this.router.navigate(['/camera']);
+  //   }, (err) => {
+  //     // Handle error
+  //     console.log('Camera issue:' + err);
+  //   });
+  // }
+
+
+
+
+
+
+  takePicture($event) {
     const options: CameraOptions = {
       quality: 100,
       destinationType: this.camera.DestinationType.DATA_URL,
@@ -181,14 +206,38 @@ export class HomePage implements OnInit {
 
     this.camera.getPicture(options).then((imageData) => {
       this.currentImage = 'data:image/jpeg;base64,' + imageData;
-      alert(imageData);
-      this.sendImage(event);
-    this.router.navigate(['camera']);
+   
+      this.storage.set("img", this.currentImage ).then((response) => { 
+
+      }).catch((error) => {
+
+        console.log('set error for ' + this.currentImage + ' ', error);
+      });
+      this.storage.set("img",this.currentImage );
+    this.router.navigate(['/options']);
     }, (err) => {
       // Handle error
       console.log('Camera issue:' + err);
     });
   }
+  
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   convertMealsToEvent() {
     this.mealsFromServer = this.mealsFromServer as [];
     for (let index = 0; index < this.mealsFromServer.length; index++) {
@@ -342,13 +391,17 @@ console.log(this.imagesToLoad);
       }
     };
     this.searchText = '';
-    this.router.navigate(['search'], navigationExtras);
+    this.router.navigate(['/search'], navigationExtras);
   }
   sendImage($event): void {
+    alert("cam sendimg");
         const file: File = $event.target.files[0];
+        alert("cam sendimg");
     const reader = new FileReader();
+    alert("cam sendimg");
+
     reader.onload = (event: any) => {
-      alert(event.target.result);
+      alert(" sendImage  set   " +event.target.result);
       // localStorage.clear();
       // localStorage.setItem('loadedImage', event.target.result);
       this.setValue("img",event.target.result);
@@ -356,7 +409,6 @@ console.log(this.imagesToLoad);
     };
     reader.readAsDataURL(file);
     this.router.navigate(['/options']);
-    // this.navCtrl.navigateRoot("/options"); // go to next page
   }
   ss(){
     alert("today");

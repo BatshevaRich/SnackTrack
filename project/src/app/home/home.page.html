@@ -1,16 +1,16 @@
 <ion-header >
-  <ion-toolbar >
-    <ion-title><ion-img  style="width:50px;"src="https://storage.cloud.google.com/dietdiaryfoodpics/Document-page-001.jpg"></ion-img></ion-title>
+  <ion-toolbar>
+    <ion-title ><ion-img  style="width:100px;"src="https://storage.cloud.google.com/dietdiaryfoodpics/Document-page-001.jpg"></ion-img></ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-row>
-  <ion-col size="1"></ion-col>
-  <ion-col size="10">
-      <ion-auto-complete [(ngModel)]="searchText" (keyup.enter)="onSelected()" (itemSelected)="onSelected()"
+  <ion-col size="0.02"></ion-col>
+  <ion-col size="12">
+      <ion-auto-complete style="height:180%;" [(ngModel)]="searchText" (keyup.enter)="onSelected()" (itemSelected)="onSelected()"
       [dataProvider]="autoCompleteLabelsService">
     </ion-auto-complete>
     </ion-col>
-    <ion-col size="0.2"></ion-col>
+    <ion-col size="0.02"></ion-col>
 
   </ion-row>
 
@@ -18,25 +18,24 @@
     <ion-col size="2">
       <ion-button  fill="clear" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
         (viewDateChange)="closeOpenMonthViewDay()">
-        <ion-icon name="arrow-back"></ion-icon>
+        <ion-icon style="color:#005D57" name="arrow-back"></ion-icon>
       </ion-button>
     </ion-col>
     <ion-col size="8" text-align: center>
-      <h3>{{ viewDate | calendarDate: view + "ViewTitle":"en" }}</h3>
+      <h3 > {{ viewDate | calendarDate: view + "ViewTitle":"en" }}</h3>
     </ion-col>
     <ion-col size="2">
       <ion-button fill="clear" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
         (viewDateChange)="closeOpenMonthViewDay()">
-        <ion-icon name="arrow-forward"></ion-icon>
+        <ion-icon style="color:#005D57" name="arrow-forward"></ion-icon>
       </ion-button>
     </ion-col>
   </ion-row>
   <ion-content style="width: 100%">
-  <div [ngSwitch]="view" style="width:100%;height:10%;">
+  <div [ngSwitch]="view" style="height:2px;color: #005D57;">
       <mwl-calendar-month-view 
       #box id="calendarMonth" 
       [cellTemplate]="customCellTemplate"
-  
       *ngSwitchCase="CalendarView.Month" 
       [viewDate]="viewDate"
         [events]="events" 
@@ -45,32 +44,33 @@
       </mwl-calendar-month-view>
     </div>
 
-    <ng-template #customCellTemplate let-day="day" let-locale="locale">
-      
-            <div  align="right" class="cal-day-number"  style="font-weight: bold;font-size:20px; color:#10AAA2 ;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">
+    <ng-template #customCellTemplate let-day="day" let-locale="locale" >
+            <p   align="right" class="cal-day-number"  style=" font-weight: bold; color:#005D57 ;font-family:'Roboto';font-size: 25px;
+    ">
               {{ day.date | calendarDate:'monthViewDayNumber':locale }}
 
-            </div>
-            <div>
-            <ion-badge>1</ion-badge>
-            
+            </p>
+            <p>
+            <ion-badge  style="color: white;font-size: 10px">1</ion-badge>
+           <!-- <ion-badge *ngIf="day.badgeTotal > 0">{{ day.badgeTotal }}<ion-badge> -->
 
-          </div>
+
+            </p>
         </ng-template>
-    
+        
 
     
 </ion-content>
   <ion-fab vertical="bottom" horizontal="end" >
-    <ion-fab-button color="dark" size="medium">
+    <ion-fab-button color="light" size="medium">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="top">
-      <ion-fab-button routerLink="../camera" color="medium" size="small">
+      <ion-fab-button (click)="takePicture($event)"  color="light" size="small">
         <ion-icon name="camera"></ion-icon>
-      </ion-fab-button>
+        </ion-fab-button>
       <label  for="file-input" >
-        <ion-fab-button color="medium" size="small">
+        <ion-fab-button  color="light" size="small">
           <ion-icon name="link"></ion-icon>
         </ion-fab-button>
       </label>
@@ -78,6 +78,6 @@
         style="display: none" />‏
     </ion-fab-list>
   </ion-fab>
-  <ion-fab-button (click)="takePicture($event)" color="medium" size="small">
-    <ion-icon name="camera"></ion-icon>
-  </ion-fab-button>
+  
+
+  

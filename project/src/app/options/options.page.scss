@@ -7,8 +7,8 @@ body { background: #0dc5c1; }
   width: 11em;
   height: 11em;
   border-radius: 50%;
-  background: #FFF;
-  background: linear-gradient(to right, #FFF 10%, rgba(255, 255, 255, 0) 42%);
+  background: #005D57;
+  background: #005D57;
   position: relative;
   animation: load3 1.4s infinite linear;
   transform: translateZ(0);
@@ -16,7 +16,7 @@ body { background: #0dc5c1; }
   &:before {
     width: 50%;
     height: 50%;
-    background: #FFF;
+    background: #005D57;
     border-radius: 100% 0 0 0;
     position: absolute;
     top: 0;
@@ -25,7 +25,7 @@ body { background: #0dc5c1; }
   }
 
   &:after {
-    background: #0dc5c1;
+    background: #007D51;
     width: 75%;
     height: 75%;
     border-radius: 50%;

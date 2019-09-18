@@ -73,16 +73,22 @@ click: boolean;
           this.currentImage=val;
           this.imageData=val;
           this.base64Image=val;
+          // alert("clear");
+
+          // this.storage.clear();
+          // alert("clear" +this.storage);
+
           return new Promise(resolve => {
              // setTimeout(() => {
               resolve(
           // send the local storage base64 path
-          this.apPic.InsertImages(val).then(data => {
+          this.apPic.InsertImages(this.base64Image).then(data => {
             return data;
           })
         );
       // }, 400);
-    });});
+    });}
+    );
   }
   // ionic cordova run android --target=402000f30108aa829446
   /**
@@ -92,6 +98,8 @@ click: boolean;
    */
   async loadLabelsFromAPI() {
 this.tags = await this.resolveAfter2Seconds();
+          this.storage.clear();
+
     this.loadedLabels = this.tags as Label[]; // this.tags is the result from webapi
     let i = 0;
     for (; i < 5; i++) {
