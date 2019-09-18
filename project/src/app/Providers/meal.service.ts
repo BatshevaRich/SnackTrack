@@ -20,6 +20,7 @@ export class MealService {
   public SaveToServer(path: string, hour: Date, labels: string[]): any {
     const formData = new FormData();
     formData.append('path', path);
+    formData.append("hour",hour.toString().replace(" GMT+0300 (שעון ישראל (קיץ))",""));
     const allLabels: string = labels.join(',');
     formData.append('labels', allLabels);
     const res = this.http.post(this.baseURL + 'meal/upload', formData);

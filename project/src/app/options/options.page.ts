@@ -32,6 +32,7 @@ export class OptionsPage {
     this.counter = 5;
     // this.base64Image = this.imageData;
   }
+  myDate:Date=new Date();
   @ViewChild('box', null) userInput;
   labels: Array<{ name: string; wanted: boolean }>;
   unwantedLabels: Array<{ name: string; wanted: boolean }>;
@@ -54,6 +55,9 @@ export class OptionsPage {
     // this.base64Image = this.imageData;
     this.click = false;
   }
+  doSomething() {
+    console.log(this.myDate); // 2019-04-22
+ }
   // ionic cordova run android --target=402000f30108aa829446
   /**
    * asynchronous func to load labels from webapi
@@ -134,7 +138,7 @@ export class OptionsPage {
     this.mealProvider.SaveToServer(
       // localStorage.getItem('loadedImage')
       this.base64Image, // path
-      new Date(), // time
+      this.myDate, // time
       stringedLabels // labels
     );
     // localStorage.clear();
