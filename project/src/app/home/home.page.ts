@@ -1,5 +1,21 @@
+
 import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef, OnInit } from '@angular/core';
-import { startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMonth, addHours } from 'date-fns';
+import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+
+import {
+  startOfDay,
+  endOfDay,
+  subDays,
+  addDays,
+  endOfMonth,
+  isSameDay,
+  isSameMonth,
+  addHours
+} from 'date-fns';
+import { CalendarDateFormatter, DateFormatterParams } from 'angular-calendar';
+import { DatePipe } from '@angular/common';
+import { Title }     from '@angular/platform-browser';
+
 import { AutoCompleteLabelsService } from '../Providers/auto-complete-labels.service';
 import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -28,7 +44,8 @@ interface mealLoaded {
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
-  constructor(private storage: Storage,
+  constructor(private camera: Camera,
+    private storage: Storage, private titleService: Title,
               private router: Router,
               private modal: NgbModal,
               private mealService: MealService,
@@ -36,6 +53,22 @@ export class HomePage implements OnInit {
               public popoverCtrl: PopoverController) {
     this.loadLabelsFromAPI();
     this.mealsFromServer = [];
+    this.didNotLoad = true;
+    // await this.loadLabelsFromAPI();
+    this.mealsFromServer = [];
+    
+    // this.dayClicked();    
+  }
+  ionViewWillEnter(){
+    this.storage.clear();
+  }
+  someMethod(){
+    this.titleService.setTitle ('An Awesome Title');
+  }
+
+
+  public weekViewColumnHeader({ date, locale }: DateFormatterParams): string {
+    return new DatePipe(locale).transform(date, 'EEE', locale);
   }
   @ViewChild('box', null) userInput;
   @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
@@ -68,10 +101,15 @@ export class HomePage implements OnInit {
   labelsToLoad: string[] = [];
   dateToLoad: string;
   async ngOnInit() {
-    const result = await this.loadLabelsFromAPI();
-    console.log('result ' + result);
-    this.events = await this.convertMealsToEvent(result);
-    console.log(this.events);
+    this.loadLabelsFromAPI();
+    // var that  = this;
+    // setTimeout(function () {  // still buggy need to wait for dom to load.
+    //   // const date: Date = new Date();
+    //   // const events: CalendarEvent[] = [];
+    //   // that.dayClicked({date, events});
+    //   // that.userInput.dayClicked();
+    //   this.loadLabelsFromAPI();
+    // }, 3000);
   }
   parseDate(value): Date {
     if (value.indexOf('-') > -1) {
@@ -93,10 +131,35 @@ export class HomePage implements OnInit {
       return Number(h[0]);
     }
   }
-  async convertMealsToEvent(result) {
-    this.mealsFromServer = result as mealLoaded[];
-    const eventMeals: CalendarEvent[] = [];
+  currentImage: any;
+
+
+  takePicture(event) {
+    const options: CameraOptions = {
+      quality: 100,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
+    };
+
+    this.camera.getPicture(options).then((imageData) => {
+      this.currentImage = 'data:image/jpeg;base64,' + imageData;
+      alert(imageData);
+      this.sendImage(event);
+    this.router.navigate(['camera']);
+    }, (err) => {
+      // Handle error
+      console.log('Camera issue:' + err);
+    });
+  }
+  convertMealsToEvent() {
+    this.mealsFromServer = this.mealsFromServer as [];
     for (let index = 0; index < this.mealsFromServer.length; index++) {
+// alert(this.mealsFromServer[0].DateOfPic);
+      colors.red.primary = new Image();
+      colors.red.primary.src = this.mealsFromServer[index].Path;
+      colors.red.secondary = new Image();
+      colors.red.secondary.src = this.mealsFromServer[index].Path;
       const endate = new Date(this.parseDate(this.mealsFromServer[index].DateOfPic));
       let s = '';
       let i;
@@ -104,7 +167,7 @@ export class HomePage implements OnInit {
         s = s + this.mealsFromServer[index].Labels[i] + ', ';
       }
       s = s + this.mealsFromServer[index].Labels[i];
-      eventMeals.push({
+      this.events.push({
         start: addHours(startOfDay(this.parseDate(this.mealsFromServer[index].DateOfPic)), 2),
         end: addHours(startOfDay(this.parseDate(this.mealsFromServer[index].DateOfPic)), 4),
         title: s,
@@ -119,20 +182,24 @@ export class HomePage implements OnInit {
       },
       );
     }
-    return eventMeals;
   }
   resolveAfter2Seconds() {
     return new Promise(resolve => {
-      resolve(
-        this.mealService.GetAllMeals().then(data => {
-          this.mealsFromServer = [];
-          this.mealsFromServer = data as [];
-        })
-      );
+        resolve(
+          // send the local storage base64 path
+          this.mealService.GetAllMeals().then(data => {
+            console.log(data);
+            this.mealsFromServer = [];
+            this.mealsFromServer = data as [];
+            this.convertMealsToEvent();
+            this.didNotLoad = false;
+            // this.userInput.onClick();
+          })
+        );
     });
   }
   async loadLabelsFromAPI() {
-    await this.resolveAfter2Seconds();
+    this.resolveAfter2Seconds();
     console.log(this.mealsFromServer);
     return this.mealsFromServer;
   }
@@ -207,7 +274,7 @@ export class HomePage implements OnInit {
   }
 
   sendImage($event): void {
-    const file: File = $event.target.files[0];
+        const file: File = $event.target.files[0];
     const reader = new FileReader();
     this.storage.clear();
     reader.onload = (event: any) => {
@@ -215,6 +282,11 @@ export class HomePage implements OnInit {
       this.router.navigate(['/options']);
     };
     reader.readAsDataURL(file);
+    // this.router.navigate(['/options']);
+    // this.navCtrl.navigateRoot("/options"); // go to next page
+  }
+  ss(){
+    alert("today");
   }
 
   async presentPopover({ date, events }: { date: Date; events: CalendarEvent[] }) {

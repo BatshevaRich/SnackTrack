@@ -1,29 +1,35 @@
 
 <ion-content>
     <img [src]="currentImage" *ngIf="currentImage">
-    <ion-fab vertical="bottom" horizontal="center" slot="fixed" *ngIf="currentImage">
-      <ion-fab-button (click)="sendI()">
+    <!-- <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+      <ion-fab-button (click)="sendI()" color="medium" size="small">
         <ion-icon name="send"></ion-icon>
         </ion-fab-button>
         
-    </ion-fab>
+    </ion-fab> -->
+    <ion-fab vertical="bottom" horizontal="end" vertical="top" slot="fixed" *ngIf="currentImage">
+        <ion-fab-button (click)="sendImage()" color="medium" size="small">
+          <ion-icon name="send"></ion-icon>
+          </ion-fab-button>
+          
+      </ion-fab>
   <ion-fab vertical="bottom" horizontal="center" slot="fixed">
-    <ion-fab-button (click)="takePicture()">
+    <ion-fab-button (click)="takePicture()" color="medium" size="small">
       <ion-icon name="camera"></ion-icon>
       </ion-fab-button>
       
   </ion-fab>
   <ion-fab vertical="bottom" horizontal="end">
-    <ion-fab-button>
+    <ion-fab-button color="medium" size="small">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="top">
        
-      <ion-fab-button routerLink="../home">
+      <ion-fab-button routerLink="../home" color="medium" size="small">
         <ion-icon name="calendar"></ion-icon>
       </ion-fab-button>
       <label style="size: 5000px" for="file-input">
-        <ion-fab-button >
+        <ion-fab-button color="medium" size="small">
          <ion-icon name="link"></ion-icon>
         </ion-fab-button>
       </label>

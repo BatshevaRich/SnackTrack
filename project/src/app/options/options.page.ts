@@ -61,7 +61,6 @@ export class OptionsPage {
    * called on page load
    */
   async loadLabelsFromAPI() {
-    // this.tags = await this.resolveAfter2Seconds();
     this.tags = await this.storage.get('img').then((val) => {
       this.currentImage = val;
       this.imageData = val;
@@ -130,11 +129,11 @@ export class OptionsPage {
    * called upon pressing the 'ok' button
    */
   uploadData() {
-    console.log(this.labels);
     let stringedLabels: string[]; // var to keep chosen strings
     stringedLabels = this.labels.filter(l => l.name).map(l => l.name);
     this.mealProvider.SaveToServer(
-      localStorage.getItem('loadedImage'), // path
+      // localStorage.getItem('loadedImage')
+      this.base64Image, // path
       new Date(), // time
       stringedLabels // labels
     );
@@ -155,8 +154,8 @@ export class OptionsPage {
     const reader = new FileReader();
     reader.onload = (event: any) => {
       this.setValue('img', event.target.result);
+      this.router.navigate(['/options']);
     };
     reader.readAsDataURL(file);
-    this.router.navigate(['/options']);
   }
 }
