@@ -14,38 +14,30 @@ import {
 } from 'date-fns';
 import { CalendarDateFormatter, DateFormatterParams } from 'angular-calendar';
 import { DatePipe } from '@angular/common';
-import { Title }     from '@angular/platform-browser';
+import { Title } from '@angular/platform-browser';
 
 import { AutoCompleteLabelsService } from '../Providers/auto-complete-labels.service';
 import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import {
-  CalendarEventAction,
-  CalendarEventTimesChangedEvent,
-  CalendarView,
-  CalendarEvent,
-} from 'angular-calendar';
+import { CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView, CalendarEvent } from 'angular-calendar';
 import { MealService } from '../Providers/meal.service';
 import { Router, NavigationExtras } from '@angular/router';
 import { CalendarEventActionsComponent } from 'angular-calendar/modules/common/calendar-event-actions.component';
-const colors: any = {
-  red: {
-    primary: Image,
-    secondary: Image
-  },
-  blue: {
-    primary: '#1e90ff',
-    secondary: '#D1E8FF'
-  },
-  yellow: {
-    primary: '#e3bc08',
-    secondary: '#FDF1BA'
-  }
-};
-import { Storage } from '@ionic/storage';
 import { PopoverController } from '@ionic/angular';
 import { ViewDayMealPage } from '../view-day-meal/view-day-meal.page';
+import { Storage } from '@ionic/storage';
+import { Meal } from '../classes/Meal';
 
+const colors: any = {
+  red: { primary: Image, secondary: Image },
+  blue: { primary: '#1e90ff', secondary: '#D1E8FF' },
+  yellow: { primary: '#e3bc08', secondary: '#FDF1BA' }
+};
+interface mealLoaded {
+  Path: string;
+  DateOfPic: string;
+  Labels: string[];
+}
 @Component({
   selector: 'app-home',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -53,6 +45,29 @@ import { ViewDayMealPage } from '../view-day-meal/view-day-meal.page';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
+  constructor(private camera: Camera,
+    private storage: Storage, private titleService: Title,
+    private router: Router,
+    private modal: NgbModal,
+    private mealService: MealService,
+    public autoCompleteLabelsService: AutoCompleteLabelsService,
+    public popoverCtrl: PopoverController) {
+    this.loadLabelsFromAPI();
+    this.mealsFromServer = [];
+    this.didNotLoad = true;
+    // await this.loadLabelsFromAPI();
+    this.mealsFromServer = [];
+
+    // this.dayClicked();    
+  }
+  ionViewWillEnter() {
+    this.storage.clear();
+  }
+  someMethod() {
+    this.titleService.setTitle('An Awesome Title');
+  }
+
+
   public weekViewColumnHeader({ date, locale }: DateFormatterParams): string {
     return new DatePipe(locale).transform(date, 'EEE', locale);
   }
@@ -61,10 +76,7 @@ export class HomePage implements OnInit {
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
   viewDate: Date = new Date();
-  modalData: {
-    action: string;
-    event: CalendarEvent;
-  };
+  modalData: { action: string; event: CalendarEvent; };
   actions: CalendarEventAction[] = [
     {
       label: '<i></i>',
@@ -81,46 +93,14 @@ export class HomePage implements OnInit {
     }
   ];
   refresh: Subject<any> = new Subject();
-  events: CalendarEvent[] = [
-    // {
-    //   start: subDays(startOfDay(new Date()), 1),
-    //   end: addDays(new Date(), 1),
-    //   title: 'A 3 day event',
-    //   color: colors.red,
-    //   actions: this.actions,
-    //   allDay: true,
-    //   resizable: {
-    //     beforeStart: true,
-    //     afterEnd: true
-    //   },
-    //   draggable: true
-    // },
-    // {
-    //   start: startOfDay(new Date()),
-    //   title: 'An event with no end date',
-    //   color: colors.yellow,
-    //   actions: this.actions
-    // },
-    // {
-    //   start: subDays(endOfMonth(new Date()), 3),
-    //   end: addDays(endOfMonth(new Date()), 3),
-    //   title: 'A long event that spans 2 months',
-    //   color: colors.blue,
-    //   allDay: true
-    // },
-    // {
-    //   start: addHours(startOfDay(new Date()), 2),
-    //   end: new Date(),
-    //   title: 'A draggable and resizable event',
-    //   color: colors.yellow,
-    //   actions: this.actions,
-    //   resizable: {
-    //     beforeStart: true,
-    //     afterEnd: true
-    //   },
-    //   draggable: true
-    // }
-  ];
+  events: CalendarEvent[] = [];
+  didNotLoad: boolean;
+  activeDayIsOpen = false;
+  mealsFromServer: mealLoaded[];
+  searchText = '';
+  imagesToLoad: string[] = [];
+  labelsToLoad: string[] = [];
+  dateToLoad: string;
   async ngOnInit() {
     this.loadLabelsFromAPI();
     // var that  = this;
@@ -132,23 +112,6 @@ export class HomePage implements OnInit {
     //   this.loadLabelsFromAPI();
     // }, 3000);
   }
-  didNotLoad: boolean;
-  activeDayIsOpen: boolean = false;
-  mealsFromServer: [];
-  constructor(public popoverCtrl:PopoverController,
-    private camera: Camera,
-    
-    private titleService: Title,private storage: Storage,private router: Router, private modal: NgbModal,
-     private mealService: MealService, public autoCompleteLabelsService: AutoCompleteLabelsService ) {
-    this.didNotLoad = true;
-    // await this.loadLabelsFromAPI();
-    this.mealsFromServer = [];
-    // this.dayClicked();
-  }
-  someMethod(){
-    this.titleService.setTitle ('An Awesome Title');  
-  }
-  searchText = '';
   parseDate(value): Date {
     if (value.indexOf('-') > -1) {
       const str = value.split('-');
@@ -241,13 +204,13 @@ export class HomePage implements OnInit {
   convertMealsToEvent() {
     this.mealsFromServer = this.mealsFromServer as [];
     for (let index = 0; index < this.mealsFromServer.length; index++) {
-// alert(this.mealsFromServer[0].DateOfPic);
+      // alert(this.mealsFromServer[0].DateOfPic);
       colors.red.primary = new Image();
       colors.red.primary.src = this.mealsFromServer[index].Path;
       colors.red.secondary = new Image();
       colors.red.secondary.src = this.mealsFromServer[index].Path;
       const endate = new Date(this.parseDate(this.mealsFromServer[index].DateOfPic));
-      let s = "";
+      let s = '';
       let i;
       for (i = 0; i < this.mealsFromServer[index].Labels.length - 1; i++) {
         s = s + this.mealsFromServer[index].Labels[i] + ', ';
@@ -255,7 +218,6 @@ export class HomePage implements OnInit {
       s = s + this.mealsFromServer[index].Labels[i];
       this.events.push({
         start: addHours(startOfDay(this.parseDate(this.mealsFromServer[index].DateOfPic)), 2),
-        // start: subDays(startOfDay(new Date()), index),
         end: addHours(startOfDay(this.parseDate(this.mealsFromServer[index].DateOfPic)), 4),
         title: s,
         color: colors.red,
@@ -269,17 +231,6 @@ export class HomePage implements OnInit {
       },
       );
     }
-    
-
-  }
-  setValue(key: string, value: any) {
-
-    // this.storage.remove("key");
-    this.storage.set(key, value).then((response) => {
-    }).catch((error) => {
-      console.log('set error for ' + key + ' ', error);
-    });
-    this.storage.set(key,value);
   }
   resolveAfter2Seconds() {
     return new Promise(resolve => {
@@ -299,36 +250,7 @@ export class HomePage implements OnInit {
   async loadLabelsFromAPI() {
     this.resolveAfter2Seconds();
     console.log(this.mealsFromServer);
-    
-    // this.convertMealsToEvent();
-
-  }
-  imagesToLoad: string[]= [];
-  labelsToLoad: string[] = [];
-  dateToLoad: Date;
-  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
-    this.imagesToLoad = [];
-    for (let index = 0; index < this.mealsFromServer.length; index++) {
-      const d = this.parseDate(this.mealsFromServer[index].DateOfPic);
-      if(d.getDate() == date.getDate()){
-        alert("dayClicked");
-        this.dateToLoad = d.toLocaleDateString();
-        this.imagesToLoad.push(this.mealsFromServer[index].Path);
-      }
-    }
-console.log(this.imagesToLoad);
-
-    if (isSameMonth(date, this.viewDate)) {
-      if (
-        (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
-        events.length === 0
-      ) {
-        this.activeDayIsOpen = false;
-      } else {
-        this.activeDayIsOpen = true;
-      }
-      this.viewDate = date;
-    }
+    return this.mealsFromServer;
   }
 
   eventTimesChanged({
@@ -383,44 +305,47 @@ console.log(this.imagesToLoad);
     this.activeDayIsOpen = false;
   }
   onSelected() {
-    // console.log(event.currentTarget);
     const navigationExtras: NavigationExtras = {
       queryParams: {
         special: JSON.stringify(this.searchText)
-        // special: JSON.stringify(event.currentTarget.attributes[3].textContent)
       }
     };
     this.searchText = '';
     this.router.navigate(['/search'], navigationExtras);
   }
+  setValue(key: string, value: any) {
+    // this.storage.remove("key");
+    this.storage.set(key, value).then((response) => {
+    }).catch((error) => {
+      console.log('set error for ' + key + ' ', error);
+    });
+    this.storage.set(key, value);
+  }
+
   sendImage($event): void {
-    alert("cam sendimg");
-        const file: File = $event.target.files[0];
-        alert("cam sendimg");
+    const file: File = $event.target.files[0];
     const reader = new FileReader();
-    alert("cam sendimg");
-
+    this.storage.clear();
     reader.onload = (event: any) => {
-      alert(" sendImage  set   " +event.target.result);
-      // localStorage.clear();
-      // localStorage.setItem('loadedImage', event.target.result);
-      this.setValue("img",event.target.result);
-
+      this.setValue('img', event.target.result);
+      this.router.navigate(['/options']);
     };
     reader.readAsDataURL(file);
-    this.router.navigate(['/options']);
+    // this.router.navigate(['/options']);
+    // this.navCtrl.navigateRoot("/options"); // go to next page
   }
-  ss(){
+  ss() {
     alert("today");
   }
+
   async presentPopover({ date, events }: { date: Date; events: CalendarEvent[] }) {
-    const popover =await this.popoverCtrl.create({
+    const popover = await this.popoverCtrl.create({
       component: ViewDayMealPage,
-      componentProps:{
-        dateToday:date
+      componentProps: {
+        dateToday: date
       },
     });
-    popover.style.cssText='--max-height:45%;--width:95%';
+    popover.style.cssText = '--max-height:45%;--width:95%';
     popover.present();
   }
 }
