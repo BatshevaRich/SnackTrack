@@ -9,7 +9,16 @@ namespace dal
         public static meal convertMealToEntityAsync(Meal meal)
         {
             meal res = new meal();
-            res.path = Manager.UploadFileToStorage("dietdiaryfoodpics", meal.Path);
+            try
+            {
+res.path = Manager.UploadFileToStorage("dietdiaryfoodpics", meal.Path);
+            }
+            catch (System.Exception e)
+            {
+
+                throw e;
+            }
+            
             res.tags = "";
             foreach (var item in meal.Labels)
             {

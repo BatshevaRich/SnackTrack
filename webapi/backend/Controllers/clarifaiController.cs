@@ -43,7 +43,7 @@ namespace backend.Controllers
         {
             var res = await CLARIFAI_API_URL.PublicModels.FoodModel.Predict(
                     new ClarifaiFileImage(path),
-                     minValue: 0.8M, maxConcepts: 10)
+                     minValue: 0.8M, maxConcepts: 15)
                 .ExecuteAsync();
             List<Label> Results = new List<Label>();
             foreach (var concept in res.Get().Data)
@@ -59,7 +59,7 @@ namespace backend.Controllers
         /// gets image from body of http post
         /// </summary>
         /// <returns>httpactionresult, with labels in body of message</returns>
-        [Route("InsertImages")]
+        [Route("insertimages")]
         [HttpPost]
         public async Task<IHttpActionResult> InsertImagesAsync()
         {

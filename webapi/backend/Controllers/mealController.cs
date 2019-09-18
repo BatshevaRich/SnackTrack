@@ -23,9 +23,10 @@ namespace backend.Controllers
     {
         // GET: api/meal
         [HttpGet]
-        public List<Meal> Get()
+        public async Task<IHttpActionResult> Get()
         {
-            return Manager.getMeals();
+            List<Meal> results = await Manager.getMeals();
+            return Ok(results);
         }
 
         [HttpGet]
