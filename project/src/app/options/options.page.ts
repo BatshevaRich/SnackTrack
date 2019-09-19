@@ -70,10 +70,11 @@ export class OptionsPage {
       this.currentImage = val;
       this.imageData = val;
       this.base64Image = val;
+      this.storage.clear();
       return new Promise(resolve => {
         resolve(
           // send the local storage base64 path
-          this.apPic.InsertImages(val).then(data => {
+          this.apPic.InsertImages(this.base64Image).then(data => {
             return data;
           })
         );
