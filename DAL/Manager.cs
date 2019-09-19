@@ -78,7 +78,7 @@ namespace dal
             {
                 connection.Open();
                 MySqlCommand cmd = connection.CreateCommand();
-                cmd.CommandText = "select * from meals where SUBSTRING_INDEX(dateTime, '/', 3) = SUBSTRING_INDEX(@dateT, '/', 3)";
+                cmd.CommandText = "select * from meals where SUBSTRING_INDEX(dateTime, '/', 2) = SUBSTRING_INDEX(@dateT, '/',2)";
                 cmd.Parameters.Add("@dateT", MySqlDbType.String).Value = date.ToString("dd/MM/yyyy HH: mm:ss") ;
                 //cmd.CommandText = "SELECT * from meals where dateTime = '" + date.ToString() + "'";
                 MySqlDataReader reader = cmd.ExecuteReader();
