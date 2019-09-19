@@ -78,7 +78,9 @@ namespace dal
             {
                 connection.Open();
                 MySqlCommand cmd = connection.CreateCommand();
-                cmd.CommandText = "SELECT * from meals where dateTime = '" + date.ToString() + "'";
+                cmd.CommandText = "select * from meals where SUBSTRING_INDEX(dateTime, '/', 3) = SUBSTRING_INDEX(@dateT, '/', 3)";
+                cmd.Parameters.Add("@dateT", MySqlDbType.String).Value = date.ToString("dd/MM/yyyy HH: mm:ss") ;
+                //cmd.CommandText = "SELECT * from meals where dateTime = '" + date.ToString() + "'";
                 MySqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
@@ -86,7 +88,9 @@ namespace dal
                     meal m = new meal();
                     m.path = reader["path"].ToString();
                     m.tags = reader["tags"].ToString();
-                    m.dateTime = DateTime.Parse(reader["dateTime"].ToString());
+                    var x = reader["dateTime"];
+                    IFormatProvider culture = new CultureInfo("en-US", true);
+                    m.dateTime = DateTime.ParseExact(reader["dateTime"].ToString(), "dd/MM/yyyy HH:mm:ss", culture);
                     meals.Add(m);
                 }
             }
