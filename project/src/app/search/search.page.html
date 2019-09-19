@@ -30,7 +30,7 @@
         </ion-card-content>
           </ion-card>
     </ion-list>
- <p [hidden]=[display]>you didn't eat any {{data}} yet</p>
+ <p *ngIf="display">you didn't eat any {{data}} yet</p>
 </ion-content>
 
 

@@ -37,6 +37,8 @@ display: boolean;
     ,public autoCompleteLabelsService: AutoCompleteLabelsService) {
      
     this.display = false;
+    alert(this.display);
+
     console.log(this.meals);
     this.route.queryParams.subscribe(params => {
         if (params && params.special) {
@@ -45,6 +47,7 @@ this.searchText=this.data;
           this.loadLabelsFromAPI();
           };
         });
+      
 
      
   }
@@ -63,8 +66,10 @@ this.searchText=this.data;
   })}
   async loadLabelsFromAPI() {
     this.meals = await this.resolveAfter2Seconds() as Meal[];
-    this.display=true;
-
+    alert(this.meals);
+    if (this.meals.length == 0) {
+      this.display=true;
+    }
   }
 
   // resolveAfter2Seconds() {
