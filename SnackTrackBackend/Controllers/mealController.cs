@@ -15,6 +15,8 @@ using System.Web;
 using System.Text;
 using System.Drawing;
 using dal;
+using System.Globalization;
+
 namespace backend.Controllers
 {
     [RoutePrefix("api/meal")]
@@ -68,7 +70,9 @@ namespace backend.Controllers
                 DateTime dd = DateTime.Parse(hour);
             }
             catch { }
-            Meal meal = new Meal() { DateOfPic = DateTime.Parse(hour), Labels = labelsFromFrontend, Path = path };
+            IFormatProvider culture = new CultureInfo("en-US", true);
+            
+            Meal meal = new Meal() { DateOfPic = DateTime.Now, Labels = labelsFromFrontend, Path = path };
             Manager.addMeal(meal);
             return Ok();
         }
