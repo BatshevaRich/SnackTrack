@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using System.Threading.Tasks;
-using Clarifai.API;
-using Clarifai.DTOs.Inputs;
-using System.IO;
-using System.Web.Http.Cors;
-using Clarifai.DTOs.Predictions;
-using backend.Models;
-using System.Web;
-using System.Text;
-using System.Drawing;
+﻿using backend.Models;
 using dal;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace backend.Controllers
 {
@@ -35,14 +28,14 @@ namespace backend.Controllers
         // GET: api/meal/5
         public List<Meal> Get(DateTime dateTime)
         {
-           
+
             return Manager.getMealsToDay(dateTime);
         }
 
         [HttpGet]
         public List<Meal> Get(string label)
         {
-           return Manager.getMealsByLabel(label);
+            return Manager.getMealsByLabel(label);
         }
 
         /// <summary>
@@ -70,9 +63,8 @@ namespace backend.Controllers
                 DateTime dd = DateTime.Parse(hour);
             }
             catch { }
-            IFormatProvider culture = new CultureInfo("en-US", true);
-            
-            Meal meal = new Meal() { DateOfPic = DateTime.Now, Labels = labelsFromFrontend, Path = path };
+            var date = DateTime.Parse(hour.ToString().Substring(0, hour.ToString().IndexOf("G")));
+            Meal meal = new Meal() { DateOfPic = date, Labels = labelsFromFrontend, Path = path };
             Manager.addMeal(meal);
             return Ok();
         }
