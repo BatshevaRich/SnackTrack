@@ -170,7 +170,7 @@ namespace dal
             {
                 // Create a new stream to write to the file
                 Writer = new BinaryWriter(File.OpenWrite(Name));
-                // Writer raw data                
+                // Writer raw data
                 Writer.Write(binData);
                 Writer.Flush();
                 Writer.Close();
