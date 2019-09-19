@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class MealService {
   // baseURL = 'http://ce6dc86e.ngrok.io/api/';
-  baseURL = 'http://localhost:54640/api/';
+  baseURL = 'http://34.90.143.154/api/';
   // baseURL = 'http://b40029a0.ngrok.io/api/';
   // baseURL = 'http://localhost:54640/api/';
   listAllMeal: Meal[];

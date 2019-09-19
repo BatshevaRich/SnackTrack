@@ -17,14 +17,13 @@
     <ion-list ion-item *ngFor="let meal of meals">
         <ion-card>
             <img [src]="meal.Path"/>
-            <ion-card-content>
-                  {{meal.DateOfPic|date: 'dd/MM/yyyy  - hh:mm'}}
-
-            </ion-card-content>
-            <ion-card-content>
-              <span style="color:#005D57;font-weight: bold">{{data}}</span>
-              <span *ngFor="let lab of meal.Labels">,
-              <span  *ngIf="lab !== data">
+            <ion-card-content >
+                <div style="font-size:30px;font-family: 'Roboto', sans-serif;"> {{meal.DateOfPic|date: 'dd/MM/yyyy  - hh:mm'}}
+                </div> 
+              <span style="color:#005D57;font-weight: bold;font-size:25px;font-family: 'Roboto', sans-serif;">{{data}}</span>
+              <span *ngFor="let lab of meal.Labels">
+              <span  *ngIf="lab !== data" style="font-size:20px;font-family: 'Roboto', sans-serif;">,
+                
               {{lab}} 
                 </span>
               </span>
@@ -33,3 +32,33 @@
     </ion-list>
  <p *ngIf="display">you didn't eat any {{data}} yet</p>
 </ion-content>
+
+
+
+<ion-fab vertical="bottom" horizontal="end">
+    <ion-fab-button color="light" size="medium">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button routerLink="../camera" color="light" size="small">
+        <ion-icon name="camera"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button routerLink="../home" color="light" size="small">
+        <ion-icon name="calendar"></ion-icon>
+      </ion-fab-button>
+      <label style="size: 5000px" for="file-input">
+        <ion-fab-button color="light" size="small">
+          <ion-icon name="link"></ion-icon>
+        </ion-fab-button>
+      </label>
+      <input
+        type="file"
+        id="file-input"
+        accept="image/*"
+        capture="camera"
+        (change)="sendImage($event)"
+        style="display: none"
+      />‏
+    </ion-fab-list>
+  </ion-fab>
+
