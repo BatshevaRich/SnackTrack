@@ -14,7 +14,7 @@ import {
 } from 'date-fns';
 import { CalendarDateFormatter, DateFormatterParams } from 'angular-calendar';
 import { DatePipe } from '@angular/common';
-import { Title }     from '@angular/platform-browser';
+import { Title } from '@angular/platform-browser';
 
 import { AutoCompleteLabelsService } from '../Providers/auto-complete-labels.service';
 import { Subject } from 'rxjs';
@@ -27,6 +27,7 @@ import { PopoverController } from '@ionic/angular';
 import { ViewDayMealPage } from '../view-day-meal/view-day-meal.page';
 import { Storage } from '@ionic/storage';
 import { Meal } from '../classes/Meal';
+
 const colors: any = {
   red: { primary: Image, secondary: Image },
   blue: { primary: '#1e90ff', secondary: '#D1E8FF' },
@@ -46,24 +47,24 @@ interface mealLoaded {
 export class HomePage implements OnInit {
   constructor(private camera: Camera,
     private storage: Storage, private titleService: Title,
-              private router: Router,
-              private modal: NgbModal,
-              private mealService: MealService,
-              public autoCompleteLabelsService: AutoCompleteLabelsService,
-              public popoverCtrl: PopoverController) {
+    private router: Router,
+    private modal: NgbModal,
+    private mealService: MealService,
+    public autoCompleteLabelsService: AutoCompleteLabelsService,
+    public popoverCtrl: PopoverController) {
     this.loadLabelsFromAPI();
     this.mealsFromServer = [];
     this.didNotLoad = true;
     // await this.loadLabelsFromAPI();
     this.mealsFromServer = [];
-    
+
     // this.dayClicked();    
   }
-  ionViewWillEnter(){
+  ionViewWillEnter() {
     this.storage.clear();
   }
-  someMethod(){
-    this.titleService.setTitle ('An Awesome Title');
+  someMethod() {
+    this.titleService.setTitle('An Awesome Title');
   }
 
 
@@ -134,7 +135,31 @@ export class HomePage implements OnInit {
   currentImage: any;
 
 
-  takePicture(event) {
+  // takePicture($event) {
+  //   const options: CameraOptions = {
+  //     quality: 100,
+  //     destinationType: this.camera.DestinationType.DATA_URL,
+  //     encodingType: this.camera.EncodingType.JPEG,
+  //     mediaType: this.camera.MediaType.PICTURE
+  //   };
+
+  //   this.camera.getPicture(options).then((imageData) => {
+  //     this.currentImage = 'data:image/jpeg;base64,' + imageData;
+  //     alert(imageData);
+  //     this.sendImage($event);
+  //   // this.router.navigate(['/camera']);
+  //   }, (err) => {
+  //     // Handle error
+  //     console.log('Camera issue:' + err);
+  //   });
+  // }
+
+
+
+
+
+
+  takePicture($event) {
     const options: CameraOptions = {
       quality: 100,
       destinationType: this.camera.DestinationType.DATA_URL,
@@ -144,18 +169,42 @@ export class HomePage implements OnInit {
 
     this.camera.getPicture(options).then((imageData) => {
       this.currentImage = 'data:image/jpeg;base64,' + imageData;
-      alert(imageData);
-      this.sendImage(event);
-    this.router.navigate(['camera']);
+   
+      this.storage.set("img", this.currentImage ).then((response) => { 
+
+      }).catch((error) => {
+
+        console.log('set error for ' + this.currentImage + ' ', error);
+      });
+      this.storage.set("img",this.currentImage );
+    this.router.navigate(['/options']);
     }, (err) => {
       // Handle error
       console.log('Camera issue:' + err);
     });
   }
+  
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   convertMealsToEvent() {
     this.mealsFromServer = this.mealsFromServer as [];
     for (let index = 0; index < this.mealsFromServer.length; index++) {
-// alert(this.mealsFromServer[0].DateOfPic);
+      // alert(this.mealsFromServer[0].DateOfPic);
       colors.red.primary = new Image();
       colors.red.primary.src = this.mealsFromServer[index].Path;
       colors.red.secondary = new Image();
@@ -262,7 +311,7 @@ export class HomePage implements OnInit {
       }
     };
     this.searchText = '';
-    this.router.navigate(['search'], navigationExtras);
+    this.router.navigate(['/search'], navigationExtras);
   }
   setValue(key: string, value: any) {
     // this.storage.remove("key");
@@ -274,7 +323,7 @@ export class HomePage implements OnInit {
   }
 
   sendImage($event): void {
-        const file: File = $event.target.files[0];
+    const file: File = $event.target.files[0];
     const reader = new FileReader();
     this.storage.clear();
     reader.onload = (event: any) => {
@@ -285,7 +334,7 @@ export class HomePage implements OnInit {
     // this.router.navigate(['/options']);
     // this.navCtrl.navigateRoot("/options"); // go to next page
   }
-  ss(){
+  ss() {
     alert("today");
   }
 

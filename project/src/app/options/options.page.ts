@@ -21,7 +21,7 @@ export class OptionsPage {
               public loadingController: LoadingController,
               private mealProvider: MealService
   ) {
-
+    this.myDate=new Date();
     this.load = true;
     this.loadLabelsFromAPI();
     this.labels = new Array<{ name: string; wanted: boolean; }>();
@@ -34,6 +34,7 @@ export class OptionsPage {
   }
   myDate:Date=new Date();
   @ViewChild('box', null) userInput;
+  @ViewChild('datet',null)dateChange;
   labels: Array<{ name: string; wanted: boolean }>;
   unwantedLabels: Array<{ name: string; wanted: boolean }>;
   counter: number;
@@ -69,10 +70,11 @@ export class OptionsPage {
       this.currentImage = val;
       this.imageData = val;
       this.base64Image = val;
+      this.storage.clear();
       return new Promise(resolve => {
         resolve(
           // send the local storage base64 path
-          this.apPic.InsertImages(val).then(data => {
+          this.apPic.InsertImages(this.base64Image).then(data => {
             return data;
           })
         );
@@ -133,12 +135,14 @@ export class OptionsPage {
    * called upon pressing the 'ok' button
    */
   uploadData() {
+    console.log(this.dateChange.value);
     let stringedLabels: string[]; // var to keep chosen strings
     stringedLabels = this.labels.filter(l => l.name).map(l => l.name);
     this.mealProvider.SaveToServer(
       // localStorage.getItem('loadedImage')
       this.base64Image, // path
-      this.myDate, // time
+      this.dateChange.value,
+      //this.myDate, // time
       stringedLabels // labels
     );
     // localStorage.clear();
@@ -158,7 +162,8 @@ export class OptionsPage {
     const reader = new FileReader();
     reader.onload = (event: any) => {
       this.setValue('img', event.target.result);
-      //this.router.navigate(['/options']);
+      location.reload();
+     // this.router.navigate(['/options']);
     };
     reader.readAsDataURL(file);
   }
