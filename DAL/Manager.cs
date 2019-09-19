@@ -8,8 +8,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
+
 namespace dal
 {
     public static class Manager
@@ -59,11 +62,12 @@ namespace dal
                 MySqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    CultureInfo provider = CultureInfo.InvariantCulture;
+                    IFormatProvider culture = new CultureInfo("en-US", true);
                     meal m = new meal();
                     m.path = reader["path"].ToString();
                     m.tags = reader["tags"].ToString();
-                    m.dateTime = DateTime.Parse(reader["dateTime"].ToString());
+                    var x = reader["dateTime"].ToString();
+                    m.dateTime = DateTime.ParseExact(x, "dd/MM/yyyy HH:mm:ss", culture);
                     listMealsEntity.Add(m);
                 }
             }
@@ -78,8 +82,8 @@ namespace dal
             {
                 connection.Open();
                 MySqlCommand cmd = connection.CreateCommand();
-                cmd.CommandText = "select * from meals where SUBSTRING_INDEX(dateTime, '/', 3) = SUBSTRING_INDEX(@dateT, '/', 3)";
-                cmd.Parameters.Add("@dateT", MySqlDbType.String).Value = date.ToString("dd/MM/yyyy HH: mm:ss") ;
+                cmd.CommandText = "select * from meals where SUBSTRING_INDEX(dateTime, '/', 2) = SUBSTRING_INDEX(@dateT, '/', 2)";
+                cmd.Parameters.Add("@dateT", MySqlDbType.String).Value = date.ToString("dd/MM/yyyy HH:mm:ss") ;
                 //cmd.CommandText = "SELECT * from meals where dateTime = '" + date.ToString() + "'";
                 MySqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
@@ -155,7 +159,13 @@ namespace dal
             var base64Data = Regex.Match(imageString, @"data:image/(?<type>.+?),(?<data>.+)").Groups["data"].Value;
             var binData = Convert.FromBase64String(base64Data);
             BinaryWriter Writer = null;
-            string Name = Path.Combine("C:\\key", "pic.jpg");
+            string p = "";
+            p = HttpRuntime.AppDomainAppPath;
+            //if (HttpRuntime.AppDomainAppVirtualPath != null)
+            //    path = Path.Combine(HttpRuntime.AppDomainAppPath, "App_Data");
+            //else
+            //    path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string Name = Path.Combine(p,"App_Data", "pic.jpg");
             try
             {
                 // Create a new stream to write to the file
