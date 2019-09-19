@@ -21,7 +21,7 @@ export class OptionsPage {
               public loadingController: LoadingController,
               private mealProvider: MealService
   ) {
-
+    this.myDate=new Date();
     this.load = true;
     this.loadLabelsFromAPI();
     this.labels = new Array<{ name: string; wanted: boolean; }>();
@@ -34,6 +34,7 @@ export class OptionsPage {
   }
   myDate:Date=new Date();
   @ViewChild('box', null) userInput;
+  @ViewChild('datet',null)dateChange;
   labels: Array<{ name: string; wanted: boolean }>;
   unwantedLabels: Array<{ name: string; wanted: boolean }>;
   counter: number;
@@ -133,12 +134,14 @@ export class OptionsPage {
    * called upon pressing the 'ok' button
    */
   uploadData() {
+    console.log(this.dateChange.value);
     let stringedLabels: string[]; // var to keep chosen strings
     stringedLabels = this.labels.filter(l => l.name).map(l => l.name);
     this.mealProvider.SaveToServer(
       // localStorage.getItem('loadedImage')
       this.base64Image, // path
-      this.myDate, // time
+      this.dateChange.value,
+      //this.myDate, // time
       stringedLabels // labels
     );
     // localStorage.clear();
