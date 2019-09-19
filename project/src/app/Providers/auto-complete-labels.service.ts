@@ -10,7 +10,7 @@ import { AutoCompleteService } from 'ionic4-auto-complete';
 export class AutoCompleteLabelsService implements AutoCompleteService {
   labelAttribute = 'name';
   private labels: any[] = [];
-  private baseURL = 'http://localhost:54640/api/'
+  private baseURL = 'http://34.90.143.154/api/'
 
   constructor(private http: HttpClient) { }
 

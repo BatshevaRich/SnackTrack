@@ -10,7 +10,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ApiPictureService {
   labels: Label[];
-  baseURL = 'http://localhost:54640/api/'
+  baseURL = 'http://34.90.143.154/api/'
 // baseURL = 'https://helpless-mayfly-52.localtunnel.me/api/'
   // baseURL = 'http://b40029a0.ngrok.io/api/';
   fileToUpload: File;
@@ -41,7 +41,6 @@ export class ApiPictureService {
   InsertImages(formData): any {
     const file = this.dataURLtoFile(formData, 'img.jpg');
     const formD = new FormData();
-    this.fileToUpload = file;
     formD.append('file', file);
     const res = this.httpClient.post(
       this.baseURL + 'clarifai/InsertImages/',
