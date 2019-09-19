@@ -103,15 +103,9 @@ export class HomePage implements OnInit {
   dateToLoad: string;
   async ngOnInit() {
     this.loadLabelsFromAPI();
-    // var that  = this;
-    // setTimeout(function () {  // still buggy need to wait for dom to load.
-    //   // const date: Date = new Date();
-    //   // const events: CalendarEvent[] = [];
-    //   // that.dayClicked({date, events});
-    //   // that.userInput.dayClicked();
-    //   this.loadLabelsFromAPI();
-    // }, 3000);
+    // location.reload();
   }
+
   parseDate(value): Date {
     if (value.indexOf('-') > -1) {
       const str = value.split('-');
