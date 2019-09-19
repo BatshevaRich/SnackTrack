@@ -45,21 +45,18 @@
     </div>
 
     <ng-template #customCellTemplate let-day="day" let-locale="locale" >
-            <p   align="right" class="cal-day-number"  style=" font-weight: bold; color:#005D57 ;font-family:'Roboto';font-size: 25px;
-    ">
+            <p   align="right" class="cal-day-number"  style=" font-weight: bold; color:#005D57 ;font-family:'Roboto';font-size: 25px;">
               {{ day.date | calendarDate:'monthViewDayNumber':locale }}
 
             </p>
             <p>
-            <ion-badge  style="color: white;font-size: 10px">1</ion-badge>
-           <!-- <ion-badge *ngIf="day.badgeTotal > 0">{{ day.badgeTotal }}<ion-badge> -->
-
-
-            </p>
+            <ion-badge  style="color: white;font-size: 10px" *ngIf="day.badgeTotal > -1">{{ day.badgeTotal }}</ion-badge>
+           <!-- <ion-badge *ngIf="day.badgeTotal > 0">{{ day.badgeTotal }}<ion-badge>
+              <span class="cal-day-badge" *ngIf="day.badgeTotal > -1">{{ day.badgeTotal }}</span> -->
+              
+   </p>
         </ng-template>
         
-
-    
 </ion-content>
   <ion-fab vertical="bottom" horizontal="end" >
     <ion-fab-button color="light" size="medium">
@@ -78,6 +75,3 @@
         style="display: none" />‏
     </ion-fab-list>
   </ion-fab>
-  
-
-  

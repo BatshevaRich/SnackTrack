@@ -159,7 +159,8 @@ export class OptionsPage {
     const reader = new FileReader();
     reader.onload = (event: any) => {
       this.setValue('img', event.target.result);
-      this.router.navigate(['/options']);
+      location.reload();
+     // this.router.navigate(['/options']);
     };
     reader.readAsDataURL(file);
   }
