@@ -11,20 +11,25 @@ namespace dal
             meal res = new meal();
             try
             {
-res.path = Manager.UploadFileToStorage("dietdiaryfoodpics", meal.Path,meal.DateOfPic);
+                res.path = Manager.UploadFileToStorage("dietdiaryfoodpics", meal.Path, meal.DateOfPic);
             }
             catch (System.Exception e)
             {
 
                 throw e;
             }
-            
+
             res.tags = "";
             foreach (var item in meal.Labels)
             {
                 if (res.tags.Equals(""))
+                {
                     res.tags += item;
-                else res.tags += "," + item;
+                }
+                else
+                {
+                    res.tags += "," + item;
+                }
             }
             res.dateTime = meal.DateOfPic;
             return res;

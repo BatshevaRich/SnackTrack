@@ -2,7 +2,6 @@
 using dal;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -28,7 +27,6 @@ namespace backend.Controllers
         // GET: api/meal/5
         public List<Meal> Get(DateTime dateTime)
         {
-
             return Manager.getMealsToDay(dateTime);
         }
 
@@ -65,7 +63,16 @@ namespace backend.Controllers
             catch { }
             var date = DateTime.Parse(hour.ToString().Substring(0, hour.ToString().IndexOf("G")));
             Meal meal = new Meal() { DateOfPic = date, Labels = labelsFromFrontend, Path = path };
-            Manager.addMeal(meal);
+            try
+            {
+                Manager.addMeal(meal);
+            }
+            catch (Exception e)
+            {
+
+                return Ok(e);
+            }
+
             return Ok();
         }
 

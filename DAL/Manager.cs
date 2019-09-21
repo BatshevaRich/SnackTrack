@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
@@ -17,7 +16,7 @@ namespace dal
 {
     public static class Manager
     {
-        public static MySqlConnectionStringBuilder csb = new MySqlConnectionStringBuilder
+        private static MySqlConnectionStringBuilder csb = new MySqlConnectionStringBuilder
         {
             Server = "35.204.62.53",
             UserID = "root",
@@ -36,13 +35,23 @@ namespace dal
         {
             using (var connection = new MySqlConnection(csb.ConnectionString))
             {
-                meal mm = Mapper.convertMealToEntityAsync(m);
+                meal mm = null;
+                try
+                {
+                    mm = Mapper.convertMealToEntityAsync(m);
+                }
+                catch (Exception e)
+                {
+
+                    throw e;
+                }
+
                 connection.Open();
                 MySqlCommand cmd = connection.CreateCommand();
                 cmd.CommandText = "INSERT INTO meals(dateTime, path, tags) VALUES(@date, @path, @tag)";
-                cmd.Parameters.Add("@date", MySqlDbType.String).Value = mm.dateTime.ToString("dd/MM/yyyy HH:mm:ss");
-                cmd.Parameters.Add("@path", MySqlDbType.String).Value = mm.path;
-                cmd.Parameters.Add("@tag", MySqlDbType.String).Value = mm.tags;
+                cmd.Parameters.AddWithValue("@date", mm.dateTime.ToString("dd/MM/yyyy HH:mm:ss"));
+                cmd.Parameters.AddWithValue("@path", mm.path);
+                cmd.Parameters.AddWithValue("@tag", mm.tags);
                 cmd.ExecuteNonQuery();
             }
         }
@@ -83,7 +92,7 @@ namespace dal
                 connection.Open();
                 MySqlCommand cmd = connection.CreateCommand();
                 cmd.CommandText = "select * from meals where SUBSTRING_INDEX(dateTime, '/', 2) = SUBSTRING_INDEX(@dateT, '/', 2)";
-                cmd.Parameters.Add("@dateT", MySqlDbType.String).Value = date.ToString("dd/MM/yyyy HH:mm:ss") ;
+                cmd.Parameters.Add("@dateT", MySqlDbType.String).Value = date.ToString("dd/MM/yyyy HH:mm:ss");
                 //cmd.CommandText = "SELECT * from meals where dateTime = '" + date.ToString() + "'";
                 MySqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
@@ -113,11 +122,12 @@ namespace dal
                 MySqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    CultureInfo provider = CultureInfo.InvariantCulture;
+                    IFormatProvider culture = new CultureInfo("en-US", true);
                     meal m = new meal();
                     m.path = reader["path"].ToString();
                     m.tags = reader["tags"].ToString();
-                    m.dateTime = DateTime.Parse(reader["dateTime"].ToString());
+                    var x = reader["dateTime"].ToString();
+                    m.dateTime = DateTime.ParseExact(x, "dd/MM/yyyy HH:mm:ss", culture);
                     meals.Add(m);
                 }
             }
@@ -128,19 +138,27 @@ namespace dal
         public static List<string> GetLabels()
         {
             List<string> listLabels = new List<string>();
-
+            SortedSet<string> labelsSet = new SortedSet<string>();
             using (var connection = new MySqlConnection(csb.ConnectionString))
             {
-                connection.Open();
-                MySqlCommand cmd = connection.CreateCommand();
-                cmd.CommandText = "SELECT tags from meals";
-                MySqlDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
+                try
                 {
-                    listLabels.Add(reader[0].ToString());
+                    connection.Open();
+                    MySqlCommand cmd = connection.CreateCommand();
+                    cmd.CommandText = "SELECT tags from meals";
+                    MySqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        listLabels.Add(reader[0].ToString());
+                    }
                 }
+                catch (MySqlException e)
+                {
+
+                    throw e;
+                }
+
             }
-            SortedSet<string> labelsSet = new SortedSet<string>();
             listLabels.ForEach(ls => ls.Split(',').ToList().ForEach(l => labelsSet.Add(l)));
             return labelsSet.ToList();
         }
@@ -152,7 +170,7 @@ namespace dal
         /// <param name="imageString">the base64 image string</param>
         /// <param name="objectName"></param>
         /// <returns></returns>
-        public static string UploadFileToStorage(string bucketName, string imageString,DateTime DateOfPic, string objectName = null)
+        public static string UploadFileToStorage(string bucketName, string imageString, DateTime DateOfPic, string objectName = null)
         {
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "C:\\key\\DietDiary-f95b600d05ed.json");
             var storage = StorageClient.Create();
@@ -160,12 +178,19 @@ namespace dal
             var binData = Convert.FromBase64String(base64Data);
             BinaryWriter Writer = null;
             string p = "";
-            p = HttpRuntime.AppDomainAppPath;
-            //if (HttpRuntime.AppDomainAppVirtualPath != null)
-            //    path = Path.Combine(HttpRuntime.AppDomainAppPath, "App_Data");
-            //else
-            //    path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string Name = Path.Combine(p,"App_Data", "pic.jpg");
+            string Name = "";
+
+            try
+            {
+                p = "C:\\key\\";
+                Name = Path.Combine(p, "pic.jpg");
+            }
+            catch (Exception e)
+            {
+
+                p = HttpRuntime.AppDomainAppPath;
+                Name = Path.Combine(p, "App_Data", "pic.jpg");
+            }
             try
             {
                 // Create a new stream to write to the file
@@ -175,7 +200,11 @@ namespace dal
                 Writer.Flush();
                 Writer.Close();
             }
-            catch (Exception e)
+            catch (UnauthorizedAccessException e)
+            {
+                throw e;
+            }
+            catch (DirectoryNotFoundException e)
             {
                 throw e;
             }
