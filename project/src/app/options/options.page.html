@@ -5,8 +5,8 @@
              <ion-title>Choose Foods</ion-title>
           </ion-col>
           <ion-col  size="1">
-               <ion-button (click)="uploadData()" [hidden]="labels.length== 0">
-              <ion-icon name="checkmark"></ion-icon>
+               <ion-button (click)="uploadData()" [hidden]="labels.length== 0" color="primary-contrast">
+              <ion-icon color="light"name="checkmark"></ion-icon>
               </ion-button>
           </ion-col>
         </ion-row>
@@ -30,7 +30,7 @@
 
   <ion-card *ngIf="load && labels.length != 0" >
       <ion-item>
-          <ion-datetime shape="round" #datet [value]="myDate.toString(datet.value)" displayFormat="MM/DD/YYYY HH:mm" (ionChange)="doSomething()"></ion-datetime>
+          <ion-datetime shape="round" #datet [value]="myDate.toString(datet.value)" displayFormat="DD/MM/YYYY HH:mm" (ionChange)="doSomething()"></ion-datetime>
       </ion-item>
     <ion-card-header>
       <ion-img
@@ -87,15 +87,6 @@
       (click)="moveToWanted($event)"
     ></ion-icon>
   </ion-chip>
-  <ion-button
-        expand="block"
-        ion-button
-        color="light"
-        (click)="uploadData()"
-        [hidden]="labels.length == 0"
-      >
-        Save To Calendar
-      </ion-button>
     </ion-card-content>
   </ion-card>
   <br />

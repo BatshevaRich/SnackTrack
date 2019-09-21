@@ -67,6 +67,7 @@ this.searchText=this.data;
   async loadLabelsFromAPI() {
     this.meals = await this.resolveAfter2Seconds() as Meal[];
     alert(this.meals);
+    this.display=false;
     if (this.meals.length == 0) {
       this.display=true;
     }
