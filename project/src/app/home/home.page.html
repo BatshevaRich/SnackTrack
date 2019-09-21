@@ -50,7 +50,7 @@
               {{ day.date | calendarDate:'monthViewDayNumber':locale }}
 
             </p>
-            <ion-badge  style="color: white;font-size: 10px" *ngIf="day.badgeTotal > 0">{{ day.badgeTotal/2 }}</ion-badge>
+            <ion-badge  style="color: white;font-size: 10px" *ngIf="day.badgeTotal > 0">{{ day.badgeTotal }}</ion-badge>
            <!-- <ion-badge *ngIf="day.badgeTotal > 0">{{ day.badgeTotal }}<ion-badge> -->
               <!-- <span class="cal-day-badge" *ngIf="day.badgeTotal > -1">{{ day.badgeTotal }}</span> -->
                 </ng-template>
