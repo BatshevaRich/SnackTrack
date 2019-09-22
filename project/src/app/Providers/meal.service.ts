@@ -57,16 +57,9 @@ export class MealService {
   }
 
   public GetAllMeals() {
-
     return this.http.get(this.baseURL + 'meal');
-
-    // const res = this.http.get(this.baseURL + 'meal');
-    // return new Promise(resolve => {
-    //   res.subscribe(data => {
-    //     resolve(data);
-    //   });
-    // });
   }
+
   getResults(): Observable<Meal[]> {
     let observable: Observable<Meal[]>;
     if (this.listAllMeal.length === 0) {

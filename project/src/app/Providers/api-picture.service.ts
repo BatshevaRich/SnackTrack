@@ -1,16 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Label } from '../../app/classes/Label';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/map';
 import { HttpClient } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
 export class ApiPictureService {
   labels: Label[];
-  baseURL = 'http://34.90.143.154/api/'
+  baseURL = 'http://34.90.143.154/api/';
 // baseURL = 'https://helpless-mayfly-52.localtunnel.me/api/'
   // baseURL = 'http://b40029a0.ngrok.io/api/';
   fileToUpload: File;

@@ -46,19 +46,16 @@ export interface mealLoaded {
 })
 export class HomePage implements OnInit {
   constructor(private camera: Camera,
-    private storage: Storage, private titleService: Title,
-    private router: Router,
-    private modal: NgbModal,
-    private mealService: MealService,
-    public autoCompleteLabelsService: AutoCompleteLabelsService,
-    public popoverCtrl: PopoverController) {
+              private storage: Storage, private titleService: Title,
+              private router: Router,
+              private modal: NgbModal,
+              private mealService: MealService,
+              public autoCompleteLabelsService: AutoCompleteLabelsService,
+              public popoverCtrl: PopoverController) {
     this.loadLabelsFromAPI();
     this.mealsFromServer = [];
     this.didNotLoad = true;
-    // await this.loadLabelsFromAPI();
     this.mealsFromServer = [];
-
-    // this.dayClicked();    
   }
   @ViewChild('box', null) userInput;
   @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
@@ -93,19 +90,16 @@ export class HomePage implements OnInit {
   currentImage: any;
   ionViewWillEnter() {
     this.storage.clear();
+    this.refresh.next();
   }
   someMethod() {
     this.titleService.setTitle('An Awesome Title');
   }
 
-
   public weekViewColumnHeader({ date, locale }: DateFormatterParams): string {
     return new DatePipe(locale).transform(date, 'EEE', locale);
   }
-  // async ngOnInit() {
-  //   this.loadLabelsFromAPI();
-  //   // location.reload();
-  // }
+
   ngOnInit() {
     this.events = [];
     this.loadLabelsFromAPI();
@@ -169,7 +163,7 @@ export class HomePage implements OnInit {
         console.log('set error for ' + this.currentImage + ' ', error);
       });
       this.storage.set("img",this.currentImage );
-    this.router.navigate(['/options']);
+      this.router.navigate(['/options']);
     }, (err) => {
       // Handle error
       console.log('Camera issue:' + err);
@@ -313,7 +307,7 @@ export class HomePage implements OnInit {
     // this.navCtrl.navigateRoot("/options"); // go to next page
   }
   ss() {
-    alert("today");
+    alert('today');
   }
 
   async presentPopover({ date, events }: { date: Date; events: CalendarEvent[] }) {
