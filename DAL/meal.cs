@@ -13,4 +13,3 @@ namespace dal
         public List<string> Tags { get; set; }
     }
 }
-

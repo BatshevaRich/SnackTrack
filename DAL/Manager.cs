@@ -1,22 +1,17 @@
-﻿using backend.Models;
-using Google.Cloud.Storage.V1;
+﻿using Google.Cloud.Storage.V1;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-//using System.Data.Entity;
-//using System.Data.Entity.Core.Objects;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Web;
-
 namespace dal
 {
     public static class Manager
     {
-        private static MySqlConnectionStringBuilder csb = new MySqlConnectionStringBuilder
+        public static MySqlConnectionStringBuilder csb = new MySqlConnectionStringBuilder
         {
             Server = "35.204.62.53",
             UserID = "root",
@@ -31,27 +26,23 @@ namespace dal
         /// func to add meal to db. gets an empty meal object
         /// </summary>
         /// <param name="m"></param>
-        public static void addMeal(Meal m)
+        public static void addMeal(Meal newMeal)
         {
             using (var connection = new MySqlConnection(csb.ConnectionString))
             {
-                meal mm = null;
-                try
-                {
-                    mm = Mapper.convertMealToEntityAsync(m);
-                }
-                catch (Exception e)
-                {
-
-                    throw e;
-                }
-
                 connection.Open();
                 MySqlCommand cmd = connection.CreateCommand();
                 cmd.CommandText = "INSERT INTO meals(dateTime, path, tags) VALUES(@date, @path, @tag)";
-                cmd.Parameters.AddWithValue("@date", mm.dateTime.ToString("dd/MM/yyyy HH:mm:ss"));
-                cmd.Parameters.AddWithValue("@path", mm.path);
-                cmd.Parameters.AddWithValue("@tag", mm.tags);
+                cmd.Parameters.Add("@date", MySqlDbType.String).Value = newMeal.DateOfPic.ToString("dd/MM/yyyy HH:mm:ss");
+                cmd.Parameters.Add("@path", MySqlDbType.String).Value = UploadFileToStorage("dietdiaryfoodpics", newMeal.Path, newMeal.DateOfPic);
+                string tags = "";
+                foreach (var item in newMeal.Tags)
+                {
+                    if (tags.Equals(""))
+                        tags += item;
+                    else tags += "," + item;
+                }
+                cmd.Parameters.Add("@tag", MySqlDbType.String).Value = tags;
                 cmd.ExecuteNonQuery();
             }
         }
@@ -59,9 +50,8 @@ namespace dal
         /// func to return list of all meals. called by mealcontroller
         /// </summary>
         /// <returns></returns>
-        public async static Task<List<backend.Models.Meal>> getMeals()
+        public async static Task<List<Meal>> getMeals()
         {
-            List<meal> listMealsEntity = new List<meal>();
             List<Meal> listMeals = new List<Meal>();
             using (var connection = new MySqlConnection(csb.ConnectionString))
             {
@@ -71,49 +61,74 @@ namespace dal
                 MySqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
+                    CultureInfo provider = CultureInfo.InvariantCulture;
+                    Meal meal = new Meal();
+                    meal.Path = reader["path"].ToString();
+                    meal.Tags = reader["tags"].ToString().Split(',').ToList();
                     IFormatProvider culture = new CultureInfo("en-US", true);
-                    meal m = new meal();
-                    m.path = reader["path"].ToString();
-                    m.tags = reader["tags"].ToString();
-                    var x = reader["dateTime"].ToString();
-                    m.dateTime = DateTime.ParseExact(x, "dd/MM/yyyy HH:mm:ss", culture);
-                    listMealsEntity.Add(m);
+                    meal.DateOfPic = DateTime.ParseExact(reader["dateTime"].ToString(), "dd/MM/yyyy HH:mm:ss", culture);
+                    listMeals.Add(meal);
                 }
             }
-            listMeals = listMealsEntity.Select<meal, Meal>(m => Mapper.convertEntityToMeal(m)).ToList<Meal>();//listMealsEntity.Select<meal,object/*api obj*/>(Mapper.convertEntityToMeal);
             return listMeals;
         }
 
-        public static List<Meal> getMealsToDay(DateTime date)
+
+        public static List<Meal> GetMonthMeals(DateTime date)
         {
-            List<meal> meals = new List<meal>();
+            List<Meal> meals = new List<Meal>();
             using (var connection = new MySqlConnection(csb.ConnectionString))
             {
                 connection.Open();
                 MySqlCommand cmd = connection.CreateCommand();
-                cmd.CommandText = "select * from meals where SUBSTRING_INDEX(dateTime, '/', 2) = SUBSTRING_INDEX(@dateT, '/', 2)";
-                cmd.Parameters.Add("@dateT", MySqlDbType.String).Value = date.ToString("dd/MM/yyyy HH:mm:ss");
-                //cmd.CommandText = "SELECT * from meals where dateTime = '" + date.ToString() + "'";
+                cmd.CommandText = "select * from meals where MID(dateTime, 4, 7) AS ExtractString = MID(@dateT, 4,7) AS ExtractString";
+                cmd.Parameters.Add("@dateT", MySqlDbType.String).Value = date.ToString("dd/MM/yyyy HH: mm:ss");
                 MySqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
                     CultureInfo provider = CultureInfo.InvariantCulture;
-                    meal m = new meal();
-                    m.path = reader["path"].ToString();
-                    m.tags = reader["tags"].ToString();
+                    Meal meal = new Meal();
+                    meal.Path = reader["path"].ToString();
+                    meal.Tags = reader["tags"].ToString().Split(',').ToList();
                     var x = reader["dateTime"];
                     IFormatProvider culture = new CultureInfo("en-US", true);
-                    m.dateTime = DateTime.ParseExact(reader["dateTime"].ToString(), "dd/MM/yyyy HH:mm:ss", culture);
-                    meals.Add(m);
+                    meal.DateOfPic = DateTime.ParseExact(reader["dateTime"].ToString(), "dd/MM/yyyy HH:mm:ss", culture);
+                    meals.Add(meal);
                 }
             }
-            List<Meal> listMealToDay = meals.Select<meal, Meal>(m => Mapper.convertEntityToMeal(m)).ToList<Meal>();
-            return listMealToDay;
+            return meals;
+        }
+
+
+
+
+        public static List<Meal> getMealsToDay(DateTime date)
+        {
+            List<Meal> meals = new List<Meal>();
+            using (var connection = new MySqlConnection(csb.ConnectionString))
+            {
+                connection.Open();
+                MySqlCommand cmd = connection.CreateCommand();
+                cmd.CommandText = "select * from meals where SUBSTRING_INDEX(dateTime, ' ',1) = SUBSTRING_INDEX(@dateT, ' ',1)";
+                cmd.Parameters.Add("@dateT", MySqlDbType.String).Value = date.ToString("dd/MM/yyyy HH: mm:ss");
+                MySqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    CultureInfo provider = CultureInfo.InvariantCulture;
+                    Meal meal = new Meal();
+                    meal.Path = reader["path"].ToString();
+                    meal.Tags = reader["tags"].ToString().Split(',').ToList();
+                    IFormatProvider culture = new CultureInfo("en-US", true);
+                    meal.DateOfPic = DateTime.ParseExact(reader["dateTime"].ToString(), "dd/MM/yyyy HH:mm:ss", culture);
+                    meals.Add(meal);
+                }
+            }
+            return meals;
         }
 
         public static List<Meal> getMealsByLabel(string label)
         {
-            List<meal> meals = new List<meal>();
+            List<Meal> meals = new List<Meal>();
             using (var connection = new MySqlConnection(csb.ConnectionString))
             {
                 connection.Open();
@@ -122,43 +137,34 @@ namespace dal
                 MySqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
+                    CultureInfo provider = CultureInfo.InvariantCulture;
+                    Meal meal = new Meal();
+                    meal.Path = reader["path"].ToString();
+                    meal.Tags = reader["tags"].ToString().Split(',').ToList();
                     IFormatProvider culture = new CultureInfo("en-US", true);
-                    meal m = new meal();
-                    m.path = reader["path"].ToString();
-                    m.tags = reader["tags"].ToString();
-                    var x = reader["dateTime"].ToString();
-                    m.dateTime = DateTime.ParseExact(x, "dd/MM/yyyy HH:mm:ss", culture);
-                    meals.Add(m);
+                    meal.DateOfPic = DateTime.ParseExact(reader["dateTime"].ToString(), "dd/MM/yyyy HH:mm:ss", culture);
+                    meals.Add(meal);
                 }
             }
-            List<Meal> listMealToDay = meals.Select<meal, Meal>(m => Mapper.convertEntityToMeal(m)).ToList<Meal>();
-            return listMealToDay;
+            return meals;
         }
 
         public static List<string> GetLabels()
         {
             List<string> listLabels = new List<string>();
-            SortedSet<string> labelsSet = new SortedSet<string>();
+
             using (var connection = new MySqlConnection(csb.ConnectionString))
             {
-                try
+                connection.Open();
+                MySqlCommand cmd = connection.CreateCommand();
+                cmd.CommandText = "SELECT tags from meals";
+                MySqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
                 {
-                    connection.Open();
-                    MySqlCommand cmd = connection.CreateCommand();
-                    cmd.CommandText = "SELECT tags from meals";
-                    MySqlDataReader reader = cmd.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        listLabels.Add(reader[0].ToString());
-                    }
+                    listLabels.Add(reader[0].ToString());
                 }
-                catch (MySqlException e)
-                {
-
-                    throw e;
-                }
-
             }
+            SortedSet<string> labelsSet = new SortedSet<string>();
             listLabels.ForEach(ls => ls.Split(',').ToList().ForEach(l => labelsSet.Add(l)));
             return labelsSet.ToList();
         }
@@ -177,34 +183,17 @@ namespace dal
             var base64Data = Regex.Match(imageString, @"data:image/(?<type>.+?),(?<data>.+)").Groups["data"].Value;
             var binData = Convert.FromBase64String(base64Data);
             BinaryWriter Writer = null;
-            string p = "";
-            string Name = "";
-
-            try
-            {
-                p = "C:\\key\\";
-                Name = Path.Combine(p, "pic.jpg");
-            }
-            catch (Exception e)
-            {
-
-                p = HttpRuntime.AppDomainAppPath;
-                Name = Path.Combine(p, "App_Data", "pic.jpg");
-            }
+            string Name = Path.Combine("C:\\key", "pic.jpg");
             try
             {
                 // Create a new stream to write to the file
                 Writer = new BinaryWriter(File.OpenWrite(Name));
-                // Writer raw data
+                // Writer raw data                
                 Writer.Write(binData);
                 Writer.Flush();
                 Writer.Close();
             }
-            catch (UnauthorizedAccessException e)
-            {
-                throw e;
-            }
-            catch (DirectoryNotFoundException e)
+            catch (Exception e)
             {
                 throw e;
             }
