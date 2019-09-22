@@ -17,7 +17,7 @@ namespace WebApi
             config.MapHttpAttributeRoutes();
             config.Formatters.JsonFormatter.SupportedMediaTypes
     .Add(new MediaTypeHeaderValue("text/html"));
-            var cors = new EnableCorsAttribute("http://localhost:8101", "*", "*");
+            var cors = new EnableCorsAttribute("http://localhost:8100", "*", "*");
             config.EnableCors(cors);
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
