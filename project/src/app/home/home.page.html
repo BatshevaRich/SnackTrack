@@ -1,13 +1,15 @@
-<ion-header >
-  <ion-toolbar>
-    <ion-title ><ion-img  style="width:100px;"src="https://storage.cloud.google.com/dietdiaryfoodpics/Document-page-001.jpg"></ion-img></ion-title>
+
+<a style="background-color:#33333D">
+<ion-header style="background-color:#33333D">
+  <ion-toolbar >
+    <ion-title><ion-img  style="width:100px;"src="https://storage.cloud.google.com/dietdiaryfoodpics/Document-page-001.jpg"></ion-img></ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-row>
+<ion-row >
   <ion-col size="0.02"></ion-col>
   <ion-col size="12">
-      <ion-auto-complete style="height:180%;" [(ngModel)]="searchText" (keyup.enter)="onSelected()" (itemSelected)="onSelected()"
+      <ion-auto-complete style="background-color:#33333D" color='primary' [(ngModel)]="searchText" (keyup.enter)="onSelected()" (itemSelected)="onSelected()"
       [dataProvider]="autoCompleteLabelsService">
     </ion-auto-complete>
     </ion-col>
@@ -19,11 +21,11 @@
     <ion-col size="2">
       <ion-button  fill="clear" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
         (viewDateChange)="closeOpenMonthViewDay()">
-        <ion-icon style="color:#005D57" name="arrow-back"></ion-icon>
+        <ion-icon style="color:#005D57;size: 20px" name="arrow-back"></ion-icon>
       </ion-button>
     </ion-col>
     <ion-col size="8" text-align: center>
-      <h3 > {{ viewDate | calendarDate: view + "ViewTitle":"en" }}</h3>
+      <h3 > <ion-img  style="width:100px;"src="https://storage.cloud.google.com/dietdiaryfoodpics/Document-page-001.jpg"></ion-img></h3>
     </ion-col>
     <ion-col size="2">
       <ion-button fill="clear" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
@@ -32,29 +34,34 @@
       </ion-button>
     </ion-col>
   </ion-row>
-  <ion-content style="width: 100%">
+   
+  <ion-content style="width: 100%;">
+  
   <div [ngSwitch]="view" style="height:2px;color: #005D57;">
       <mwl-calendar-month-view 
-      #box id="calendarMonth" 
-      [cellTemplate]="customCellTemplate"
       *ngSwitchCase="CalendarView.Month" 
       [viewDate]="viewDate"
+      [cellTemplate]="customCellTemplate"
+
         [events]="events" 
         [refresh]="refresh" [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="presentPopover($event.day)"
         (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
       </mwl-calendar-month-view>
     </div>
+    <!-- #box id="calendarMonth"  -->
+
+   
+
 
     <ng-template #customCellTemplate let-day="day" let-locale="locale" >
-            <p   align="right" class="cal-day-number"  style=" font-weight: bold; color:#005D57 ;font-family:'Roboto';font-size: 25px;">
+      
+            <p   align="right" class="cal-day-number"  style=" font-weight: bold; color:#005D57 ;font-family:'Roboto';font-size: 25px;background-color: black;">
               {{ day.date | calendarDate:'monthViewDayNumber':locale }}
 
             </p>
-            <ion-badge  style="color: white;font-size: 10px" *ngIf="day.badgeTotal > 0">{{ day.badgeTotal/2 }}</ion-badge>
-           <!-- <ion-badge *ngIf="day.badgeTotal > 0">{{ day.badgeTotal }}<ion-badge> -->
-              <!-- <span class="cal-day-badge" *ngIf="day.badgeTotal > -1">{{ day.badgeTotal }}</span> -->
-                </ng-template>
-
+            <ion-badge  style="color: white;font-size: 10px;" *ngIf="day.badgeTotal > 0">{{ (day.badgeTotal)/2 }}</ion-badge>
+               
+              </ng-template>
 </ion-content>
   <ion-fab vertical="bottom" horizontal="end" >
     <ion-fab-button color="light" size="medium">
@@ -66,10 +73,11 @@
         </ion-fab-button>
       <label  for="file-input" >
         <ion-fab-button  color="light" size="small">
-          <ion-icon name="link"></ion-icon>
+          <ion-icon name="cloud-upload"></ion-icon>
         </ion-fab-button>
       </label>
       <input type="file" id="file-input" accept="image/*" capture="camera" (change)="sendImage($event)"
         style="display: none" />‏
     </ion-fab-list>
   </ion-fab>
+</a>

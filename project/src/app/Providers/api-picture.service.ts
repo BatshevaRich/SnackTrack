@@ -4,15 +4,16 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/map';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
 export class ApiPictureService {
   labels: Label[];
-  baseURL = 'http://34.90.143.154/api/'
+  baseURL = 'http://localhost:54640/api/';
+  // baseURL = 'http://34.90.143.154/api/'
 // baseURL = 'https://helpless-mayfly-52.localtunnel.me/api/'
-  // baseURL = 'http://b40029a0.ngrok.io/api/';
+//   baseURL = 'http://7cffcf8b.ngrok.io/api/';
   fileToUpload: File;
   constructor(public httpClient: HttpClient) {}
 
@@ -26,12 +27,14 @@ export class ApiPictureService {
   }
 
   dataURLtoFile(dataurl, filename) {
+   
     // https://stackoverflow.com/questions/35940290/how-to-convert-base64-string-to-javascript-file-object-like-as-from-file-input-f?noredirect=1&lq=1
     let arr = dataurl.split(','),
       mime = arr[0].match(/:(.*?);/)[1],
       bstr = atob(arr[1]),
       n = bstr.length,
       u8arr = new Uint8Array(n);
+      
     while (n--) {
       u8arr[n] = bstr.charCodeAt(n);
     }
@@ -39,12 +42,14 @@ export class ApiPictureService {
   }
 
   InsertImages(formData): any {
-    const file = this.dataURLtoFile(formData, 'img.jpg');
-    const formD = new FormData();
-    formD.append('file', file);
+    // alert(formData);
+    // const file = this.dataURLtoFile(formData, 'img.jpg');
+    // const formD = new FormData();
+    // formD.append('file', file);
+    const headers= new HttpHeaders({'Content-Type':'application/json'});
     const res = this.httpClient.post(
       this.baseURL + 'clarifai/InsertImages/',
-      formD
+      JSON.stringify(formData),{headers:headers}
     );
 
     return new Promise(resolve => {

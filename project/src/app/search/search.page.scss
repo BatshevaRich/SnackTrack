@@ -1,0 +1,33 @@
+ion-content{
+   
+      --ion-background-color:#111D12  url("https://storage.cloud.google.com/dietdiaryfoodpics/292.jpg?authuser=0") no-repeat center center / cover;
+   }
+
+   
+.autocomplete {
+	width: 100%;
+	ion-list {
+		position: absolute;
+		width: inherit;
+		overflow-y: scroll;
+		max-height: 150%;
+    z-index: 999;
+    color:red;
+
+		ion-item {
+
+			img {
+				max-height: 2.5rem;
+				width: auto;
+				margin: auto;
+				display: block;
+			}
+		}
+
+		ion-item:hover {
+      color: red;
+			cursor: pointer;
+			background: #005D57;
+		}
+	}
+}

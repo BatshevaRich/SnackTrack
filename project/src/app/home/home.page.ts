@@ -12,7 +12,7 @@ import {
   isSameMonth,
   addHours
 } from 'date-fns';
-import { CalendarDateFormatter, DateFormatterParams } from 'angular-calendar';
+import { CalendarDateFormatter, DateFormatterParams, CalendarMonthViewDay } from 'angular-calendar';
 import { DatePipe } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 
@@ -38,11 +38,14 @@ interface mealLoaded {
   DateOfPic: string;
   Labels: string[];
 }
+const RED_CELL: 'red-cell' = 'red-cell';
+const BLUE_CELL: 'blue-cell' = 'blue-cell';
 @Component({
   selector: 'app-home',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
+
 })
 export class HomePage implements OnInit {
   constructor(private camera: Camera,
@@ -62,6 +65,7 @@ export class HomePage implements OnInit {
   }
   ionViewWillEnter() {
     this.storage.clear();
+    
   }
   someMethod() {
     this.titleService.setTitle('An Awesome Title');
@@ -162,8 +166,8 @@ export class HomePage implements OnInit {
     };
 
     this.camera.getPicture(options).then((imageData) => {
-      this.currentImage = 'data:image/jpeg;base64,' + imageData;
-   
+      this.currentImage =  imageData;
+      // 'data:image/jpeg;base64,'
       this.storage.set("img", this.currentImage ).then((response) => { 
 
       }).catch((error) => {
@@ -307,8 +311,10 @@ export class HomePage implements OnInit {
     this.searchText = '';
     this.router.navigate(['/search'], navigationExtras);
   }
-  setValue(key: string, value: any) {
-    // this.storage.remove("key");
+  setValue(key: string, value: string) {
+    value=value.substring(23,value.length);
+    alert(value);
+
     this.storage.set(key, value).then((response) => {
     }).catch((error) => {
       console.log('set error for ' + key + ' ', error);
@@ -317,6 +323,7 @@ export class HomePage implements OnInit {
   }
 
   sendImage($event): void {
+    alert("cam");
     const file: File = $event.target.files[0];
     const reader = new FileReader();
     this.storage.clear();
@@ -329,8 +336,9 @@ export class HomePage implements OnInit {
     // this.navCtrl.navigateRoot("/options"); // go to next page
   }
   ss() {
-    alert("today");
+    // alert("today");
   }
+  
 
   async presentPopover({ date, events }: { date: Date; events: CalendarEvent[] }) {
     const popover = await this.popoverCtrl.create({
@@ -342,4 +350,7 @@ export class HomePage implements OnInit {
     popover.style.cssText = '--max-height:45%;--width:95%';
     popover.present();
   }
+
+  
+ 
 }

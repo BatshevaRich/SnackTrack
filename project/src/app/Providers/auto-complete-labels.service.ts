@@ -11,8 +11,8 @@ import { Label } from '../classes/Label';
 export class AutoCompleteLabelsService implements AutoCompleteService {
   labelAttribute = 'name';
   private labels: any[] = [];
-  private baseURL = 'http://34.90.143.154/api/'
-
+   // baseURL = 'http://7cffcf8b.ngrok.io/api/'
+   baseURL = 'http://localhost:54640/api/';
   constructor(private http: HttpClient) {
       this.initialization();
   }
