@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.779
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dal", "dal\dal.csproj", "{18AEC272-8B98-4EFE-BE60-9A5DC89C4FE8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "WebApi\WebApi.csproj", "{CD927E0E-A8F7-4C53-863A-D8FD8DB083EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dal", "..\dal\dal\dal.csproj", "{18AEC272-8B98-4EFE-BE60-9A5DC89C4FE8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,6 +13,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CD927E0E-A8F7-4C53-863A-D8FD8DB083EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD927E0E-A8F7-4C53-863A-D8FD8DB083EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD927E0E-A8F7-4C53-863A-D8FD8DB083EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD927E0E-A8F7-4C53-863A-D8FD8DB083EB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{18AEC272-8B98-4EFE-BE60-9A5DC89C4FE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{18AEC272-8B98-4EFE-BE60-9A5DC89C4FE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18AEC272-8B98-4EFE-BE60-9A5DC89C4FE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -20,6 +26,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {0C6CC1CD-5E61-42FE-A5CC-17C4A324DD3F}
+		SolutionGuid = {6924593E-DBCE-4BD9-B3E8-C280F25549D0}
 	EndGlobalSection
 EndGlobal
