@@ -27,13 +27,13 @@ import { PopoverController } from '@ionic/angular';
 import { ViewDayMealPage } from '../view-day-meal/view-day-meal.page';
 import { Storage } from '@ionic/storage';
 import { Meal } from '../classes/Meal';
-
+// ,*TgpkZTbdtlA~u
 const colors: any = {
   red: { primary: Image, secondary: Image },
   blue: { primary: '#1e90ff', secondary: '#D1E8FF' },
   yellow: { primary: '#e3bc08', secondary: '#FDF1BA' }
 };
-interface mealLoaded {
+export interface mealLoaded {
   Path: string;
   DateOfPic: string;
   Labels: string[];
@@ -42,7 +42,7 @@ const RED_CELL: 'red-cell' = 'red-cell';
 const BLUE_CELL: 'blue-cell' = 'blue-cell';
 @Component({
   selector: 'app-home',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  //changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 
@@ -62,18 +62,6 @@ export class HomePage implements OnInit {
     this.mealsFromServer = [];
 
     // this.dayClicked();    
-  }
-  ionViewWillEnter() {
-    this.storage.clear();
-    
-  }
-  someMethod() {
-    this.titleService.setTitle('An Awesome Title');
-  }
-
-
-  public weekViewColumnHeader({ date, locale }: DateFormatterParams): string {
-    return new DatePipe(locale).transform(date, 'EEE', locale);
   }
   @ViewChild('box', null) userInput;
   @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
@@ -105,11 +93,27 @@ export class HomePage implements OnInit {
   imagesToLoad: string[] = [];
   labelsToLoad: string[] = [];
   dateToLoad: string;
-  async ngOnInit() {
-    this.loadLabelsFromAPI();
-    // location.reload();
+  currentImage: any;
+  ionViewWillEnter() {
+    this.storage.clear();
+  }
+  someMethod() {
+    this.titleService.setTitle('An Awesome Title');
   }
 
+
+  public weekViewColumnHeader({ date, locale }: DateFormatterParams): string {
+    return new DatePipe(locale).transform(date, 'EEE', locale);
+  }
+  // async ngOnInit() {
+  //   this.loadLabelsFromAPI();
+  //   // location.reload();
+  // }
+  ngOnInit() {
+    this.events = [];
+    this.loadLabelsFromAPI();
+    this.refresh.next();
+  }
   parseDate(value): Date {
     if (value.indexOf('-') > -1) {
       const str = value.split('-');
@@ -130,7 +134,6 @@ export class HomePage implements OnInit {
       return Number(h[0]);
     }
   }
-  currentImage: any;
 
 
   // takePicture($event) {
@@ -151,12 +154,6 @@ export class HomePage implements OnInit {
   //     console.log('Camera issue:' + err);
   //   });
   // }
-
-
-
-
-
-
   takePicture($event) {
     const options: CameraOptions = {
       quality: 100,
@@ -181,24 +178,6 @@ export class HomePage implements OnInit {
       console.log('Camera issue:' + err);
     });
   }
-  
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   convertMealsToEvent() {
     this.mealsFromServer = this.mealsFromServer as [];
     for (let index = 0; index < this.mealsFromServer.length; index++) {
@@ -230,25 +209,29 @@ export class HomePage implements OnInit {
       );
     }
   }
-  resolveAfter2Seconds() {
-    return new Promise(resolve => {
-        resolve(
-          // send the local storage base64 path
-          this.mealService.GetAllMeals().then(data => {
-            console.log(data);
-            this.mealsFromServer = [];
-            this.mealsFromServer = data as [];
-            this.convertMealsToEvent();
-            this.didNotLoad = false;
-            // this.userInput.onClick();
+
+  loadLabelsFromAPI() {
+    this.mealService.GetAllMeals().subscribe(
+      (res: mealLoaded[])=>{
+        this.events = [];
+        for(let m of res){
+          this.events.push({
+            start: addHours(startOfDay(this.parseDate(m.DateOfPic)), 2),
+        end: addHours(startOfDay(this.parseDate(m.DateOfPic)), 4),
+        title: m.Path,
+        color: colors.red,
+        actions: this.actions,
+        allDay: true,
+        resizable: {
+          beforeStart: true,
+          afterEnd: true
+        },
+        draggable: true
           })
-        );
-    });
-  }
-  async loadLabelsFromAPI() {
-    this.resolveAfter2Seconds();
-    console.log(this.mealsFromServer);
-    return this.mealsFromServer;
+        }
+      }
+    );
+    this.refresh.next();
   }
 
   eventTimesChanged({
