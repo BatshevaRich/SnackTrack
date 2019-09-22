@@ -18,7 +18,7 @@ export class AutoCompleteLabelsService implements AutoCompleteService {
   }
 
   initialization() {
-    this.http.get<string[]>(this.baseURL + 'labels').subscribe(allLabel => {
+    this.http.get<string[]>(this.baseURL + 'label').subscribe(allLabel => {
         this.labels = allLabel;
       } ,
       err => {console.log(err); }

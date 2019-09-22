@@ -6,6 +6,7 @@ import { MealService } from '../providers/meal.service';
 import { filter } from 'rxjs/operator/filter';
 import { Storage } from '@ionic/storage';
 import { Router, NavigationExtras } from '@angular/router';
+import { HomePage } from '../home/home.page';
 @Component({
   selector: 'app-options',
   templateUrl: './options.page.html',
@@ -56,9 +57,6 @@ export class OptionsPage {
     // this.base64Image = this.imageData;
     this.click = false;
   }
-  doSomething() {
-    console.log(this.myDate); // 2019-04-22
- }
   // ionic cordova run android --target=402000f30108aa829446
   /**
    * asynchronous func to load labels from webapi
@@ -146,6 +144,7 @@ export class OptionsPage {
       stringedLabels // labels
     );
     // localStorage.clear();
+    
     this.router.navigate(['/home']);
   }
 

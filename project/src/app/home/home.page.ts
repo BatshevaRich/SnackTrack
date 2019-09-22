@@ -248,7 +248,7 @@ export class HomePage implements OnInit {
     this.modal.open(this.modalContent, { size: 'lg' });
   }
 
-  addEvent(): void {
+  public addEvent(): void {
     this.events = [
       ...this.events,
       {
