@@ -141,3 +141,7 @@ C:\Users\יהודית\Documents\google\final project\Backend\dal\dal\obj\Debug\d
 C:\Users\יהודית\Documents\google\final project\Backend\dal\dal\obj\Debug\dal.csproj.CopyComplete
 C:\Users\יהודית\Documents\google\final project\Backend\dal\dal\obj\Debug\dal.dll
 C:\Users\יהודית\Documents\google\final project\Backend\dal\dal\obj\Debug\dal.pdb
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\dal\obj\Debug\dal.csprojAssemblyReference.cache
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\dal\obj\Debug\dal.csproj.CoreCompileInputs.cache
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\dal\obj\Debug\dal.dll
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\dal\obj\Debug\dal.pdb
