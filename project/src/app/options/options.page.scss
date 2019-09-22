@@ -11,17 +11,34 @@
   display: block;
   // width: 250px;
 }
+.pane[state$="tabs.facts"]{
+  background: green;
+}
+.picker{
+  --ion-background-color: red;
+  }
+
+// background
+ion-content{
+ // --background: url('../imeg/Document-page-001.jpg')  0 0/50% 10% no-repeat;
+
+   --ion-background-color:#111D12  url("https://storage.cloud.google.com/dietdiaryfoodpics/292.jpg?authuser=0") no-repeat center center / cover;
+}
+
 .card{
+  background-color: #000;
   padding-inline-start: 10px;
   padding-inline-end: 10px;
   padding:10px;
 }
 .title{
-  font: 75 2em/105% Impact;
-  vertical-align: middle;
-  text-align: center;
-  padding: 5px;
-  margin: 5px;
+  font-family: 'Roboto',sans-serif ;
+  // vertical-align: middle;
+   text-align: left;
+  // padding: 5px;
+  // margin: 5px;
+  font-weight: bold;
+  font-size: 20px;
 }
 
 .wrapper p {

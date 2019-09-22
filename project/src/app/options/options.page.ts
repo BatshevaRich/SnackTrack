@@ -6,13 +6,16 @@ import { MealService } from '../providers/meal.service';
 import { filter } from 'rxjs/operator/filter';
 import { Storage } from '@ionic/storage';
 import { Router, NavigationExtras } from '@angular/router';
+import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
 @Component({
   selector: 'app-options',
   templateUrl: './options.page.html',
   styleUrls: ['./options.page.scss']
 })
 export class OptionsPage {
-  constructor(private storage: Storage,
+
+  
+  constructor(private camera: Camera,private storage: Storage,
               private alertCtrl: AlertController,
               @Inject(LOCALE_ID) private locale: string,
               private navControl: NavController,
@@ -69,12 +72,12 @@ export class OptionsPage {
     this.tags = await this.storage.get('img').then((val) => {
       this.currentImage = val;
       this.imageData = val;
-      this.base64Image = val;
+      this.base64Image ='data:image/jpeg;base64,'+ val;
       this.storage.clear();
       return new Promise(resolve => {
         resolve(
           // send the local storage base64 path
-          this.apPic.InsertImages(this.base64Image).then(data => {
+          this.apPic.InsertImages(val).then(data => {
             return data;
           })
         );
@@ -134,20 +137,7 @@ export class OptionsPage {
    * func to upload labels to server
    * called upon pressing the 'ok' button
    */
-  uploadData() {
-    console.log(this.dateChange.value);
-    let stringedLabels: string[]; // var to keep chosen strings
-    stringedLabels = this.labels.filter(l => l.name).map(l => l.name);
-    this.mealProvider.SaveToServer(
-      // localStorage.getItem('loadedImage')
-      this.base64Image, // path
-      this.dateChange.value,
-      //this.myDate, // time
-      stringedLabels // labels
-    );
-    // localStorage.clear();
-    this.router.navigate(['/home']);
-  }
+  
 
   setValue(key: string, value: any) {
     // this.storage.remove("key");
@@ -167,4 +157,70 @@ export class OptionsPage {
     };
     reader.readAsDataURL(file);
   }
+
+
+
+
+
+
+
+
+
+
+  takePicture($event) {
+    const options: CameraOptions = {
+      quality: 100,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
+    };
+
+    this.camera.getPicture(options).then((imageData) => {
+      this.currentImage =  imageData;
+      // 'data:image/jpeg;base64,' 
+      this.storage.set("img", this.currentImage ).then((response) => { 
+
+      }).catch((error) => {
+
+        console.log('set error for ' + this.currentImage + ' ', error);
+      });
+      this.storage.set("img",this.currentImage );
+    this.router.navigate(['/options']);
+    }, (err) => {
+      // Handle error
+      console.log('Camera issue:' + err);
+    });
+
+  
+  }
+  
+ 
+
+
+
+
+
+
+
+  uploadData() {
+
+    console.log(this.dateChange.value);
+    let stringedLabels: string[]; // var to keep chosen strings
+    stringedLabels = this.labels.filter(l => l.name).map(l => l.name);
+    this.mealProvider.SaveToServer(
+      // localStorage.getItem('loadedImage')
+      this.base64Image, // path
+      this.dateChange.value,
+      //this.myDate, // time
+      stringedLabels // labels
+    );
+    // localStorage.clear();
+
+    this.router.navigate(['/home']);
+  }
+
+
 }
+
+
+

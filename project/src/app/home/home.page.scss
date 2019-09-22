@@ -2,9 +2,15 @@
 
 //background icon
 //month
-h3 { color: #007D51; font-family: 'Raleway',sans-serif;  line-height: 36px; margin: 0 0 24px; text-align: center; }
+h3 { color: #007D51; font-family: 'Raleway',sans-serif; font-size: 30px; line-height: 36px; margin: 0 0 24px; text-align: center; }
+pre {
+  background-color: black;
+  padding: 15px;
+}
+ion-content{
 
-
+  --ion-background-color:#111D12;
+}
 // day
 
 div { color: #007D51; font-family: 'Roboto',sans-serif; font-size: 10px; margin: 0 0 24px; text-align: center; }
@@ -12,55 +18,54 @@ div { color: #007D51; font-family: 'Roboto',sans-serif; font-size: 10px; margin:
 ion-row {
   text-align: center;
   }
-  searchbar-input {
-    background: black !important;
-    border-radius: 30px !important;
-    height: 40px !important;
-    max-width: 400px;
-    font-size: 1.25em !important;
-    border: 1px solid transparent;
+  .ng-star-inserted ion-page{
+    background: red;
+  }
+
+
+
+.autocomplete {
+	width: 100%;
+	ion-list {
+		position: absolute;
+		width: inherit;
+		overflow-y: scroll;
+		max-height: 150%;
+    z-index: 999;
+    color:red;
+
+		ion-item {
+
+			img {
+				max-height: 2.5rem;
+				width: auto;
+				margin: auto;
+				display: block;
+			}
+		}
+
+		ion-item:hover {
+      color: red;
+			cursor: pointer;
+			background: #005D57;
+		}
+	}
 }
-
-
-
-//autocomplete {
-// 	width: 100%;
-// 	ion-list {
-// 		position: absolute;
-// 		width: inherit;
-// 		overflow-y: scroll;
-// 		max-height: 150%;
-// 		z-index: 999;
-
-// 		ion-item {
-
-// 			img {
-// 				max-height: 2.5rem;
-// 				width: auto;
-// 				margin: auto;
-// 				display: block;
-// 			}
-// 		}
-
-// 		ion-item:hover {
-// 			cursor: pointer;
-// 			background: #005D57;
-// 		}
-// 	}
-// }
-// ion-fab-button[data-desc]::after {
-//   position: absolute;
-//   content: attr(data-desc);
-//   z-index: 1;
-//   right: 55px;
-//   bottom: 4px;
-//   background-color: #005D57;
-//   padding: 9px;
-//   border-radius: 15px;
-//   color:#005D57;
-//   box-shadow: 0 3px 5px -1px rgba(0,0,0,0.2), 0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12);
-// }
+ion-fab-button[data-desc]::after {
+  position: absolute;
+  content: attr(data-desc);
+  z-index: 1;
+  right: 55px;
+  bottom: 4px;
+  background-color: red;
+  padding: 9px;
+  border-radius: 15px;
+  color:red;
+  box-shadow: 0 3px 5px -1px rgba(0,0,0,0.2), 0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12);
+}
 ion-icon { zoom: 100%;color:white; }
+
+
 
 //event on the calendar
 ion-badge {
@@ -72,9 +77,8 @@ ion-badge {
   font-size: 7px;
 }
 
-
-.cal-month-view .cal-day-cell {
-  min-height: 100px;
-  color:black;
-  background-color: black;
-}
+// .cal-month-view .cal-day-cell {
+//   min-height: 100px;
+//   color:black;
+//   background-color: black;
+// }

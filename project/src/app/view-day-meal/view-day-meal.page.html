@@ -6,7 +6,7 @@
 </ion-header>
 
 
-<ion-content>
+<!-- <ion-content> -->
  <ion-list>
     <ion-item *ngFor="let m of mealsToday" lines="full">
         <ion-thumbnail slot="start">
@@ -19,5 +19,5 @@
       </ion-item>
   </ion-list> 
   <ion-label *ngIf='mealsToday.length==0' style="font-family: 'Roboto', sans-serif;color:red">You didn't eat anything today</ion-label>
-</ion-content>
+<!-- </ion-content> -->
 </ion-grid>
