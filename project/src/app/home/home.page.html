@@ -95,8 +95,9 @@
 
   <ion-row>
     <ion-col size="0.02"></ion-col>
-    <ion-col size="12">
-      <ion-auto-complete style="height:180%;color:#ffffff;
+    <ion-col size="9">
+      <ion-auto-complete style="height:200%;width: 380px; color:#ffffff;-moz-background-inline-policy: bounding-box;
+      -moz-user-input: #ffffff;
          caret-color: #ffffff;
 -moz-border-bottom-colors: #ffffff;
 -moz-border-left-colors: #ffffff;
@@ -109,9 +110,11 @@
 
           " [(ngModel)]="searchText" (keyup.enter)="onSelected()" (itemSelected)="onSelected()"
         [dataProvider]="autoCompleteLabelsService">
-      </ion-auto-complete>
+        <!-- <ion-auto-complete style="height:180%;" [(ngModel)]="searchText" (keyup.enter)="onSelected()" (itemSelected)="onSelected()"
+        [dataProvider]="autoCompleteLabelsService">-->
+      </ion-auto-complete> 
     </ion-col>
-    <ion-col size="0.02"></ion-col>
+   
 
   </ion-row>
 
