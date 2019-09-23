@@ -10,7 +10,7 @@ import { from } from 'rxjs';
   templateUrl: './zum-image.page.html',
   styleUrls: ['./zum-image.page.scss'],
 })
-export class ZumImagePage implements OnInit {
+export class zumImagePage implements OnInit {
 srcImage:string;
   constructor(public navParams:NavParams,public PopoverCtrl: PopoverController) { }
 

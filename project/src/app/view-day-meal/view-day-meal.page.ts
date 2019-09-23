@@ -3,7 +3,7 @@ import { PopoverController, NavParams, ModalController} from '@ionic/angular';
 import{ Meal }from '../classes/Meal';
 import{MealService}from '../Providers/meal.service'
 import { from } from 'rxjs';
-import{ZumImagePage}from'../zum-image/zum-image.page'
+import{zumImagePage}from'../zum-image/zum-image.page'
 @Component({
   selector: 'app-view-day-meal',
   templateUrl: './view-day-meal.page.html',
@@ -41,11 +41,12 @@ mealsToday:Meal[];
   }
   async zum(datet:string){
     const popover =await this.popoverCtrl.create({
-component:ZumImagePage,
+component:zumImagePage,
 componentProps:{
   img:datet
 }
     });
+    popover.style.cssText = '--max-height:95%;--width:90%';
     popover.present();
   }
 

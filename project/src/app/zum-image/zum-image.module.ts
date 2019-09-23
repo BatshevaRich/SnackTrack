@@ -5,12 +5,12 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ZumImagePage } from './zum-image.page';
+import { zumImagePage } from './zum-image.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: ZumImagePage
+    component: zumImagePage
   }
 ];
 
@@ -21,6 +21,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [ZumImagePage]
+  declarations: [zumImagePage]
 })
-export class ZumImagePageModule {}
+export class zumImagePageModule {}
