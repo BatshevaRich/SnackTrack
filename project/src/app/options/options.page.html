@@ -1,132 +1,119 @@
-<!-- class="bg-image no-scroll" -->
 <ion-content >
-
-<ion-header >
-  <ion-toolbar>
-  </ion-toolbar>
-  
-</ion-header>
-
-<!--
-    Generated template for the OptionsPage page.
-    See http://ionicframework.com/docs/components/#navigation for more info on
-    Ionic pages and navigation.
-  -->
-  
-  <div  class="wrapper" [hidden]="labels.length != 0 && unwantedLabels.length != 0">
-    <ion-img src="https://storage.cloud.google.com/dietdiaryfoodpics/burger.gif?authuser=0"></ion-img>
+  <ion-header >
+    <ion-toolbar>
+    </ion-toolbar>
     
-    <p  class="loading" >Analyzing Food</p>
-  </div>
-
-  <ion-card *ngIf="load && labels.length != 0" >
-      <ion-card-content
-         >
-          <ion-row >
-                    <ion-col size="8" text-align:left>
-
-          <ion-datetime style="color: #ffffff;font-family: 'Roboto',sans-serif ;" class="title"shape="square" #datet [value]="myDate.toString(datet.value)" displayFormat=" DD/MM/YYYY HH:mm " (ionChange)="doSomething()"></ion-datetime>
-          
-        </ion-col >
-        <ion-col size="4" text-align:right>
-
-        <ion-button    (click)="uploadData()" [hidden]="labels.length <=0"  color="light"><span style="color: #ffffff;font-family:'Roboto',sans-serif ">Save</span> 
-            </ion-button>
-          </ion-col>
-
-          </ion-row>
-    </ion-card-content>
-    <ion-card-content >
-      <ion-img
-        class="_img"
-        [src]="base64Image"
-      ></ion-img>
-    </ion-card-content >
+  </ion-header>    
+    <div  class="wrapper" [hidden]="load&&(labels.length != 0 || unwantedLabels.length != 0)">
+      <ion-img src="https://storage.cloud.google.com/dietdiaryfoodpics/burger.gif?authuser=0"></ion-img>   
+      <p  class="loading" >Analyzing Food</p>
+    </div>
   
-    <ion-card-content class="background-image" >
-        <h3 class="title" style="padding-left: 10px">Most Likely: </h3>
-      <ion-chip *ngFor="let label of labels" outline>
-        <ion-icon name="ios-restaurant" ></ion-icon>
-        <ion-label>{{ label.name | titlecase  }}</ion-label>
-        <!-- <ion-button ion-button style="--background:white" > -->
-        <ion-icon 
-          [id]="label.name"
-          name="close"
-          (click)="moveToUnwanted($event)"
-        ></ion-icon>
-        <!-- </ion-button> -->
-      </ion-chip>
-      <ion-button
-        class="buttonIcon"
-        ion-button
-        shape="round"
-        size="small"
-        color="light"
-        (click)="add()"
-        *ngIf="counter < 10 && !click"
-      >
-        <ion-icon name="add"></ion-icon>
-      </ion-button>
-      <!-- <ion-item > -->
-      <ion-input
-        [hidden]="click == false"
-        color="light"
-        type="text"
-        [(ngModel)]="value"
-        #box
-        (ionBlur)="click=false"
-        (change)="addedLabel(box.value)"
-        placeholder="Add Label"
-        id="addL"
-      ></ion-input>
-
-      <!-- </ion-item> -->
-    </ion-card-content>
-    <ion-card-content class="background-image" >
-
-      <h3 class="title" *ngIf="unwantedLabels.length != 0" style="padding-left: 5px">Suggestions: </h3>
-  <ion-chip *ngFor="let label of unwantedLabels">
-    <!-- <ion-icon name="ios-restaurant" color="primary"></ion-icon> -->
-    <ion-label>{{ label.name | titlecase  }}</ion-label>
-    <ion-icon
-      [id]="label.name"
-      name="md-arrow-up"
-      (click)="moveToWanted($event)"
-    ></ion-icon>
-  </ion-chip>
+    <ion-card *ngIf="load && (labels.length != 0 || unwantedLabels.length != 0)" >
+        <ion-card-content
+           >
+            <ion-row >
+                      <ion-col size="9" text-align:left>
   
-    </ion-card-content>
-  <ion-card-content style="align-items: center">
-   
-    </ion-card-content>
-  </ion-card>
-</ion-content>
-
-<ion-fab vertical="bottom" horizontal="end">
-  <ion-fab-button color="light" size="medium">
-    <ion-icon name="add"></ion-icon>
-  </ion-fab-button>
-  <ion-fab-list side="top">
-      <ion-fab-button (click)="takePicture($event)"  color="light" size="small">
-          <ion-icon name="camera"></ion-icon>
-          </ion-fab-button>
-    <ion-fab-button routerLink="../home" color="light" size="small">
-      <ion-icon name="calendar"></ion-icon>
+            <ion-datetime style="color: #ffffff;font-family: 'Roboto',sans-serif ;" class="title"shape="square" #datet [value]="myDate.toString(datet.value)" displayFormat=" DD/MM/YYYY HH:mm " (ionChange)="doSomething()"></ion-datetime>
+            
+          </ion-col >
+          <ion-col size="2" item-align:left>
+  
+          <ion-button    (click)="uploadData()" [hidden]="labels.length <=0"  color="light"><span style="color: #ffffff;font-family:'Roboto',sans-serif ">Save</span> 
+              </ion-button>
+            </ion-col>
+  
+            </ion-row>
+      </ion-card-content>
+      <ion-card-content >
+        <ion-img
+          class="_img"
+          [src]="base64Image"
+        ></ion-img>
+      </ion-card-content >
+    
+      <ion-card-content class="background-image" >
+          <h3 class="title" style="padding-left: 10px">Most Likely: </h3>
+        <ion-chip *ngFor="let label of labels" outline>
+          <ion-icon name="ios-restaurant" ></ion-icon>
+          <ion-label>{{ label.name | titlecase  }}</ion-label>
+          <!-- <ion-button ion-button style="--background:white" > -->
+          <ion-icon 
+            [id]="label.name"
+            name="close"
+            (click)="moveToUnwanted($event)"
+          ></ion-icon>
+          <!-- </ion-button> -->
+        </ion-chip>
+        <ion-button
+          class="buttonIcon"
+          ion-button
+          shape="round"
+          size="small"
+          color="light"
+          (click)="add()"
+          *ngIf="counter < 10 && !click"
+        >
+          <ion-icon name="add"></ion-icon>
+        </ion-button>
+        <!-- <ion-item > -->
+        <ion-input
+          [hidden]="click == false"
+          color="light"
+          type="text"
+          [(ngModel)]="value"
+          #box
+          (ionBlur)="click=false"
+          (change)="addedLabel(box.value)"
+          placeholder="Add Label"
+          id="addL"
+        ></ion-input>
+  
+        <!-- </ion-item> -->
+      </ion-card-content>
+      <ion-card-content class="background-image" >
+  
+        <h3 class="title" *ngIf="unwantedLabels.length != 0" style="padding-left: 5px">Suggestions: </h3>
+    <ion-chip *ngFor="let label of unwantedLabels">
+      <!-- <ion-icon name="ios-restaurant" color="primary"></ion-icon> -->
+      <ion-label>{{ label.name | titlecase  }}</ion-label>
+      <ion-icon
+        [id]="label.name"
+        name="md-arrow-up"
+        (click)="moveToWanted($event)"
+      ></ion-icon>
+    </ion-chip>
+    
+      </ion-card-content>
+    <ion-card-content style="align-items: center">
+     
+      </ion-card-content>
+    </ion-card>
+  </ion-content>
+  
+  <ion-fab vertical="bottom" horizontal="end">
+    <ion-fab-button color="light" size="medium">
+      <ion-icon name="add"></ion-icon>
     </ion-fab-button>
-    <label style="size: 5000px" for="file-input-option">
-      <ion-fab-button color="light" size="small">
-        <ion-icon name="cloud-upload"></ion-icon>
-      </ion-fab-button>
-    </label>
-    <input
-      type="file"
-      id="file-input-option"
-      accept="image/*"
-      capture="camera"
-      (change)="sendImage($event)"
-      style="display: none"
-    />‏
-  </ion-fab-list>
-</ion-fab>
-
-
+    <ion-fab-list side="top">
+        <ion-fab-button (click)="takePicture($event)"  color="light" size="small">
+            <ion-icon name="camera"></ion-icon>
+            </ion-fab-button>
+     
+      <label style="size: 5000px" for="file-input-option">
+        <ion-fab-button color="light" size="small">
+          <ion-icon name="cloud-upload"></ion-icon>
+        </ion-fab-button>
+      </label>
+      <input
+        type="file"
+        id="file-input-option"
+        accept="image/*"
+        capture="camera"
+        (change)="sendImage2($event)"
+        style="display: none"
+      />‏
+    </ion-fab-list>
+  </ion-fab>
+  

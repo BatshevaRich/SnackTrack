@@ -11,7 +11,7 @@ export class MealService {
   // baseURL = 'http://ce6dc86e.ngrok.io/api/';
   baseURL = 'http://34.90.143.154/api/';
   // baseURL = 'http://b40029a0.ngrok.io/api/';
-  // baseURL = 'http://localhost:54640/api/';
+  // baseURL = 'http://localhost:51786/api/';
   listAllMeal: Meal[];
   constructor(public http: HttpClient) {
     console.log('Hello MealProvider Provider');
@@ -27,7 +27,7 @@ export class MealService {
   public SaveToServer(path: string, hour: Date, labels: string[]): any {
     const formData = new FormData();
     formData.append('path', path);
-    formData.append('hour', hour.toString().replace(' GMT+0300 (שעון ישראל (קיץ))',''));
+    formData.append('hour', hour.toString().replace(' GMT+0300 (שעון ישראל (קיץ))', ''));
     const allLabels: string = labels.join(',');
     formData.append('labels', allLabels);
     const res = this.http.post(this.baseURL + 'meal/upload', formData);

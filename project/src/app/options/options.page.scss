@@ -1,4 +1,3 @@
-
 ._img {
   // border: 2px solid #07e5d8;
   // border-radius: 10%;
@@ -34,7 +33,7 @@ ion-card-content{
   background-color: #000;
   padding-inline-start: 10px;
   padding-inline-end: 10px;
-  padding:10px;
+  padding: 10px;
 }
 .title{
   font-family: 'Roboto',sans-serif ;
@@ -59,17 +58,16 @@ ion-chip{
   color: black;
   font: 300 4em/150% Impact;
   position: absolute;
-    z-index: 99;
-    top: 0px;
-    opacity: 0.7;
-    vertical-align: middle;
+  z-index: 99;
+  top: 0px;
+  opacity: 0.7;
+  vertical-align: middle;
   text-align: center;
 }
 
 /* loading dots */
 
 .loading:after {
-  
   content: " .";
   animation: dots 1s steps(5, end) infinite;
 }

@@ -1,4 +1,4 @@
-<!-- 
+<!--
   <ion-content >
       <ion-header>
   <ion-toolbar >
@@ -34,31 +34,31 @@
       </ion-button>
     </ion-col>
   </ion-row>
-   
-  
+
+
   <div [ngSwitch]="view" >
-      <mwl-calendar-month-view 
+      <mwl-calendar-month-view
       *ngSwitchCase="CalendarView.Month" 
       [viewDate]="viewDate"
       [cellTemplate]="customCellTemplate"
 
-        [events]="events" 
+        [events]="events"
         [refresh]="refresh" [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="presentPopover($event.day)"
         (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
       </mwl-calendar-month-view>
     </div>
 
-   
+
 
 
     <ng-template #customCellTemplate let-day="day" let-locale="locale" >
-      
+
             <p   align="right" class="cal-day-number"  style=" font-weight: bold; color:#ffffff ;font-family:'Roboto';font-size: 25px;">
               {{ day.date | calendarDate:'monthViewDayNumber':locale }}
 
             </p>
             <ion-badge  style="color: white;font-size: 10px" *ngIf="day.badgeTotal > 0">{{ day.badgeTotal }}</ion-badge>
- 
+
                 </ng-template>
 
 </ion-content>
@@ -85,14 +85,14 @@
 
     <ion-header >
         <ion-toolbar>
-            
-      
-      
+
+
+
         </ion-toolbar>
-        
+
       </ion-header>
-      
-    
+
+
     <ion-row>
       <ion-col size="0.02"></ion-col>
       <ion-col size="12">
@@ -112,9 +112,9 @@
         </ion-auto-complete>
         </ion-col>
         <ion-col size="0.02"></ion-col>
-    
+
       </ion-row>
-    
+
       <ion-row >
         <ion-col size="2" style="padding-top:0px">
           <ion-button  fill="clear" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
@@ -134,26 +134,26 @@
       </ion-row>
       <!-- <ion-content style="width: 100%"> -->
       <div [ngSwitch]="view" style="color: #ffffff;">
-          <mwl-calendar-month-view 
-          #box id="calendarMonth" 
+          <mwl-calendar-month-view
+          #box id="calendarMonth"
           [cellTemplate]="customCellTemplate"
-          *ngSwitchCase="CalendarView.Month" 
+          *ngSwitchCase="CalendarView.Month"
           [viewDate]="viewDate"
-            [events]="events" 
+            [events]="events"
             [refresh]="refresh" [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="presentPopover($event.day)"
             (eventClicked)="handleEvent('Clicked', $event.event)" (eventTimesChanged)="eventTimesChanged($event)">
           </mwl-calendar-month-view>
         </div>
-    
+
         <ng-template #customCellTemplate let-day="day" let-locale="locale"  >
                 <p  class="aa" align="right" class="cal-day-number"  style=" font-weight: bold; color:#ffffff ;font-family:'Roboto';font-size: 25px;">
                   {{ day.date | calendarDate:'monthViewDayNumber':locale }}
-    
+
                 </p>
                 <ion-badge  style="color: white;" *ngIf="day.badgeTotal > 0">{{ day.badgeTotal }}</ion-badge>
-         
+
                     </ng-template>
-    
+
     </ion-content>
       <ion-fab vertical="bottom" horizontal="end" >
         <ion-fab-button color="light" size="medium">

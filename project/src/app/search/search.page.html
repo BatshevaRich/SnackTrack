@@ -32,11 +32,11 @@
             <img [src]="meal.Path"/>
             <ion-card-content >
               <div>
-                <span style="font-size:20px;font-family: 'Roboto', sans-serif;text-align: start"> {{meal.DateOfPic|date: ' hh:mm '}}
+                <span style="font-size:25px;font-family: 'Roboto', sans-serif;text-align: start"> {{meal.DateOfPic|date: ' hh:mm '}}
                   </span> 
 
                 <span style="font-size:25px;font-family: 'Roboto', sans-serif;text-align: end"> {{meal.DateOfPic|date: ' dd/MM/yyyy'}}
-                  </span> 
+                  </span>
                 </div>
 
               <span style="color:#005D57;font-weight: bold;font-size:25px;font-family: 'Roboto', sans-serif;">{{data}},</span>
@@ -65,7 +65,7 @@
             <ion-col size="5"></ion-col>
             <ion-img *ngIf="display" style="width:150px; height:150px;" src="https://storage.cloud.google.com/dietdiaryfoodpics/loudlycrying.gif?authuser=0"></ion-img>
             <ion-col size="5"></ion-col>
-             
+
             </ion-row>
 </ion-content> -->
 
@@ -78,9 +78,7 @@
         <ion-fab-button (click)="takePicture($event)"  color="light" size="small">
             <ion-icon name="camera"></ion-icon>
             </ion-fab-button>
-      <ion-fab-button routerLink="../home" color="light" size="small">
-        <ion-icon name="calendar"></ion-icon>
-      </ion-fab-button>
+     
       <label style="size: 5000px" for="file-input">
         <ion-fab-button color="light" size="small">
           <ion-icon name="cloud-upload"></ion-icon>
@@ -91,7 +89,7 @@
         id="file-input"
         accept="image/*"
         capture="camera"
-        (change)="sendImage($event)"
+        (change)="sendImage3($event)"
         style="display: none"
       />‏
     </ion-fab-list>
