@@ -46,12 +46,12 @@ export interface mealLoaded {
 })
 export class HomePage implements OnInit {
   constructor(private camera: Camera,
-              private storage: Storage, private titleService: Title,
-              private router: Router,
-              private modal: NgbModal,
-              private mealService: MealService,
-              public autoCompleteLabelsService: AutoCompleteLabelsService,
-              public popoverCtrl: PopoverController) {
+    private storage: Storage, private titleService: Title,
+    private router: Router,
+    private modal: NgbModal,
+    private mealService: MealService,
+    public autoCompleteLabelsService: AutoCompleteLabelsService,
+    public popoverCtrl: PopoverController) {
     this.loadLabelsFromAPI();
     this.mealsFromServer = [];
     this.didNotLoad = true;
@@ -109,14 +109,14 @@ export class HomePage implements OnInit {
       mediaType: this.camera.MediaType.PICTURE
     };
     this.camera.getPicture(options).then((imageData) => {
-      this.currentImage =  imageData;
+      this.currentImage = imageData;
       // 'data:image/jpeg;base64,'
-      this.storage.set("img", this.currentImage ).then((response) => {
+      this.storage.set("img", this.currentImage).then((response) => {
 
       }).catch((error) => {
         console.log('set error for ' + this.currentImage + ' ', error);
       });
-      this.storage.set('img', this.currentImage );
+      this.storage.set('img', this.currentImage);
       this.router.navigate(['/options']);
     }, (err) => {
       console.log('Camera issue:' + err);
@@ -130,15 +130,15 @@ export class HomePage implements OnInit {
         for (const m of res) {
           this.events.push({
             start: addHours(startOfDay(this.parseDate(m.DateOfPic)), 2),
-        end: addHours(startOfDay(this.parseDate(m.DateOfPic)), 4),
-        title: m.Path,
-        color: colors.red,
-        allDay: true,
-        resizable: {
-          beforeStart: true,
-          afterEnd: true
-        },
-        draggable: true
+            end: addHours(startOfDay(this.parseDate(m.DateOfPic)), 4),
+            title: m.Path,
+            color: colors.red,
+            allDay: true,
+            resizable: {
+              beforeStart: true,
+              afterEnd: true
+            },
+            draggable: true
           });
         }
       }
