@@ -10,7 +10,7 @@
  <ion-list>
     <ion-item style="background: cornsilk;color:#005D57"  *ngFor="let m of mealsToday" lines="full">
         <ion-thumbnail slot="start">
-          <img [src]="m.Path">
+         <img [src]="m.Path" (click)="zum(m.Path)">
         </ion-thumbnail>
         <ion-label>
           <h3>{{m.DateOfPic|date:'shortTime'}}</h3>

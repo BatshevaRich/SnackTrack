@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { PopoverController, NavParams} from '@ionic/angular';
+import { PopoverController, NavParams, ModalController} from '@ionic/angular';
 import{ Meal }from '../classes/Meal';
 import{MealService}from '../Providers/meal.service'
 import { from } from 'rxjs';
-
+import{ZumImagePage}from'../zum-image/zum-image.page'
 @Component({
   selector: 'app-view-day-meal',
   templateUrl: './view-day-meal.page.html',
@@ -13,7 +13,8 @@ export class ViewDayMealPage implements OnInit{
   
   today:Date;
 mealsToday:Meal[];
-  constructor(public navParams:NavParams,public popoverCtrl: PopoverController,public mealService:MealService) {
+  constructor(public navParams:NavParams,public popoverCtrl: PopoverController,
+    public mealService:MealService, public modalCtrl:ModalController) {
     this.mealsToday = [];
       }
 
@@ -37,6 +38,15 @@ mealsToday:Meal[];
   close() {
     this.popoverCtrl.dismiss();
 
+  }
+  async zum(datet:string){
+    const popover =await this.popoverCtrl.create({
+component:ZumImagePage,
+componentProps:{
+  img:datet
+}
+    });
+    popover.present();
   }
 
   

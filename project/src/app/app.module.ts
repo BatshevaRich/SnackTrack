@@ -20,13 +20,15 @@ import { ViewDayMealPageModule } from './view-day-meal/view-day-meal.module';
 import {IonicStorageModule} from '@ionic/storage';
 // import { FilterPipe } from './pipes/filter.pipe';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
+import { ZumImagePageModule } from './zum-image/zum-image.module';
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
   imports: [
     NgbModule, PipesModule,
-    BrowserModule, BrowserAnimationsModule, HttpClientModule, CommonModule, IonicModule.forRoot(),IonicStorageModule.forRoot(),AppRoutingModule,ViewDayMealPageModule],
+    BrowserModule, BrowserAnimationsModule, HttpClientModule, CommonModule, IonicModule.forRoot(),IonicStorageModule.forRoot(),
+    AppRoutingModule,ViewDayMealPageModule,ZumImagePageModule],
   providers: [
     StatusBar,
     SplashScreen, HttpClientModule, Camera,NativeStorage,
