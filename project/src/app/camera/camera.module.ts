@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { CameraPage } from './camera.page';
-import { MbscModule } from '@mobiscroll/angular-lite';
 
 const routes: Routes = [
   {
@@ -14,7 +13,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [MbscModule,
+  imports: [
     CommonModule,
     FormsModule,
     IonicModule,
