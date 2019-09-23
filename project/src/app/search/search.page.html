@@ -52,17 +52,22 @@
             </ion-card-content>
           </ion-card>
     </ion-list>
- <p style="font-family:  'Roboto', sans-serif;font-size: 25px;color:blanchedalmond;text-align: center" *ngIf="display">
-        you didn't eat any {{data}} yet</p>
+ <div *ngIf="display" class="wrapper"><span class="txt">You didn't eat <br><div style="color: red">  {{data}}</div></span>  
+   <ion-img src= "../assets/plate.png"></ion-img>
+  
 
+ </div>
 
+</ion-content>
+
+<!-- 
         <ion-row>
             <ion-col size="5"></ion-col>
             <ion-img *ngIf="display" style="width:150px; height:150px;" src="https://storage.cloud.google.com/dietdiaryfoodpics/loudlycrying.gif?authuser=0"></ion-img>
             <ion-col size="5"></ion-col>
 
             </ion-row>
-</ion-content>
+</ion-content> -->
 
 
 <ion-fab vertical="bottom" horizontal="end">
