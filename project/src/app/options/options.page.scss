@@ -22,7 +22,7 @@
 ion-content{
  // --background: url('../imeg/Document-page-001.jpg')  0 0/50% 10% no-repeat;
 
-   --ion-background-color:#111D12 ;
+   --ion-background-color:rgb(58, 59, 58);
     // url("../../assets/292.jpg") no-repeat center center / cover;
 }
 ion-card-content{
@@ -57,7 +57,8 @@ ion-chip{
 }
 .wrapper p {
   color: black;
-  font: 300 4em/150% Impact;
+  font: 300 4em/150% 'Roboto',sans-serif;
+  // font-size: ;
   position: absolute;
   z-index: 99;
   top: 0px;
