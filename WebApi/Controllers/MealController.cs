@@ -23,19 +23,18 @@ namespace WebApi.Controllers
         }
 
         // GET: api/meal/5
-        [Route("GetDayMeal")]
+         //[Route("GetMonthMeal")]
         [HttpGet]
-        public List<Meal> GetDayMeal(DateTime dateTime)
-        {
-
-            return Manager.getMealsToDay(dateTime);
-        }
-        [Route("GetMonthMeals")]
-        [HttpGet]
-        public List<Meal> GetMonthMeals(DateTime dateTime)
+        public List<Meal> Get(DateTime dateTime)
         {
             return Manager.GetMonthMeals(dateTime);
         }
+        //[Route("GetDayMeals")]
+        //[HttpGet]
+        //public List<Meal> GetDayMeals(DateTime dateTime)
+        //{
+        //   return Manager.getMealsToDay(dateTime);
+        //}
         [HttpGet]
         public List<Meal> Get(string label)
         {

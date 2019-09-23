@@ -81,7 +81,7 @@ namespace dal
             {
                 connection.Open();
                 MySqlCommand cmd = connection.CreateCommand();
-                cmd.CommandText = "select * from meals where MID(dateTime, 4, 7) AS ExtractString = MID(@dateT, 4,7) AS ExtractString";
+                cmd.CommandText = "select * from meals where MID(dateTime, 4, 7) = MID(@dateT, 4,7)";
                 cmd.Parameters.Add("@dateT", MySqlDbType.String).Value = date.ToString("dd/MM/yyyy HH: mm:ss");
                 MySqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
