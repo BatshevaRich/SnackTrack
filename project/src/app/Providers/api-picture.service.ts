@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Label } from '../../app/classes/Label';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
@@ -35,12 +35,10 @@ export class ApiPictureService {
   }
 
   InsertImages(formData): any {
-    const file = this.dataURLtoFile(formData, 'img.jpg');
-    const formD = new FormData();
-    formD.append('file', file);
+    const headers= new HttpHeaders({'Content-Type':'application/json'});
     const res = this.httpClient.post(
       this.baseURL + 'clarifai/InsertImages/',
-      formD
+      JSON.stringify(formData),{headers:headers}
     );
 
     return new Promise(resolve => {
