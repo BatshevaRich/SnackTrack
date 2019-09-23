@@ -83,7 +83,7 @@
 
 <ion-content>
 
-  <ion-header>
+  <ion-header style="height: 68px;">
     <ion-toolbar>
 
 
@@ -96,7 +96,7 @@
   <ion-row>
     <ion-col size="0.02"></ion-col>
     <ion-col size="9">
-      <ion-auto-complete style="height:200%;width: 380px; color:#ffffff;-moz-background-inline-policy: bounding-box;
+      <ion-auto-complete style="height:200%;width: 300px; color:#ffffff;-moz-background-inline-policy: bounding-box;
       -moz-user-input: #ffffff;
          caret-color: #ffffff;
 -moz-border-bottom-colors: #ffffff;
@@ -114,7 +114,14 @@
         [dataProvider]="autoCompleteLabelsService">-->
       </ion-auto-complete> 
     </ion-col>
-   
+    <ion-col  text-align: center size="2.5">
+     <ion-button mwlCalendarToday
+     [(viewDate)]="viewDate" color="light">
+
+      Today
+  
+  </ion-button>
+    </ion-col>
 
   </ion-row>
 
