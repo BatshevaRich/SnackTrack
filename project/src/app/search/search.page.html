@@ -6,9 +6,20 @@
 <ion-row>
   <ion-col size="0.5"></ion-col>
   <ion-col size="10">
-      <ion-auto-complete style="height:120%;" [(ngModel)]="searchText" (keyup.enter)="onSelected()" (itemSelected)="onSelected()"
-      [dataProvider]="autoCompleteLabelsService">
-    </ion-auto-complete>
+      <ion-auto-complete  style="height:180%;color:#ffffff;
+      caret-color: #ffffff;
+-moz-border-bottom-colors: #ffffff;
+-moz-border-left-colors: #ffffff;
+-webkit-column-break-before: #ffffff;
+-webkit-text-stroke-color: #ffffff;
+-webkit-text-fill-color: #005D57;fill-rule: 100px;
+-webkit-tap-highlight-color: #005D57;
+-webkit-column-rule-color: #005D57;
+-webkit-border-before-color: #005D57;font-weight: bold;
+
+       " [(ngModel)]="searchText" (keyup.enter)="onSelected()" (itemSelected)="onSelected()"
+       [dataProvider]="autoCompleteLabelsService">
+     </ion-auto-complete>
     <!-- <ion-auto-complete style="background-color:#33333D" color='primary' [(ngModel)]="searchText" (keyup.enter)="onSelected()" (itemSelected)="onSelected()"
     [dataProvider]="autoCompleteLabelsService">
   </ion-auto-complete> -->
@@ -21,21 +32,24 @@
             <img [src]="meal.Path"/>
             <ion-card-content >
               <div>
-                <span style="font-size:15px;font-family: 'Roboto', sans-serif;text-align: left"> {{meal.DateOfPic|date: ' hh:mm '}},
+                <span style="font-size:20px;font-family: 'Roboto', sans-serif;text-align: start"> {{meal.DateOfPic|date: ' hh:mm '}}
                   </span> 
 
-                <span style="font-size:20px;font-family: 'Roboto', sans-serif;text-align: end"> {{meal.DateOfPic|date: ' dd/MM/yyyy'}},
+                <span style="font-size:25px;font-family: 'Roboto', sans-serif;text-align: end"> {{meal.DateOfPic|date: ' dd/MM/yyyy'}}
                   </span> 
                 </div>
 
               <span style="color:#005D57;font-weight: bold;font-size:25px;font-family: 'Roboto', sans-serif;">{{data}},</span>
-              <span *ngFor="let lab of meal.Labels">
-              <span  *ngIf="lab !== data" style="font-size:20px;font-family: 'Roboto', sans-serif;">
+              <span *ngFor="let lab of meal.Labels;let i=index" >
+              <span  *ngIf="lab !== data&&i<meal.Labels.length-1" style="font-size:20px;font-family: 'Roboto', sans-serif;">
                 
-              {{lab}} 
+              {{lab}},
                 </span>
+
               </span>
-        </ion-card-content>
+            <span style="font-size:20px;font-family: 'Roboto', sans-serif;"> {{meal.Labels[meal.Labels.length-1]}}
+              </span> 
+            </ion-card-content>
           </ion-card>
     </ion-list>
  <p style="font-family:  'Roboto', sans-serif;font-size: 25px;color:blanchedalmond;text-align: center" *ngIf="display">
