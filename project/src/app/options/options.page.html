@@ -1,28 +1,15 @@
-
-
-
-<!-- class="bg-image no-scroll" -->
 <ion-content >
-
   <ion-header >
     <ion-toolbar>
     </ion-toolbar>
     
-  </ion-header>
-  
-  <!--
-      Generated template for the OptionsPage page.
-      See http://ionicframework.com/docs/components/#navigation for more info on
-      Ionic pages and navigation.
-    -->
-    
-    <div  class="wrapper" [hidden]="load&&( labels.length != 0 || unwantedLabels.length != 0)">
-      <ion-img src="https://storage.cloud.google.com/dietdiaryfoodpics/burger.gif?authuser=0"></ion-img>
-      
+  </ion-header>    
+    <div  class="wrapper" [hidden]="load&&(labels.length != 0 || unwantedLabels.length != 0)">
+      <ion-img src="https://storage.cloud.google.com/dietdiaryfoodpics/burger.gif?authuser=0"></ion-img>   
       <p  class="loading" >Analyzing Food</p>
     </div>
   
-    <ion-card *ngIf="load && labels.length != 0" >
+    <ion-card *ngIf="load && (labels.length != 0 || unwantedLabels.length != 0)" >
         <ion-card-content
            >
             <ion-row >

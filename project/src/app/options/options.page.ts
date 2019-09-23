@@ -8,14 +8,13 @@ import { filter } from 'rxjs/operator/filter';
 import { Storage } from '@ionic/storage';
 import { Router, NavigationExtras } from '@angular/router';
 import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
+import { HomePage } from '../home/home.page';
 @Component({
   selector: 'app-options',
   templateUrl: './options.page.html',
   styleUrls: ['./options.page.scss']
 })
 export class OptionsPage {
-
-  
   constructor(private camera: Camera,private storage: Storage,
               private alertCtrl: AlertController,
               @Inject(LOCALE_ID) private locale: string,
@@ -35,7 +34,7 @@ export class OptionsPage {
     this.trues = 5;
     this.counter = 5;
     // this.base64Image = this.imageData;
-    
+
   }
   myDate:Date=new Date();
   @ViewChild('box', null) userInput;
@@ -61,9 +60,6 @@ export class OptionsPage {
     // this.base64Image = this.imageData;
     this.click = false;
   }
-  doSomething() {
-    console.log(this.myDate); // 2019-04-22
- }
   // ionic cordova run android --target=402000f30108aa829446
   /**
    * asynchronous func to load labels from webapi
@@ -81,7 +77,7 @@ export class OptionsPage {
           // send the local storage base64 path
           this.apPic.InsertImages(val).then(data => {
             return data;
-            
+
           })
         );
       });
@@ -140,7 +136,7 @@ export class OptionsPage {
    * func to upload labels to server
    * called upon pressing the 'ok' button
    */
-  
+
 
   setValue(key: string, value: any) {
     this.storage.set(key, value).then((response) => {
@@ -170,16 +166,6 @@ export class OptionsPage {
     reader.readAsDataURL(file);
   }
 
-
-
-
-
-
-
-
-
-
-
   takePicture($event) {
     const options: CameraOptions = {
       quality: 100,
@@ -190,11 +176,10 @@ export class OptionsPage {
 
     this.camera.getPicture(options).then((imageData) => {
       this.currentImage =  imageData;
-      // 'data:image/jpeg;base64,' 
-      this.storage.set("img", this.currentImage ).then((response) => { 
+      // 'data:image/jpeg;base64,'
+      this.storage.set("img", this.currentImage ).then((response) => {
 
       }).catch((error) => {
-
         console.log('set error for ' + this.currentImage + ' ', error);
       });
       this.storage.set("img",this.currentImage );
@@ -203,35 +188,19 @@ export class OptionsPage {
       // Handle error
       console.log('Camera issue:' + err);
     });
-
-  
   }
-  
- 
-
-
-
-
-
-
 
   uploadData() {
-
     console.log(this.dateChange.value);
     let stringedLabels: string[]; // var to keep chosen strings
     stringedLabels = this.labels.filter(l => l.name).map(l => l.name);
     this.mealProvider.SaveToServer(
-      // localStorage.getItem('loadedImage')
       this.base64Image, // path
       this.dateChange.value,
-      //this.myDate, // time
       stringedLabels // labels
     );
-    // localStorage.clear();
-
     this.router.navigate(['/home']);
   }
 
 
 }
-

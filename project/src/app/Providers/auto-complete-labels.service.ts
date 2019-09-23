@@ -31,7 +31,7 @@ public addLabels(labels:string[]){
   getResults(keyword: string): Observable<any[]> {
     let observable: Observable<any>;
     if (this.labels.length === 0) {
-      observable = this.http.get(this.baseURL + 'Labels');
+      observable = this.http.get(this.baseURL + 'label');
     } else {
       observable = of(this.labels);
     }

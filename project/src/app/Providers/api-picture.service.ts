@@ -38,10 +38,6 @@ export class ApiPictureService {
   }
 
   InsertImages(formData): any {
-    // alert(formData);
-    // const file = this.dataURLtoFile(formData, 'img.jpg');
-    // const formD = new FormData();
-    // formD.append('file', file);
     const headers= new HttpHeaders({'Content-Type':'application/json'});
     const res = this.httpClient.post(
       this.baseURL + 'clarifai/InsertImages/',
