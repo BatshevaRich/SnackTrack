@@ -5,24 +5,55 @@
   height: 100%;
   width: 100%;
 }
-.wrapper {
+.wrapper{
+  text-align: center;
   margin: auto;
   display: block;
   // width: 250px;
 }
-.card {
+.pane[state$="tabs.facts"]{
+  background: green;
+}
+.picker{
+  --ion-background-color: red;
+  }
+
+// background
+ion-content{
+ // --background: url('../imeg/Document-page-001.jpg')  0 0/50% 10% no-repeat;
+
+   --ion-background-color:#111D12  url("../../assets/292.jpg") no-repeat center center / cover;
+}
+ion-card-content{
+  box-shadow: 0 2px 5px #000;
+
+}
+.card{
+
+  background-color: #000;
   padding-inline-start: 10px;
   padding-inline-end: 10px;
   padding: 10px;
 }
-.title {
-  font: 75 2em/105% Impact;
-  vertical-align: middle;
-  text-align: center;
-  padding: 5px;
-  margin: 5px;
+.title{
+  font-family: 'Roboto',sans-serif ;
+  // vertical-align: middle;
+   text-align: left;
+  // padding: 5px;
+  // margin: 5px;
+  font-weight: bold;
+  font-size: 20px;
+  color:#ffffff;
 }
-
+ion-label{
+  color:white;
+}
+ion-icon{
+  color:white;
+}
+ion-chip{
+  background: #24B780;
+}
 .wrapper p {
   color: black;
   font: 300 4em/150% Impact;

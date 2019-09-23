@@ -109,8 +109,10 @@ export class HomePage implements OnInit {
       mediaType: this.camera.MediaType.PICTURE
     };
     this.camera.getPicture(options).then((imageData) => {
-      this.currentImage = 'data:image/jpeg;base64,' + imageData;
-      this.storage.set('img', this.currentImage ).then((response) => {
+      this.currentImage =  imageData;
+      // 'data:image/jpeg;base64,'
+      this.storage.set("img", this.currentImage ).then((response) => {
+
       }).catch((error) => {
         console.log('set error for ' + this.currentImage + ' ', error);
       });

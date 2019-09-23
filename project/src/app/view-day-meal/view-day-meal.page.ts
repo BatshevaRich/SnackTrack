@@ -32,6 +32,7 @@ mealsToday:Meal[];
               })
             );
           });
+          
       }
   close() {
     this.popoverCtrl.dismiss();

@@ -6,9 +6,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class ApiPictureService {
   labels: Label[];
-  baseURL = 'http://34.90.143.154/api/';
+ // baseURL = 'http://localhost:54640/api/';
+   baseURL = 'http://34.90.143.154/api/'
 // baseURL = 'https://helpless-mayfly-52.localtunnel.me/api/'
-  // baseURL = 'http://b40029a0.ngrok.io/api/';
+   //baseURL = 'http://d2feee8e.ngrok.io/api/';
   fileToUpload: File;
   constructor(public httpClient: HttpClient) {}
 
@@ -22,12 +23,14 @@ export class ApiPictureService {
   }
 
   dataURLtoFile(dataurl, filename) {
+
     // https://stackoverflow.com/questions/35940290/how-to-convert-base64-string-to-javascript-file-object-like-as-from-file-input-f?noredirect=1&lq=1
     let arr = dataurl.split(','),
       mime = arr[0].match(/:(.*?);/)[1],
       bstr = atob(arr[1]),
       n = bstr.length,
       u8arr = new Uint8Array(n);
+
     while (n--) {
       u8arr[n] = bstr.charCodeAt(n);
     }
