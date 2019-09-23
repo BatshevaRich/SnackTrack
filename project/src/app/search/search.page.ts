@@ -133,7 +133,7 @@ this.searchText=this.data;
     this.storage.set(key, value);
   }
 
-  sendImage($event): void {
+  sendImage3($event): void {
     const file: File = $event.target.files[0];
     const reader = new FileReader();
     this.storage.clear();
@@ -145,3 +145,5 @@ this.searchText=this.data;
   }
 
 }
+
+

@@ -1,3 +1,4 @@
+
 import { Component, ViewChild, Inject, LOCALE_ID } from '@angular/core';
 import { LoadingController, AlertController, NavController } from '@ionic/angular';
 import { ApiPictureService } from '../Providers/api-picture.service';
@@ -142,23 +143,33 @@ export class OptionsPage {
   
 
   setValue(key: string, value: any) {
-    // this.storage.remove("key");
     this.storage.set(key, value).then((response) => {
+      this.myDate=new Date();
+    this.load = true;
+    this.loadLabelsFromAPI();
+    this.labels = new Array<{ name: string; wanted: boolean; }>();
+    this.unwantedLabels = new Array<{ name: string; wanted: boolean; }>();
+    this.labels = [];
+    this.showAll = false;
+    this.trues = 5;
+    this.counter = 5;
     }).catch((error) => {
       console.log('set error for ' + key + ' ', error);
     });
     this.storage.set(key, value);
   }
-  sendImage($event): void {
+
+  sendImage2($event): void {
     const file: File = $event.target.files[0];
     const reader = new FileReader();
+    this.storage.clear();
     reader.onload = (event: any) => {
       this.setValue('img', event.target.result);
-      location.reload();
-     // this.router.navigate(['/options']);
+      this.router.navigate(['/options']);
     };
     reader.readAsDataURL(file);
   }
+
 
 
 
@@ -223,6 +234,4 @@ export class OptionsPage {
 
 
 }
-
-
 
