@@ -1,9 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Label } from '../../app/classes/Label';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/map';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
@@ -27,14 +23,14 @@ export class ApiPictureService {
   }
 
   dataURLtoFile(dataurl, filename) {
-   
+
     // https://stackoverflow.com/questions/35940290/how-to-convert-base64-string-to-javascript-file-object-like-as-from-file-input-f?noredirect=1&lq=1
     let arr = dataurl.split(','),
       mime = arr[0].match(/:(.*?);/)[1],
       bstr = atob(arr[1]),
       n = bstr.length,
       u8arr = new Uint8Array(n);
-      
+
     while (n--) {
       u8arr[n] = bstr.charCodeAt(n);
     }

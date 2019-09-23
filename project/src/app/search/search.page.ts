@@ -12,24 +12,31 @@ import { Storage } from '@ionic/storage';
   styleUrls: ['./search.page.scss'],
 })
 export class SearchPage {
+  constructor(private route: ActivatedRoute,
+              private router: Router,
+              public mealService: MealService,
+              public autoCompleteLabelsService: AutoCompleteLabelsService) {
+    this.display = false;
+    this.route.queryParams.subscribe(params => {
+      if (params && params.special) {
+        this.data = JSON.parse(params.special);
+        this.searchText = this.data;
+        this.loadLabelsFromAPI();
+      }
+    });
+  }
 
   meals: Meal[] = [];
   data: any;
   myMeal: any;
-display: boolean;
+  display: boolean;
   load: any;
-  ionViewDidLoad() {
-
-  }
-
-   searchText = '';
+  searchText = '';
 
   onSelected() {
-    // console.log(event.currentTarget);
     const navigationExtras: NavigationExtras = {
       queryParams: {
         special: JSON.stringify(this.searchText)
-        // special: JSON.stringify(event.currentTarget.attributes[3].textContent)
       }
     };
     this.searchText = '';
@@ -38,7 +45,7 @@ display: boolean;
   constructor(private camera: Camera,
     private storage: Storage,private route: ActivatedRoute, private router: Router, public mealService: MealService
     ,public autoCompleteLabelsService: AutoCompleteLabelsService) {
-     
+
     this.display = false;
     // alert(this.display);
 
@@ -50,23 +57,21 @@ this.searchText=this.data;
           this.loadLabelsFromAPI();
           };
         });
-      
 
-     
+
+
   }
 
   resolveAfter2Seconds() {
     return new Promise(resolve => {
-      // setTimeout(() => {
-        resolve(
-          // send the local storage base64 path
-          this.mealService.GetMealsForSearch(this.data).then((mealk: Meal[]) => {
-            this.meals = mealk;
-            console.log(this.meals);
-            return mealk;
-      // }, 400);
-    }));
-  })}
+      resolve(
+        this.mealService.GetMealsForSearch(this.data).then((mealk: Meal[]) => {
+          this.meals = mealk;
+          console.log(this.meals);
+          return mealk;
+        }));
+    });
+  }
   async loadLabelsFromAPI() {
     this.meals = await this.resolveAfter2Seconds() as Meal[];
     // alert(this.meals);
@@ -107,7 +112,7 @@ this.searchText=this.data;
     this.camera.getPicture(options).then((imageData) => {
       this.currentImage =  imageData;
       // 'data:image/jpeg;base64,'
-      this.storage.set("img", this.currentImage ).then((response) => { 
+      this.storage.set("img", this.currentImage ).then((response) => {
 
       }).catch((error) => {
 
@@ -120,6 +125,6 @@ this.searchText=this.data;
       console.log('Camera issue:' + err);
     });
   }
-  
- 
+
+
 }
