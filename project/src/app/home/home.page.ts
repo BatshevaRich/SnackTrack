@@ -38,8 +38,7 @@ export interface mealLoaded {
   DateOfPic: string;
   Labels: string[];
 }
-const RED_CELL: 'red-cell' = 'red-cell';
-const BLUE_CELL: 'blue-cell' = 'blue-cell';
+
 @Component({
   selector: 'app-home',
   //changeDetection: ChangeDetectionStrategy.OnPush,
@@ -59,7 +58,6 @@ export class HomePage implements OnInit {
     this.mealsFromServer = [];
     this.didNotLoad = true;
     // await this.loadLabelsFromAPI();
-    this.mealsFromServer = [];
 
     // this.dayClicked();    
   }
@@ -211,14 +209,13 @@ export class HomePage implements OnInit {
   }
 
   loadLabelsFromAPI() {
-    this.mealService.GetAllMeals().subscribe(
-      (res: mealLoaded[])=>{
-        this.events = [];
-        for(let m of res){
+    let events=this.mealService.GetMonthMeals(new Date());
+      for(let i=0;i<events.length;i++)  
+    {    this.events = [];
           this.events.push({
-            start: addHours(startOfDay(this.parseDate(m.DateOfPic)), 2),
-        end: addHours(startOfDay(this.parseDate(m.DateOfPic)), 4),
-        title: m.Path,
+            start: addHours(startOfDay(this.parseDate(events[i].hour)), 2),
+        end: addHours(startOfDay(this.parseDate(events[i].hour)), 4),
+        title: events[i].path,
         color: colors.red,
         actions: this.actions,
         allDay: true,
@@ -229,8 +226,8 @@ export class HomePage implements OnInit {
         draggable: true
           })
         }
-      }
-    );
+      
+    
     this.refresh.next();
   }
 
@@ -296,7 +293,6 @@ export class HomePage implements OnInit {
   }
   setValue(key: string, value: string) {
     value=value.substring(23,value.length);
-    alert(value);
 
     this.storage.set(key, value).then((response) => {
     }).catch((error) => {
@@ -306,10 +302,10 @@ export class HomePage implements OnInit {
   }
 
   sendImage($event): void {
-    alert("cam");
     const file: File = $event.target.files[0];
     const reader = new FileReader();
     this.storage.clear();
+
     reader.onload = (event: any) => {
       this.setValue('img', event.target.result);
       this.router.navigate(['/options']);
@@ -318,9 +314,7 @@ export class HomePage implements OnInit {
     // this.router.navigate(['/options']);
     // this.navCtrl.navigateRoot("/options"); // go to next page
   }
-  ss() {
-    // alert("today");
-  }
+  
   
 
   async presentPopover({ date, events }: { date: Date; events: CalendarEvent[] }) {
