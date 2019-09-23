@@ -21,12 +21,14 @@ import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView, CalendarEvent } from 'angular-calendar';
 import { MealService } from '../Providers/meal.service';
-import { Router, NavigationExtras } from '@angular/router';
+import { Router, NavigationExtras, NavigationEnd, NavigationStart } from '@angular/router';
 import { CalendarEventActionsComponent } from 'angular-calendar/modules/common/calendar-event-actions.component';
 import { PopoverController } from '@ionic/angular';
 import { ViewDayMealPage } from '../view-day-meal/view-day-meal.page';
 import { Storage } from '@ionic/storage';
 import { Meal } from '../classes/Meal';
+import { filter } from 'rxjs/operators';
+import { NavigationEvent } from '@ng-bootstrap/ng-bootstrap/datepicker/datepicker-view-model';
 // ,*TgpkZTbdtlA~u
 const colors: any = {
   red: { primary: Image, secondary: Image },
@@ -77,6 +79,13 @@ export class HomePage implements OnInit {
   ionViewWillEnter() {
     this.storage.clear();
     this.refresh.next();
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+      filter((event: NavigationEnd) =>
+      event.urlAfterRedirects == './options'))
+      .subscribe((route: NavigationStart) => {
+        this.ngOnInit();
+      });
   }
 
   public weekViewColumnHeader({ date, locale }: DateFormatterParams): string {
@@ -84,6 +93,7 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit() {
+    console.log('init');
     this.events = [];
     this.loadLabelsFromAPI();
     this.refresh.next();
@@ -109,15 +119,16 @@ export class HomePage implements OnInit {
       mediaType: this.camera.MediaType.PICTURE
     };
     this.camera.getPicture(options).then((imageData) => {
-      this.currentImage =  imageData;
+      this.currentImage = imageData;
       // 'data:image/jpeg;base64,'
-      this.storage.set("img", this.currentImage ).then((response) => {
+      // alert(this.currentImage);
+      this.storage.set('img', 'data:image/jpeg;base64,'+ this.currentImage).then((response) => {
+        this.router.navigate(['/options']);
 
       }).catch((error) => {
         console.log('set error for ' + this.currentImage + ' ', error);
       });
-      this.storage.set('img', this.currentImage );
-      this.router.navigate(['/options']);
+      
     }, (err) => {
       console.log('Camera issue:' + err);
     });
@@ -130,15 +141,15 @@ export class HomePage implements OnInit {
         for (const m of res) {
           this.events.push({
             start: addHours(startOfDay(this.parseDate(m.DateOfPic)), 2),
-        end: addHours(startOfDay(this.parseDate(m.DateOfPic)), 4),
-        title: m.Path,
-        color: colors.red,
-        allDay: true,
-        resizable: {
-          beforeStart: true,
-          afterEnd: true
-        },
-        draggable: true
+            end: addHours(startOfDay(this.parseDate(m.DateOfPic)), 4),
+            title: m.Path,
+            color: colors.red,
+            allDay: true,
+            resizable: {
+              beforeStart: true,
+              afterEnd: true
+            },
+            draggable: true
           });
         }
       }

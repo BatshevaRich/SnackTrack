@@ -108,20 +108,18 @@ this.searchText=this.data;
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE
     };
-
     this.camera.getPicture(options).then((imageData) => {
-      this.currentImage =  imageData;
+      this.currentImage = imageData;
       // 'data:image/jpeg;base64,'
-      this.storage.set("img", this.currentImage ).then((response) => {
+      // alert(this.currentImage);
+      this.storage.set('img', 'data:image/jpeg;base64,'+ this.currentImage).then((response) => {
+        this.router.navigate(['/options']);
 
       }).catch((error) => {
-
         console.log('set error for ' + this.currentImage + ' ', error);
       });
-      this.storage.set("img",this.currentImage );
-    this.router.navigate(['/options']);
+      
     }, (err) => {
-      // Handle error
       console.log('Camera issue:' + err);
     });
   }

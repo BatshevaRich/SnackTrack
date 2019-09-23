@@ -4,18 +4,19 @@ import { LoadingController, AlertController, NavController } from '@ionic/angula
 import { ApiPictureService } from '../Providers/api-picture.service';
 import { Label } from '../../app/classes/Label';
 import { MealService } from '../providers/meal.service';
-import { filter } from 'rxjs/operator/filter';
+import { filter } from 'rxjs/operators';
 import { Storage } from '@ionic/storage';
-import { Router, NavigationExtras } from '@angular/router';
+import { Router, NavigationExtras, NavigationStart, NavigationEnd } from '@angular/router';
 import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
 import { HomePage } from '../home/home.page';
+
 @Component({
   selector: 'app-options',
   templateUrl: './options.page.html',
   styleUrls: ['./options.page.scss']
 })
 export class OptionsPage {
-  constructor(private camera: Camera,private storage: Storage,
+  constructor(private camera: Camera, private storage: Storage,
               private alertCtrl: AlertController,
               @Inject(LOCALE_ID) private locale: string,
               private navControl: NavController,
@@ -24,7 +25,7 @@ export class OptionsPage {
               public loadingController: LoadingController,
               private mealProvider: MealService
   ) {
-    this.myDate=new Date();
+    this.myDate = new Date();
     this.load = true;
     this.loadLabelsFromAPI();
     this.labels = new Array<{ name: string; wanted: boolean; }>();
@@ -36,9 +37,9 @@ export class OptionsPage {
     // this.base64Image = this.imageData;
 
   }
-  myDate:Date=new Date();
+  myDate: Date = new Date();
   @ViewChild('box', null) userInput;
-  @ViewChild('datet',null)dateChange;
+  @ViewChild('datet', null)dateChange;
   labels: Array<{ name: string; wanted: boolean }>;
   unwantedLabels: Array<{ name: string; wanted: boolean }>;
   counter: number;
@@ -140,15 +141,15 @@ export class OptionsPage {
 
   setValue(key: string, value: any) {
     this.storage.set(key, value).then((response) => {
-      this.myDate=new Date();
-    this.load = true;
-    this.loadLabelsFromAPI();
-    this.labels = new Array<{ name: string; wanted: boolean; }>();
-    this.unwantedLabels = new Array<{ name: string; wanted: boolean; }>();
-    this.labels = [];
-    this.showAll = false;
-    this.trues = 5;
-    this.counter = 5;
+      this.myDate = new Date();
+      this.load = true;
+      this.loadLabelsFromAPI();
+      this.labels = new Array<{ name: string; wanted: boolean; }>();
+      this.unwantedLabels = new Array<{ name: string; wanted: boolean; }>();
+      this.labels = [];
+      this.showAll = false;
+      this.trues = 5;
+      this.counter = 5;
     }).catch((error) => {
       console.log('set error for ' + key + ' ', error);
     });
@@ -165,7 +166,6 @@ export class OptionsPage {
     };
     reader.readAsDataURL(file);
   }
-
   takePicture($event) {
     const options: CameraOptions = {
       quality: 100,
@@ -173,19 +173,18 @@ export class OptionsPage {
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE
     };
-
     this.camera.getPicture(options).then((imageData) => {
-      this.currentImage =  imageData;
+      this.currentImage = imageData;
       // 'data:image/jpeg;base64,'
-      this.storage.set("img", this.currentImage ).then((response) => {
+      alert(this.currentImage);
+      this.storage.set('img', 'data:image/jpeg;base64,'+ this.currentImage).then((response) => {
+        this.router.navigate(['/options']);
 
       }).catch((error) => {
         console.log('set error for ' + this.currentImage + ' ', error);
       });
-      this.storage.set("img",this.currentImage );
-    this.router.navigate(['/options']);
+      
     }, (err) => {
-      // Handle error
       console.log('Camera issue:' + err);
     });
   }
@@ -199,6 +198,7 @@ export class OptionsPage {
       this.dateChange.value,
       stringedLabels // labels
     );
+    
     this.router.navigate(['/home']);
   }
 
