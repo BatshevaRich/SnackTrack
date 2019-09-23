@@ -10,8 +10,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class ApiPictureService {
   labels: Label[];
-  baseURL = 'http://localhost:54640/api/';
-  // baseURL = 'http://34.90.143.154/api/'
+ // baseURL = 'http://localhost:54640/api/';
+   baseURL = 'http://34.90.143.154/api/'
 // baseURL = 'https://helpless-mayfly-52.localtunnel.me/api/'
    //baseURL = 'http://d2feee8e.ngrok.io/api/';
   fileToUpload: File;

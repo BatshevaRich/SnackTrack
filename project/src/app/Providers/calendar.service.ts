@@ -28,7 +28,7 @@ export class CalendarService {
     console.log('Hello Calendar Provider');
   }
   // baseURL = 'http://7cffcf8b.ngrok.io/api/calendar';
-  baseURL = 'http://localhost:54640/api/calendar';
+  baseURL = 'http://34.90.143.154/api/calendar';
 
   public LoadFoodsFromServerForDay(month: Date) {
     const res = this.http.get(this.baseURL + '/gettoday/' + month.toDateString());

@@ -11,14 +11,14 @@ import { Label } from '../classes/Label';
 export class AutoCompleteLabelsService implements AutoCompleteService {
   labelAttribute = 'name';
   private labels: any[] = [];
-  private baseURL = 'http://localhost:54640/api/';
+  baseURL = 'http://34.90.143.154/api/';
 
   constructor(private http: HttpClient) {
       this.initialization();
   }
 
   initialization() {
-    this.http.get<string[]>(this.baseURL + 'labels').subscribe(allLabel => {
+    this.http.get<string[]>(this.baseURL + 'label').subscribe(allLabel => {
         this.labels = allLabel;
       } ,
       err => {console.log(err); }

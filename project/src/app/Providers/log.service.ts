@@ -7,7 +7,7 @@ import { stringify } from 'querystring';
   providedIn: 'root'
 })
 export class LogService {
-  baseURL = 'http://localhost:54640/api/';
+  baseURL = 'http://34.90.143.154/api/';
 
   constructor(public httpClient: HttpClient) { }
   toSinIn(name:string,pass:string){
