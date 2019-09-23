@@ -2,31 +2,31 @@ p{
     font-family: "Roboto";
     font-size: 50px;
 }
-// .wrapper p {
-//     color: red;
-//     font: 300 4em/150% Impact;
-//     position: absolute;
-//       z-index: 50;
-//       top: 50px;
-//       opacity: 0.7;
-//       vertical-align: middle;
-//     text-align: center;
-//     //padding-left:  22%;
 
-//   }
   a{
       text-align: center;
   }
 .txt{
     color: #24B77F;
     font: 100 3em/150% Impact;
-    position: absolute;
+    // position: absolute;
       z-index: 50;
       top: 28%;
       opacity: 0.9;
       vertical-align: middle;
     text-align: center;
-    padding-left:  14%;
+    padding-left:  15%;
+}
+.txt-over{
+  color: #24B77F;
+  font: 100 3em/150% Impact;
+  position: absolute;
+    z-index: 50;
+    top: 50%;
+    opacity: 0.9;
+    vertical-align: center;
+  text-align: center;
+  padding-left:  25%;
 }
 ion-content{
    

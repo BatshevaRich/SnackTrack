@@ -1,96 +1,104 @@
-<ion-content >
-    <ion-header >
-        <ion-toolbar >
-        </ion-toolbar>
-      </ion-header>
-<ion-row>
-  <ion-col size="0.5"></ion-col>
-  <ion-col size="10">
-      <ion-auto-complete  style="height:180%;color:#ffffff;
+<ion-content>
+  <ion-header>
+    <ion-toolbar> </ion-toolbar>
+  </ion-header>
+  <ion-row>
+    <ion-col size="0.5"></ion-col>
+    <ion-col size="10">
+      <ion-auto-complete
+        style="height:180%;color:#ffffff;
       caret-color: #ffffff;
 -moz-border-bottom-colors: #ffffff;
 -moz-border-left-colors: #ffffff;
 -webkit-column-break-before: #ffffff;
 -webkit-text-stroke-color: #ffffff;
--webkit-text-fill-color: #005D57;fill-rule: 100px;
+-webkit-text-fill-color: #24B77F;
+fill-rule: 100px;
 -webkit-tap-highlight-color: #005D57;
 -webkit-column-rule-color: #005D57;
 -webkit-border-before-color: #005D57;font-weight: bold;
 
-       " [(ngModel)]="searchText" (keyup.enter)="onSelected()" (itemSelected)="onSelected()"
-       [dataProvider]="autoCompleteLabelsService">
-     </ion-auto-complete>
-    <!-- <ion-auto-complete style="background-color:#33333D" color='primary' [(ngModel)]="searchText" (keyup.enter)="onSelected()" (itemSelected)="onSelected()"
+       "
+        [(ngModel)]="searchText"
+        (keyup.enter)="onSelected()"
+        (itemSelected)="onSelected()"
+        [dataProvider]="autoCompleteLabelsService"
+      >
+      </ion-auto-complete>
+      <!-- <ion-auto-complete style="background-color:#33333D" color='primary' [(ngModel)]="searchText" (keyup.enter)="onSelected()" (itemSelected)="onSelected()"
     [dataProvider]="autoCompleteLabelsService">
   </ion-auto-complete> -->
     </ion-col>
     <ion-col size="0.02"></ion-col>
   </ion-row>
 
-    <ion-list ion-item *ngFor="let meal of meals">
-        <ion-card>
-            <img [src]="meal.Path"/>
-            <ion-card-content >
-              <div>
-                <span style="font-size:25px;font-family: 'Roboto', sans-serif;text-align: start"> {{meal.DateOfPic|date: ' hh:mm '}}
-                  </span> 
+  <ion-list ion-item *ngFor="let meal of meals">
+    <ion-card>
+      <img [src]="meal.Path" />
+      <ion-card-content>
+        <div>
+          <span
+            style="font-size:25px;font-family: 'Roboto', sans-serif;text-align: start"
+          >
+            {{ meal.DateOfPic | date: " hh:mm " }}
+          </span>
 
-                <span style="font-size:25px;font-family: 'Roboto', sans-serif;text-align: end"> {{meal.DateOfPic|date: ' dd/MM/yyyy'}}
-                  </span>
-                </div>
+          <span
+            style="font-size:25px;font-family: 'Roboto', sans-serif;text-align: end"
+          >
+            {{ meal.DateOfPic | date: " dd/MM/yyyy" }}
+          </span>
+        </div>
 
-              <span style="color:#005D57;font-weight: bold;font-size:25px;font-family: 'Roboto', sans-serif;">{{data}},</span>
-              <span *ngFor="let lab of meal.Tags;let i=index" >
-              <span  *ngIf="lab !== data&&i<meal.Tags.length-1" style="font-size:20px;font-family: 'Roboto', sans-serif;">
-                
-              {{lab}},
-                </span>
-
-              </span>
-            <span style="font-size:20px;font-family: 'Roboto', sans-serif;"> {{meal.Tags[meal.Tags.length-1]}}
-              </span> 
-            </ion-card-content>
-          </ion-card>
-    </ion-list>
- <div *ngIf="display" class="wrapper"><span class="txt">You didn't eat <br><div style="color: #005D57">  {{data}}</div></span>  
-   <ion-img src= "../assets/plate.png"></ion-img>
-  
-
- </div>
-
+        <span
+          style="color:#005D57;font-weight: bold;font-size:25px;font-family: 'Roboto', sans-serif;"
+          >{{ data }},</span
+        >
+        <span *ngFor="let lab of meal.Tags; let i = index">
+          <span
+            *ngIf="lab !== data && i < meal.Tags.length - 1"
+            style="font-size:20px;font-family: 'Roboto', sans-serif;"
+          >
+            {{ lab }},
+          </span>
+        </span>
+        <span style="font-size:20px;font-family: 'Roboto', sans-serif;">
+          {{ meal.Tags[meal.Tags.length - 1] }}
+        </span>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+  <div *ngIf="display">
+    <span class="txt"
+      >You didn't eat <br />
+      </span
+    >
+    <div class="txt-over" style="color: #005D57">{{ data }}</div>
+    <ion-img src="../assets/plate.png"></ion-img>
+  </div>
 </ion-content>
 
-<!-- 
-        <ion-row>
-            <ion-col size="5"></ion-col>
-            <ion-img *ngIf="display" style="width:150px; height:150px;" src="https://storage.cloud.google.com/dietdiaryfoodpics/loudlycrying.gif?authuser=0"></ion-img>
-            <ion-col size="5"></ion-col>
-
-            </ion-row>
-</ion-content> -->
-
-
 <ion-fab vertical="bottom" horizontal="end">
-    <ion-fab-button color="light" size="medium">
-      <ion-icon name="add"></ion-icon>
+  <ion-fab-button color="light" size="medium">
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-list side="top">
+    <ion-fab-button (click)="takePicture($event)" color="light" size="small">
+      <ion-icon name="camera"></ion-icon>
     </ion-fab-button>
-    <ion-fab-list side="top">
-        <ion-fab-button (click)="takePicture($event)"  color="light" size="small">
-            <ion-icon name="camera"></ion-icon>
-            </ion-fab-button>
-     
-      <label style="size: 5000px" for="file-input">
-        <ion-fab-button color="light" size="small">
-          <ion-icon name="cloud-upload"></ion-icon>
-        </ion-fab-button>
-      </label>
-      <input
-        type="file"
-        id="file-input"
-        accept="image/*"
-        capture="camera"
-        (change)="sendImage3($event)"
-        style="display: none"
-      />‏
-    </ion-fab-list>
-  </ion-fab>
+
+    <label style="size: 5000px" for="file-input">
+      <ion-fab-button color="light" size="small">
+        <ion-icon name="cloud-upload"></ion-icon>
+      </ion-fab-button>
+    </label>
+    <input
+      type="file"
+      id="file-input"
+      accept="image/*"
+      capture="camera"
+      (change)="sendImage3($event)"
+      style="display: none"
+    />‏
+  </ion-fab-list>
+</ion-fab>
