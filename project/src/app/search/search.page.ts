@@ -125,6 +125,23 @@ this.searchText=this.data;
       console.log('Camera issue:' + err);
     });
   }
+  setValue(key: string, value: any) {
+    this.storage.set(key, value).then((response) => {
+    }).catch((error) => {
+      console.log('set error for ' + key + ' ', error);
+    });
+    this.storage.set(key, value);
+  }
 
+  sendImage($event): void {
+    const file: File = $event.target.files[0];
+    const reader = new FileReader();
+    this.storage.clear();
+    reader.onload = (event: any) => {
+      this.setValue('img', event.target.result);
+      this.router.navigate(['/options']);
+    };
+    reader.readAsDataURL(file);
+  }
 
 }
