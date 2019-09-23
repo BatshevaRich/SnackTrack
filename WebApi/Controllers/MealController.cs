@@ -1,13 +1,12 @@
-﻿using System;
+﻿using dal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Web.Http;
-using dal;
 using System.Threading.Tasks;
-using System.Web.Http.Cors;
 using System.Web;
+using System.Web.Http;
+using System.Web.Http.Cors;
 namespace WebApi.Controllers
 {
     [RoutePrefix("api/meal")]
@@ -23,18 +22,13 @@ namespace WebApi.Controllers
         }
 
         // GET: api/meal/5
-         //[Route("GetMonthMeal")]
+        //[Route("GetMonthMeal")]
         [HttpGet]
         public List<Meal> Get(DateTime dateTime)
         {
-            return Manager.GetMonthMeals(dateTime);
+            return Manager.getMealsToDay(dateTime);
+            //return Manager.GetMonthMeals(dateTime);
         }
-        //[Route("GetDayMeals")]
-        //[HttpGet]
-        //public List<Meal> GetDayMeals(DateTime dateTime)
-        //{
-        //   return Manager.getMealsToDay(dateTime);
-        //}
         [HttpGet]
         public List<Meal> Get(string label)
         {
@@ -61,13 +55,27 @@ namespace WebApi.Controllers
             {
                 labelsFromFrontend.Add(item);
             }
+            DateTime dd = new DateTime();
             try
             {
-                DateTime dd = DateTime.Parse(hour);
-            }
-            catch { }
+                dd = DateTime.Parse(hour);
 
-            Meal meal = new Meal() { DateOfPic = DateTime.Parse(hour), Tags = labelsFromFrontend, Path = path };
+            }
+            catch
+            {
+                try
+                {
+                    dd = DateTime.Parse(hour.Substring(0, hour.IndexOf('G')));
+                }
+                catch
+                {
+
+                    dd = DateTime.Now;
+                }
+
+            }
+
+            Meal meal = new Meal() { DateOfPic = dd, Tags = labelsFromFrontend, Path = path };
             Manager.addMeal(meal);
             return Ok();
         }
