@@ -21,12 +21,13 @@ import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView, CalendarEvent } from 'angular-calendar';
 import { MealService } from '../Providers/meal.service';
-import { Router, NavigationExtras } from '@angular/router';
+import { Router, NavigationExtras, NavigationEnd, NavigationStart } from '@angular/router';
 import { CalendarEventActionsComponent } from 'angular-calendar/modules/common/calendar-event-actions.component';
 import { PopoverController } from '@ionic/angular';
 import { ViewDayMealPage } from '../view-day-meal/view-day-meal.page';
 import { Storage } from '@ionic/storage';
 import { Meal } from '../classes/Meal';
+import { filter } from 'rxjs/operators';
 // ,*TgpkZTbdtlA~u
 const colors: any = {
   red: { primary: Image, secondary: Image },
@@ -46,12 +47,12 @@ export interface mealLoaded {
 })
 export class HomePage implements OnInit {
   constructor(private camera: Camera,
-    private storage: Storage, private titleService: Title,
-    private router: Router,
-    private modal: NgbModal,
-    private mealService: MealService,
-    public autoCompleteLabelsService: AutoCompleteLabelsService,
-    public popoverCtrl: PopoverController) {
+              private storage: Storage, private titleService: Title,
+              private router: Router,
+              private modal: NgbModal,
+              private mealService: MealService,
+              public autoCompleteLabelsService: AutoCompleteLabelsService,
+              public popoverCtrl: PopoverController) {
     this.loadLabelsFromAPI();
     this.mealsFromServer = [];
     this.didNotLoad = true;
@@ -77,6 +78,13 @@ export class HomePage implements OnInit {
   ionViewWillEnter() {
     this.storage.clear();
     this.refresh.next();
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+      filter((event: NavigationEnd) =>
+      event.urlAfterRedirects == '/options'))
+      .subscribe((route: NavigationStart) => {
+        this.ngOnInit();
+      });
   }
 
   public weekViewColumnHeader({ date, locale }: DateFormatterParams): string {
@@ -111,7 +119,7 @@ export class HomePage implements OnInit {
     this.camera.getPicture(options).then((imageData) => {
       this.currentImage = imageData;
       // 'data:image/jpeg;base64,'
-      this.storage.set("img", this.currentImage).then((response) => {
+      this.storage.set('img', this.currentImage).then((response) => {
 
       }).catch((error) => {
         console.log('set error for ' + this.currentImage + ' ', error);
