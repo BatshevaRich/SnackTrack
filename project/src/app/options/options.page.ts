@@ -73,7 +73,7 @@ export class OptionsPage {
     this.tags = await this.storage.get('img').then((val) => {
       this.currentImage = val;
       this.imageData = val;
-      this.base64Image ='data:image/jpeg;base64,'+ val;
+      this.base64Image = val;
       this.storage.clear();
       return new Promise(resolve => {
         resolve(

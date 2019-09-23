@@ -12,19 +12,19 @@ import { Storage } from '@ionic/storage';
   styleUrls: ['./search.page.scss'],
 })
 export class SearchPage {
-  constructor(private route: ActivatedRoute,
-              private router: Router,
-              public mealService: MealService,
-              public autoCompleteLabelsService: AutoCompleteLabelsService) {
-    this.display = false;
-    this.route.queryParams.subscribe(params => {
-      if (params && params.special) {
-        this.data = JSON.parse(params.special);
-        this.searchText = this.data;
-        this.loadLabelsFromAPI();
-      }
-    });
-  }
+  // constructor(private route: ActivatedRoute,
+  //             private router: Router,
+  //             public mealService: MealService,
+  //             public autoCompleteLabelsService: AutoCompleteLabelsService) {
+  //   this.display = false;
+  //   this.route.queryParams.subscribe(params => {
+  //     if (params && params.special) {
+  //       this.data = JSON.parse(params.special);
+  //       this.searchText = this.data;
+  //       this.loadLabelsFromAPI();
+  //     }
+  //   });
+  // }
 
   meals: Meal[] = [];
   data: any;
