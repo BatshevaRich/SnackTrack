@@ -18,19 +18,14 @@ mealsToday:Meal[];
       }
 
       ngOnInit() {
+        
           this.today=this.navParams.get("dateToday");
           new Promise(resolve => {
             resolve(
               // send the local storage base64 path
-              this.mealService.GetTodayMeals(this.today).then(data => {
-                // console.log(data);
-                this.mealsToday = [];
-                this.mealsToday = data as Meal[];
-                // console.log(this.mealsToday);
-                // this.didNotLoad = false;
-                // this.userInput.onClick();
-              })
-            );
+              this.mealsToday= this.mealService.GetTodayMeals(this.today)
+               
+            )
           });
       }
   close() {

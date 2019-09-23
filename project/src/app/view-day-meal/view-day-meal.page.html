@@ -1,4 +1,4 @@
-<ion-grid class="popover-page" >  
+<ion-grid class="popover-page"  >  
 <ion-header>
   <ion-toolbar>
     <ion-title  style="color:#005D57;font-family: 'Roboto', sans-serif;">{{today|date:'d MMMM, y'}}</ion-title>
@@ -8,7 +8,7 @@
 
 <!-- <ion-content> -->
  <ion-list>
-    <ion-item *ngFor="let m of mealsToday" lines="full">
+    <ion-item style="background: cornsilk;color:#005D57"  *ngFor="let m of mealsToday" lines="full">
         <ion-thumbnail slot="start">
           <img [src]="m.Path">
         </ion-thumbnail>
