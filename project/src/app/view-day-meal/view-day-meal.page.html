@@ -4,7 +4,11 @@
     <ion-title  style="color:#005D57;font-family: 'Roboto', sans-serif;">
       {{today|date:'d MMMM, y'}}
     </ion-title>
-    <
+    <ion-buttons slot="primary">
+      <ion-button (click)="close()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
