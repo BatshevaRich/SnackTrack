@@ -22,7 +22,8 @@
 ion-content{
  // --background: url('../imeg/Document-page-001.jpg')  0 0/50% 10% no-repeat;
 
-   --ion-background-color:#111D12  url("../../assets/292.jpg") no-repeat center center / cover;
+   --ion-background-color:#111D12 ;
+    // url("../../assets/292.jpg") no-repeat center center / cover;
 }
 ion-card-content{
   box-shadow: 0 2px 5px #000;
