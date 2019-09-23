@@ -13,7 +13,7 @@ export class ApiPictureService {
   baseURL = 'http://localhost:54640/api/';
   // baseURL = 'http://34.90.143.154/api/'
 // baseURL = 'https://helpless-mayfly-52.localtunnel.me/api/'
-//   baseURL = 'http://7cffcf8b.ngrok.io/api/';
+   //baseURL = 'http://d2feee8e.ngrok.io/api/';
   fileToUpload: File;
   constructor(public httpClient: HttpClient) {}
 
