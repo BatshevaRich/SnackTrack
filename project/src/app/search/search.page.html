@@ -40,15 +40,15 @@
                 </div>
 
               <span style="color:#005D57;font-weight: bold;font-size:25px;font-family: 'Roboto', sans-serif;">{{data}},</span>
-              <span *ngFor="let lab of meal.Labels;let i=index" >
-              <span  *ngIf="lab !== data&&i<meal.Labels.length-1" style="font-size:20px;font-family: 'Roboto', sans-serif;">
-
+              <span *ngFor="let lab of meal.Tags;let i=index" >
+              <span  *ngIf="lab !== data&&i<meal.Tags.length-1" style="font-size:20px;font-family: 'Roboto', sans-serif;">
+                
               {{lab}},
                 </span>
 
               </span>
-            <span style="font-size:20px;font-family: 'Roboto', sans-serif;"> {{meal.Labels[meal.Labels.length-1]}}
-              </span>
+            <span style="font-size:20px;font-family: 'Roboto', sans-serif;"> {{meal.Tags[meal.Tags.length-1]}}
+              </span> 
             </ion-card-content>
           </ion-card>
     </ion-list>
