@@ -7,6 +7,8 @@ const routes: Routes = [
   { path: 'options', loadChildren: './options/options.module#OptionsPageModule' },
   { path: 'search', loadChildren: './search/search.module#SearchPageModule' },
   { path: 'camera', loadChildren: './camera/camera.module#CameraPageModule' },
+  // { path: 'login', loadChildren: './login/login.module#LoginPageModule' },
+
 ];
 
 @NgModule({

@@ -1,33 +1,55 @@
-<ion-header >
-  <ion-toolbar>
-    <ion-title ><ion-img  style="width:100px;"src="https://storage.cloud.google.com/dietdiaryfoodpics/Document-page-001.jpg"></ion-img></ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content >
+    <ion-header >
+        <ion-toolbar >
+        </ion-toolbar>
+      </ion-header>
 <ion-row>
   <ion-col size="0.5"></ion-col>
   <ion-col size="10">
-      <ion-auto-complete style="height:120%;" [(ngModel)]="searchText" (keyup.enter)="onSelected()" (itemSelected)="onSelected()"
-      [dataProvider]="autoCompleteLabelsService">
-    </ion-auto-complete>
+      <ion-auto-complete  style="height:180%;color:#ffffff;
+      caret-color: #ffffff;
+-moz-border-bottom-colors: #ffffff;
+-moz-border-left-colors: #ffffff;
+-webkit-column-break-before: #ffffff;
+-webkit-text-stroke-color: #ffffff;
+-webkit-text-fill-color: #005D57;fill-rule: 100px;
+-webkit-tap-highlight-color: #005D57;
+-webkit-column-rule-color: #005D57;
+-webkit-border-before-color: #005D57;font-weight: bold;
+
+       " [(ngModel)]="searchText" (keyup.enter)="onSelected()" (itemSelected)="onSelected()"
+       [dataProvider]="autoCompleteLabelsService">
+     </ion-auto-complete>
+    <!-- <ion-auto-complete style="background-color:#33333D" color='primary' [(ngModel)]="searchText" (keyup.enter)="onSelected()" (itemSelected)="onSelected()"
+    [dataProvider]="autoCompleteLabelsService">
+  </ion-auto-complete> -->
     </ion-col>
     <ion-col size="0.02"></ion-col>
   </ion-row>
 
-<ion-content padding>
     <ion-list ion-item *ngFor="let meal of meals">
         <ion-card>
             <img [src]="meal.Path"/>
             <ion-card-content >
-                <div style="font-size:30px;font-family: 'Roboto', sans-serif;"> {{meal.DateOfPic|date: 'dd/MM/yyyy  - hh:mm'}}
-                </div> 
-              <span style="color:#005D57;font-weight: bold;font-size:25px;font-family: 'Roboto', sans-serif;">{{data}}</span>
-              <span *ngFor="let lab of meal.Labels">
-              <span  *ngIf="lab !== data" style="font-size:20px;font-family: 'Roboto', sans-serif;">,
+              <div>
+                <span style="font-size:20px;font-family: 'Roboto', sans-serif;text-align: start"> {{meal.DateOfPic|date: ' hh:mm '}}
+                  </span> 
+
+                <span style="font-size:25px;font-family: 'Roboto', sans-serif;text-align: end"> {{meal.DateOfPic|date: ' dd/MM/yyyy'}}
+                  </span> 
+                </div>
+
+              <span style="color:#005D57;font-weight: bold;font-size:25px;font-family: 'Roboto', sans-serif;">{{data}},</span>
+              <span *ngFor="let lab of meal.Labels;let i=index" >
+              <span  *ngIf="lab !== data&&i<meal.Labels.length-1" style="font-size:20px;font-family: 'Roboto', sans-serif;">
                 
-              {{lab}} 
+              {{lab}},
                 </span>
+
               </span>
-        </ion-card-content>
+            <span style="font-size:20px;font-family: 'Roboto', sans-serif;"> {{meal.Labels[meal.Labels.length-1]}}
+              </span> 
+            </ion-card-content>
           </ion-card>
     </ion-list>
  <div *ngIf="display" class="wrapper"><span class="txt">You didn't eat <br><div style="color: red">  {{data}}</div></span>  
@@ -39,21 +61,29 @@
 </ion-content>
 
 
+        <ion-row>
+            <ion-col size="5"></ion-col>
+            <ion-img *ngIf="display" style="width:150px; height:150px;" src="https://storage.cloud.google.com/dietdiaryfoodpics/loudlycrying.gif?authuser=0"></ion-img>
+            <ion-col size="5"></ion-col>
+             
+            </ion-row>
+</ion-content>
+
 
 <ion-fab vertical="bottom" horizontal="end">
     <ion-fab-button color="light" size="medium">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
     <ion-fab-list side="top">
-      <ion-fab-button routerLink="../camera" color="light" size="small">
-        <ion-icon name="camera"></ion-icon>
-      </ion-fab-button>
+        <ion-fab-button (click)="takePicture($event)"  color="light" size="small">
+            <ion-icon name="camera"></ion-icon>
+            </ion-fab-button>
       <ion-fab-button routerLink="../home" color="light" size="small">
         <ion-icon name="calendar"></ion-icon>
       </ion-fab-button>
       <label style="size: 5000px" for="file-input">
         <ion-fab-button color="light" size="small">
-          <ion-icon name="link"></ion-icon>
+          <ion-icon name="cloud-upload"></ion-icon>
         </ion-fab-button>
       </label>
       <input
@@ -66,4 +96,3 @@
       />‏
     </ion-fab-list>
   </ion-fab>
-

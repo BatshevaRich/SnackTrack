@@ -11,21 +11,23 @@ import { Label } from '../classes/Label';
 export class AutoCompleteLabelsService implements AutoCompleteService {
   labelAttribute = 'name';
   private labels: any[] = [];
- //private baseURL = 'http://34.90.143.154/api/'
- baseURL = 'http://localhost:51786/api/';
+  baseURL = 'http://34.90.143.154/api/';
+
   constructor(private http: HttpClient) {
       this.initialization();
   }
 
-  initialization(){
-    this.http.get<string[]>(this.baseURL + 'label').subscribe(allLabel=>
-      {
-        this.labels=allLabel;
+  initialization() {
+    this.http.get<string[]>(this.baseURL + 'label').subscribe(allLabel => {
+        this.labels = allLabel;
       } ,
-      err=>{console.log(err);}
+      err => {console.log(err); }
      );
   }
-
+public addLabels(labels:string[]){
+  for(let i in labels)
+ this.labels.push(i);
+}
   getResults(keyword: string): Observable<any[]> {
     let observable: Observable<any>;
     if (this.labels.length === 0) {

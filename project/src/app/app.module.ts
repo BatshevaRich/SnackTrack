@@ -19,6 +19,7 @@ import { NgbModalModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ViewDayMealPageModule } from './view-day-meal/view-day-meal.module';
 import {IonicStorageModule} from '@ionic/storage';
 // import { FilterPipe } from './pipes/filter.pipe';
+import { NativeStorage } from '@ionic-native/native-storage/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,7 +29,7 @@ import {IonicStorageModule} from '@ionic/storage';
     BrowserModule, BrowserAnimationsModule, HttpClientModule, CommonModule, IonicModule.forRoot(),IonicStorageModule.forRoot(),AppRoutingModule,ViewDayMealPageModule],
   providers: [
     StatusBar,
-    SplashScreen, HttpClientModule, Camera,
+    SplashScreen, HttpClientModule, Camera,NativeStorage,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

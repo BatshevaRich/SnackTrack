@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Meal } from '../../app/classes/Meal';
 import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-
+import { map } from 'rxjs-compat/operator/map';
+import {mealLoaded} from '../home/home.page';
 @Injectable({
   providedIn: 'root'
 })
@@ -14,20 +15,19 @@ export class MealService {
   listAllMeal: Meal[];
   constructor(public http: HttpClient) {
     console.log('Hello MealProvider Provider');
-    this.listAllMeal=[];
-    this.http.get<Meal[]>(this.baseURL + 'meal').subscribe(meals=>
-      { 
-        console.log("load meal-servis");
-        this.listAllMeal=meals;
+    this.listAllMeal = [];
+    this.http.get<Meal[]>(this.baseURL + 'meal').subscribe(meals => {
+        console.log('load meal-servis');
+        this.listAllMeal = meals;
       } ,
-      err=>{console.log(err);}
+      err => {console.log(err); }
      );
   }
 
   public SaveToServer(path: string, hour: Date, labels: string[]): any {
     const formData = new FormData();
     formData.append('path', path);
-    formData.append("hour",hour.toString().replace(" GMT+0300 (שעון ישראל (קיץ))",""));
+    formData.append('hour', hour.toString().replace(' GMT+0300 (שעון ישראל (קיץ))',''));
     const allLabels: string = labels.join(',');
     formData.append('labels', allLabels);
     const res = this.http.post(this.baseURL + 'meal/upload', formData);
@@ -57,13 +57,9 @@ export class MealService {
   }
 
   public GetAllMeals() {
-    const res = this.http.get(this.baseURL + 'meal');
-    return new Promise(resolve => {
-      res.subscribe(data => {
-        resolve(data);
-      });
-    });
+    return this.http.get(this.baseURL + 'meal');
   }
+
   getResults(): Observable<Meal[]> {
     let observable: Observable<Meal[]>;
     if (this.listAllMeal.length === 0) {
