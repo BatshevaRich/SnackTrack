@@ -58,6 +58,7 @@ export class HomePage implements OnInit {
     this.mealsFromServer = [];
     this.didNotLoad = true;
     this.mealsFromServer = [];
+    this.ionViewWillEnter();
   }
   @ViewChild('box', null) userInput;
   @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
@@ -76,16 +77,18 @@ export class HomePage implements OnInit {
   labelsToLoad: string[] = [];
   dateToLoad: string;
   currentImage: any;
+  navigationSubscription;
   ionViewWillEnter() {
     this.storage.clear();
     this.refresh.next();
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd),
       filter((event: NavigationEnd) =>
-      event.urlAfterRedirects == './options'))
+      event.urlAfterRedirects == 'options'))
       .subscribe((route: NavigationStart) => {
         this.ngOnInit();
       });
+   
   }
 
   public weekViewColumnHeader({ date, locale }: DateFormatterParams): string {
@@ -210,6 +213,7 @@ export class HomePage implements OnInit {
   }
 
   async presentPopover({ date, events }: { date: Date; events: CalendarEvent[] }) {
+    this.loadLabelsFromAPI();
     const popover = await this.popoverCtrl.create({
       component: ViewDayMealPage,
       componentProps: {

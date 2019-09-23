@@ -198,8 +198,7 @@ export class OptionsPage {
       this.dateChange.value,
       stringedLabels // labels
     );
-    
-    this.router.navigate(['/home']);
+    this.router.navigate(['home']);
   }
 
 
