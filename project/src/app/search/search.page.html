@@ -30,7 +30,12 @@
         </ion-card-content>
           </ion-card>
     </ion-list>
- <p *ngIf="display">you didn't eat any {{data}} yet</p>
+ <div *ngIf="display" class="wrapper"><span class="txt">You didn't eat <br><div style="color: red">  {{data}}</div></span>  
+   <ion-img src= "../assets/plate.png"></ion-img>
+  
+
+ </div>
+
 </ion-content>
 
 
