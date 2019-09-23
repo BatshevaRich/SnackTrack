@@ -28,6 +28,7 @@ import { ViewDayMealPage } from '../view-day-meal/view-day-meal.page';
 import { Storage } from '@ionic/storage';
 import { Meal } from '../classes/Meal';
 import { filter } from 'rxjs/operators';
+import { NavigationEvent } from '@ng-bootstrap/ng-bootstrap/datepicker/datepicker-view-model';
 // ,*TgpkZTbdtlA~u
 const colors: any = {
   red: { primary: Image, secondary: Image },
@@ -81,7 +82,7 @@ export class HomePage implements OnInit {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd),
       filter((event: NavigationEnd) =>
-      event.urlAfterRedirects == '/options'))
+      event.urlAfterRedirects == './options'))
       .subscribe((route: NavigationStart) => {
         this.ngOnInit();
       });
@@ -92,6 +93,7 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit() {
+    console.log('init');
     this.events = [];
     this.loadLabelsFromAPI();
     this.refresh.next();
