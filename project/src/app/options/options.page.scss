@@ -25,8 +25,12 @@ ion-content{
 
    --ion-background-color:#111D12  url("../../assets/292.jpg") no-repeat center center / cover;
 }
+ion-card-content{
+  box-shadow: 0 2px 5px #000;
 
+}
 .card{
+
   background-color: #000;
   padding-inline-start: 10px;
   padding-inline-end: 10px;

@@ -20,22 +20,22 @@
   </div>
 
   <ion-card *ngIf="load && labels.length != 0" >
-      <ion-card-header
+      <ion-card-content
          >
-          <ion-row>        <ion-col size="8">
+          <ion-row >
+                    <ion-col size="8" text-align:left>
 
-          <ion-datetime style="color: #ffffff; text-align: center;font-family: 'Roboto',sans-serif ;" class="title"shape="square" #datet [value]="myDate.toString(datet.value)" displayFormat=" DD/MM/YYYY HH:mm " (ionChange)="doSomething()"></ion-datetime>
+          <ion-datetime style="color: #ffffff;font-family: 'Roboto',sans-serif ;" class="title"shape="square" #datet [value]="myDate.toString(datet.value)" displayFormat=" DD/MM/YYYY HH:mm " (ionChange)="doSomething()"></ion-datetime>
           
         </ion-col >
-        <ion-col size="4">
+        <ion-col size="4" text-align:right>
 
-        <ion-button    (click)="uploadData()" [hidden]="labels.length <=0"  color="light">  <ion-icon ios="ios-checkmark" md="md-checkmark"></ion-icon>
-
+        <ion-button    (click)="uploadData()" [hidden]="labels.length <=0"  color="light"><span style="color: #ffffff;font-family:'Roboto',sans-serif ">Save</span> 
             </ion-button>
           </ion-col>
 
           </ion-row>
-    </ion-card-header>
+    </ion-card-content>
     <ion-card-content >
       <ion-img
         class="_img"
@@ -84,7 +84,7 @@
     </ion-card-content>
     <ion-card-content class="background-image" >
 
-      <h3 class="title" *ngIf="unwantedLabels.length != 0">Suggestions: </h3>
+      <h3 class="title" *ngIf="unwantedLabels.length != 0" style="padding-left: 5px">Suggestions: </h3>
   <ion-chip *ngFor="let label of unwantedLabels">
     <!-- <ion-icon name="ios-restaurant" color="primary"></ion-icon> -->
     <ion-label>{{ label.name | titlecase  }}</ion-label>
@@ -101,7 +101,6 @@
     </ion-card-content>
   </ion-card>
 </ion-content>
-<button>cdfc</button>
 
 <ion-fab vertical="bottom" horizontal="end">
   <ion-fab-button color="light" size="medium">
