@@ -12,7 +12,7 @@ import {
   isSameMonth,
   addHours
 } from 'date-fns';
-import { CalendarDateFormatter, DateFormatterParams, CalendarMonthViewDay } from 'angular-calendar';
+import { CalendarDateFormatter, DateFormatterParams } from 'angular-calendar';
 import { DatePipe } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 
@@ -38,28 +38,24 @@ export interface mealLoaded {
   DateOfPic: string;
   Labels: string[];
 }
-
 @Component({
   selector: 'app-home',
-  //changeDetection: ChangeDetectionStrategy.OnPush,
+  // changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-
 })
 export class HomePage implements OnInit {
   constructor(private camera: Camera,
-    private storage: Storage, private titleService: Title,
-    private router: Router,
-    private modal: NgbModal,
-    private mealService: MealService,
-    public autoCompleteLabelsService: AutoCompleteLabelsService,
-    public popoverCtrl: PopoverController) {
+              private storage: Storage, private titleService: Title,
+              private router: Router,
+              private modal: NgbModal,
+              private mealService: MealService,
+              public autoCompleteLabelsService: AutoCompleteLabelsService,
+              public popoverCtrl: PopoverController) {
     this.loadLabelsFromAPI();
     this.mealsFromServer = [];
     this.didNotLoad = true;
-    // await this.loadLabelsFromAPI();
-
-    // this.dayClicked();    
+    this.mealsFromServer = [];
   }
   @ViewChild('box', null) userInput;
   @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
@@ -67,21 +63,7 @@ export class HomePage implements OnInit {
   CalendarView = CalendarView;
   viewDate: Date = new Date();
   modalData: { action: string; event: CalendarEvent; };
-  actions: CalendarEventAction[] = [
-    {
-      label: '<i></i>',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.handleEvent('Edited', event);
-      }
-    },
-    {
-      label: '<i class="fa fa-fw fa-times"></i>',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.events = this.events.filter(iEvent => iEvent !== event);
-        this.handleEvent('Deleted', event);
-      }
-    }
-  ];
+
   refresh: Subject<any> = new Subject();
   events: CalendarEvent[] = [];
   didNotLoad: boolean;
@@ -94,19 +76,13 @@ export class HomePage implements OnInit {
   currentImage: any;
   ionViewWillEnter() {
     this.storage.clear();
+    this.refresh.next();
   }
-  someMethod() {
-    this.titleService.setTitle('An Awesome Title');
-  }
-
 
   public weekViewColumnHeader({ date, locale }: DateFormatterParams): string {
     return new DatePipe(locale).transform(date, 'EEE', locale);
   }
-  // async ngOnInit() {
-  //   this.loadLabelsFromAPI();
-  //   // location.reload();
-  // }
+
   ngOnInit() {
     this.events = [];
     this.loadLabelsFromAPI();
@@ -124,34 +100,7 @@ export class HomePage implements OnInit {
     }
     return new Date();
   }
-  parseTime(value): number {
-    if (value.indexOf('-') > -1) {
-      const str = value.split('T');
-      const time = str[1];
-      const h = time.split(':');
-      return Number(h[0]);
-    }
-  }
 
-
-  // takePicture($event) {
-  //   const options: CameraOptions = {
-  //     quality: 100,
-  //     destinationType: this.camera.DestinationType.DATA_URL,
-  //     encodingType: this.camera.EncodingType.JPEG,
-  //     mediaType: this.camera.MediaType.PICTURE
-  //   };
-
-  //   this.camera.getPicture(options).then((imageData) => {
-  //     this.currentImage = 'data:image/jpeg;base64,' + imageData;
-  //     alert(imageData);
-  //     this.sendImage($event);
-  //   // this.router.navigate(['/camera']);
-  //   }, (err) => {
-  //     // Handle error
-  //     console.log('Camera issue:' + err);
-  //   });
-  // }
   takePicture($event) {
     const options: CameraOptions = {
       quality: 100,
@@ -159,102 +108,43 @@ export class HomePage implements OnInit {
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE
     };
-
     this.camera.getPicture(options).then((imageData) => {
-      this.currentImage =  imageData;
-      // 'data:image/jpeg;base64,'
-      this.storage.set("img", this.currentImage ).then((response) => { 
-
+      this.currentImage = 'data:image/jpeg;base64,' + imageData;
+      this.storage.set('img', this.currentImage ).then((response) => {
       }).catch((error) => {
-
         console.log('set error for ' + this.currentImage + ' ', error);
       });
-      this.storage.set("img",this.currentImage );
-    this.router.navigate(['/options']);
+      this.storage.set('img', this.currentImage );
+      this.router.navigate(['/options']);
     }, (err) => {
-      // Handle error
       console.log('Camera issue:' + err);
     });
   }
-  convertMealsToEvent() {
-    this.mealsFromServer = this.mealsFromServer as [];
-    for (let index = 0; index < this.mealsFromServer.length; index++) {
-      // alert(this.mealsFromServer[0].DateOfPic);
-      colors.red.primary = new Image();
-      colors.red.primary.src = this.mealsFromServer[index].Path;
-      colors.red.secondary = new Image();
-      colors.red.secondary.src = this.mealsFromServer[index].Path;
-      const endate = new Date(this.parseDate(this.mealsFromServer[index].DateOfPic));
-      let s = '';
-      let i;
-      for (i = 0; i < this.mealsFromServer[index].Labels.length - 1; i++) {
-        s = s + this.mealsFromServer[index].Labels[i] + ', ';
-      }
-      s = s + this.mealsFromServer[index].Labels[i];
-      this.events.push({
-        start: addHours(startOfDay(this.parseDate(this.mealsFromServer[index].DateOfPic)), 2),
-        end: addHours(startOfDay(this.parseDate(this.mealsFromServer[index].DateOfPic)), 4),
-        title: s,
-        color: colors.red,
-        actions: this.actions,
-        allDay: true,
-        resizable: {
-          beforeStart: true,
-          afterEnd: true
-        },
-        draggable: true
-      },
-      );
-    }
-  }
 
   loadLabelsFromAPI() {
-    let events=this.mealService.GetMonthMeals(new Date());
-      for(let i=0;i<events.length;i++)  
-    {    this.events = [];
+    this.mealService.GetAllMeals().subscribe(
+      (res: mealLoaded[]) => {
+        this.events = [];
+        for (const m of res) {
           this.events.push({
-            start: addHours(startOfDay(this.parseDate(events[i].hour)), 2),
-        end: addHours(startOfDay(this.parseDate(events[i].hour)), 4),
-        title: events[i].path,
+            start: addHours(startOfDay(this.parseDate(m.DateOfPic)), 2),
+        end: addHours(startOfDay(this.parseDate(m.DateOfPic)), 4),
+        title: m.Path,
         color: colors.red,
-        actions: this.actions,
         allDay: true,
         resizable: {
           beforeStart: true,
           afterEnd: true
         },
         draggable: true
-          })
+          });
         }
-      
-    
+      }
+    );
     this.refresh.next();
   }
 
-  eventTimesChanged({
-    event,
-    newStart,
-    newEnd
-  }: CalendarEventTimesChangedEvent): void {
-    this.events = this.events.map(iEvent => {
-      if (iEvent === event) {
-        return {
-          ...event,
-          start: newStart,
-          end: newEnd
-        };
-      }
-      return iEvent;
-    });
-    this.handleEvent('Dropped or resized', event);
-  }
-
-  handleEvent(action: string, event: CalendarEvent): void {
-    this.modalData = { event, action };
-    this.modal.open(this.modalContent, { size: 'lg' });
-  }
-
-  addEvent(): void {
+  public addEvent(): void {
     this.events = [
       ...this.events,
       {
@@ -269,10 +159,6 @@ export class HomePage implements OnInit {
         }
       }
     ];
-  }
-
-  deleteEvent(eventToDelete: CalendarEvent) {
-    this.events = this.events.filter(event => event !== eventToDelete);
   }
 
   setView(view: CalendarView) {
@@ -291,9 +177,7 @@ export class HomePage implements OnInit {
     this.searchText = '';
     this.router.navigate(['/search'], navigationExtras);
   }
-  setValue(key: string, value: string) {
-    value=value.substring(23,value.length);
-
+  setValue(key: string, value: any) {
     this.storage.set(key, value).then((response) => {
     }).catch((error) => {
       console.log('set error for ' + key + ' ', error);
@@ -305,17 +189,12 @@ export class HomePage implements OnInit {
     const file: File = $event.target.files[0];
     const reader = new FileReader();
     this.storage.clear();
-
     reader.onload = (event: any) => {
       this.setValue('img', event.target.result);
       this.router.navigate(['/options']);
     };
     reader.readAsDataURL(file);
-    // this.router.navigate(['/options']);
-    // this.navCtrl.navigateRoot("/options"); // go to next page
   }
-  
-  
 
   async presentPopover({ date, events }: { date: Date; events: CalendarEvent[] }) {
     const popover = await this.popoverCtrl.create({
@@ -327,7 +206,4 @@ export class HomePage implements OnInit {
     popover.style.cssText = '--max-height:45%;--width:95%';
     popover.present();
   }
-
-  
- 
 }
