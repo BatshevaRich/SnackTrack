@@ -34,6 +34,7 @@ export class OptionsPage {
     this.trues = 5;
     this.counter = 5;
     // this.base64Image = this.imageData;
+    
   }
   myDate:Date=new Date();
   @ViewChild('box', null) userInput;
@@ -79,6 +80,7 @@ export class OptionsPage {
           // send the local storage base64 path
           this.apPic.InsertImages(val).then(data => {
             return data;
+            
           })
         );
       });

@@ -7,6 +7,7 @@
   width: 100%;
 }
 .wrapper{
+  text-align: center;
   margin: auto;
   display: block;
   // width: 250px;
@@ -22,7 +23,7 @@
 ion-content{
  // --background: url('../imeg/Document-page-001.jpg')  0 0/50% 10% no-repeat;
 
-   --ion-background-color:#111D12  url("https://storage.cloud.google.com/dietdiaryfoodpics/292.jpg?authuser=0") no-repeat center center / cover;
+   --ion-background-color:#111D12  url("../../assets/292.jpg") no-repeat center center / cover;
 }
 
 .card{
@@ -39,8 +40,17 @@ ion-content{
   // margin: 5px;
   font-weight: bold;
   font-size: 20px;
+  color:#ffffff;
 }
-
+ion-label{
+  color:white;
+}
+ion-icon{
+  color:white;
+}
+ion-chip{
+  background: #24B780;
+}
 .wrapper p {
   color: black;
   font: 300 4em/150% Impact;
