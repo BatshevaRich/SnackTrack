@@ -39,15 +39,15 @@ export class ApiPictureService {
 
   InsertImages(formData): any {
     const headers= new HttpHeaders({'Content-Type':'application/json'});
-    const res = this.httpClient.post(
+    return this.httpClient.post(
       this.baseURL + 'clarifai/InsertImages/',
       JSON.stringify(formData),{headers:headers}
     );
 
-    return new Promise(resolve => {
-      res.subscribe(data => {
-        resolve(data);
-      });
-    });
+    // return new Promise(resolve => {
+    //   res.subscribe(data => {
+    //     resolve(data);
+    //   });
+    // });
   }
 }
