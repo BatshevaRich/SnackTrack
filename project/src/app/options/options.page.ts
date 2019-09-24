@@ -17,13 +17,13 @@ import { HomePage } from '../home/home.page';
 })
 export class OptionsPage {
   constructor(private camera: Camera, private storage: Storage,
-              private alertCtrl: AlertController,
-              @Inject(LOCALE_ID) private locale: string,
-              private navControl: NavController,
-              private router: Router,
-              public apPic: ApiPictureService,
-              public loadingController: LoadingController,
-              private mealProvider: MealService
+    private alertCtrl: AlertController,
+    @Inject(LOCALE_ID) private locale: string,
+    private navControl: NavController,
+    private router: Router,
+    public apPic: ApiPictureService,
+    public loadingController: LoadingController,
+    private mealProvider: MealService
   ) {
     this.myDate = new Date();
     this.load = true;
@@ -39,7 +39,7 @@ export class OptionsPage {
   }
   myDate: Date = new Date();
   @ViewChild('box', null) userInput;
-  @ViewChild('datet', null)dateChange;
+  @ViewChild('datet', null) dateChange;
   labels: Array<{ name: string; wanted: boolean }>;
   unwantedLabels: Array<{ name: string; wanted: boolean }>;
   counter: number;
@@ -52,7 +52,7 @@ export class OptionsPage {
   combinedLabels: string[];
   value = ''; // for ngmodel, to clean input box
   trues: number;
-  private base64Image: string;
+  public base64Image: string;
   click: boolean;
   currentImage: any;
   ionViewWillEnter() {
@@ -73,25 +73,17 @@ export class OptionsPage {
       this.imageData = val;
       this.base64Image = val;
       this.storage.clear();
-      return new Promise(resolve => {
-        resolve(
-          // send the local storage base64 path
-          this.apPic.InsertImages(val).then(data => {
-            return data;
-
-          })
-        );
+      this.apPic.InsertImages(val).subscribe((data: Label[]) => {
+        let i = 0;
+        for (; i < 5; i++) {
+          this.labels.push({ name: data[i].Name, wanted: true });
+        }
+        for (; i < this.loadedLabels.length; i++) {
+          this.unwantedLabels.push({ name: data[i].Name, wanted: true });
+        }
+        this.counter = 5;
       });
     });
-    this.loadedLabels = this.tags as Label[]; // this.tags is the result from webapi
-    let i = 0;
-    for (; i < 5; i++) {
-      this.labels.push({ name: this.loadedLabels[i].Name, wanted: true });
-    }
-    for (; i < this.loadedLabels.length; i++) {
-      this.unwantedLabels.push({ name: this.loadedLabels[i].Name, wanted: true });
-    }
-    this.counter = 5;
   }
 
   /**
@@ -118,18 +110,18 @@ export class OptionsPage {
     this.userInput.setFocus();
   }
   moveToUnwanted($event) {
-    console.log($event);
+    //console.log($event);
     this.unwantedLabels.push({ name: $event.toElement.id, wanted: false });
-    console.log(this.unwantedLabels);
+    //console.log(this.unwantedLabels);
     this.counter = this.counter - 1;
     this.labels = this.labels.filter(item => item.name !== $event.toElement.id);
   }
   moveToWanted($event) {
-    console.log($event);
+    //console.log($event);
     if (this.counter < 10) {
       this.labels.push({ name: $event.toElement.id, wanted: true });
       this.counter = this.counter + 1;
-      console.log(this.labels);
+      //console.log(this.labels);
       this.unwantedLabels = this.unwantedLabels.filter(item => item.name !== $event.toElement.id);
     }
   }
@@ -171,26 +163,31 @@ export class OptionsPage {
       quality: 100,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE
+      mediaType: this.camera.MediaType.PICTURE,
+      targetWidth: 900,
+      targetHeight: 600,
+      saveToPhotoAlbum: false,
+      allowEdit: true,
+      sourceType: 1
     };
     this.camera.getPicture(options).then((imageData) => {
       this.currentImage = imageData;
       // 'data:image/jpeg;base64,'
       alert(this.currentImage);
-      this.storage.set('img', 'data:image/jpeg;base64,'+ this.currentImage).then((response) => {
+      this.storage.set('img', 'data:image/jpeg;base64,' + this.currentImage).then((response) => {
         this.router.navigate(['/options']);
 
       }).catch((error) => {
         console.log('set error for ' + this.currentImage + ' ', error);
       });
-      
+
     }, (err) => {
       console.log('Camera issue:' + err);
     });
   }
 
   uploadData() {
-    console.log(this.dateChange.value);
+    //console.log(this.dateChange.value);
     let stringedLabels: string[]; // var to keep chosen strings
     stringedLabels = this.labels.filter(l => l.name).map(l => l.name);
     this.mealProvider.SaveToServer(
