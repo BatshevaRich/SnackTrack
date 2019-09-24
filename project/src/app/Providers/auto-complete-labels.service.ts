@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {map} from 'rxjs/operators';
-import {Observable, of} from 'rxjs';
-import {AutoCompleteService} from 'ionic4-auto-complete';
+import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { AutoCompleteService } from 'ionic4-auto-complete';
 import { Label } from '../classes/Label';
 
 @Injectable({
@@ -14,20 +14,21 @@ export class AutoCompleteLabelsService implements AutoCompleteService {
   baseURL = 'http://34.90.143.154/api/';
 
   constructor(private http: HttpClient) {
-      this.initialization();
+    this.initialization();
   }
 
   initialization() {
     this.http.get<string[]>(this.baseURL + 'label').subscribe(allLabel => {
-        this.labels = allLabel;
-      } ,
-      err => {console.log(err); }
-     );
+      this.labels = allLabel;
+    },
+      err => { console.log(err); }
+    );
   }
-public addLabels(labels:string[]){
-  for(let i in labels)
- this.labels.push(i);
-}
+  public addLabels(labels: string[]) {
+    for (const i in labels) {
+      this.labels.push(i);
+    }
+  }
   getResults(keyword: string): Observable<any[]> {
     let observable: Observable<any>;
     if (this.labels.length === 0) {

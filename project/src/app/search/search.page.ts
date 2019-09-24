@@ -80,24 +80,6 @@ this.searchText=this.data;
       this.display=true;
     }
   }
-
-  // resolveAfter2Seconds() {
-  //   return new Promise(resolve => {
-  //     setTimeout(() => {
-  //       resolve(
-  //         this.meals.GetMealsForSearch("beet").then(data => {
-  //           this.myMeal = data;
-  //           console.log(this.meals.length);
-  //         })
-  //       );
-  //     }, 400);
-  //   });
-  // }
-
-  // async loadMealsFromDB() {
-  //   await this.resolveAfter2Seconds();
-  //   this.meals = this.myMeal as Meal[];}
-  // }
   currentImage: any;
 
 

@@ -8,7 +8,7 @@
         
     </ion-fab> -->
     <ion-fab vertical="bottom" horizontal="end" vertical="top" slot="fixed" *ngIf="currentImage">
-        <ion-fab-button (click)="sendImage()" color="medium" size="small">
+        <ion-fab-button (click)="sendImage($event)" color="medium" size="small">
           <ion-icon name="send"></ion-icon>
           </ion-fab-button>
           
