@@ -86,3 +86,47 @@ C:\Users\יהודית לנאל\Desktop\new finish\SnackTrackBackend\dal\obj\Debu
 C:\Users\יהודית לנאל\Desktop\new finish\SnackTrackBackend\dal\obj\Debug\dal.csproj.CopyComplete
 C:\Users\יהודית לנאל\Desktop\new finish\SnackTrackBackend\dal\obj\Debug\dal.dll
 C:\Users\יהודית לנאל\Desktop\new finish\SnackTrackBackend\dal\obj\Debug\dal.pdb
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\dal.dll.config
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\dal.dll
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\dal.pdb
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\BouncyCastle.Crypto.dll
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\Google.Api.Gax.dll
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\Google.Api.Gax.Rest.dll
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\Google.Apis.Auth.dll
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\Google.Apis.Auth.PlatformServices.dll
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\Google.Apis.Core.dll
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\Google.Apis.dll
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\Google.Apis.PlatformServices.dll
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\Google.Apis.Storage.v1.dll
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\Google.Cloud.Storage.V1.dll
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\Google.Protobuf.dll
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\MySql.Data.dll
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\Newtonsoft.Json.dll
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\Renci.SshNet.dll
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\System.Diagnostics.DiagnosticSource.dll
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\System.Interactive.Async.dll
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\Google.Api.Gax.pdb
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\Google.Api.Gax.xml
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\Google.Api.Gax.Rest.pdb
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\Google.Api.Gax.Rest.xml
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\Google.Apis.pdb
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\Google.Apis.xml
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\Google.Apis.Auth.pdb
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\Google.Apis.Auth.xml
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\Google.Apis.Core.pdb
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\Google.Apis.Core.xml
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\Google.Apis.Storage.v1.pdb
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\Google.Apis.Storage.v1.xml
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\Google.Cloud.Storage.V1.pdb
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\Google.Cloud.Storage.V1.xml
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\Google.Protobuf.xml
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\MySql.Data.xml
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\Newtonsoft.Json.xml
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\Renci.SshNet.xml
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\System.Diagnostics.DiagnosticSource.xml
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\bin\Debug\System.Interactive.Async.xml
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\obj\Debug\dal.csprojAssemblyReference.cache
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\obj\Debug\dal.csproj.CoreCompileInputs.cache
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\obj\Debug\dal.csproj.CopyComplete
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\obj\Debug\dal.dll
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\dal\obj\Debug\dal.pdb

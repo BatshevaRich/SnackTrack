@@ -99,3 +99,5 @@ C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\obj\Release\WebApi.cspr
 C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\obj\Release\WebApi.csproj.CopyComplete
 C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\obj\Release\WebApi.dll
 C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\obj\Release\WebApi.pdb
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\System.Interactive.Async.dll
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\System.Interactive.Async.xml

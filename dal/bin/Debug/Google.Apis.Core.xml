@@ -194,12 +194,12 @@
         </member>
         <member name="F:Google.Apis.Http.ConfigurableMessageHandler.ExceptionHandlerKey">
             <summary>
-            Key for unsuccessful response handlers in an <see cref="T:System.Net.Http.HttpRequestMessage"/> properties.
+            Key for exception handlers in an <see cref="T:System.Net.Http.HttpRequestMessage"/> properties.
             </summary>
         </member>
         <member name="F:Google.Apis.Http.ConfigurableMessageHandler.ExecuteInterceptorKey">
             <summary>
-            Key for unsuccessful response handlers in an <see cref="T:System.Net.Http.HttpRequestMessage"/> properties.
+            Key for execute handlers in an <see cref="T:System.Net.Http.HttpRequestMessage"/> properties.
             </summary>
         </member>
         <member name="F:Google.Apis.Http.ConfigurableMessageHandler.ResponseStreamInterceptorProviderKey">
@@ -367,6 +367,9 @@
         <member name="P:Google.Apis.Http.ConfigurableMessageHandler.ApplicationName">
             <summary>Gets or sets the application name which will be used on the User-Agent header.</summary>
         </member>
+        <member name="P:Google.Apis.Http.ConfigurableMessageHandler.GoogleApiClientHeader">
+            <summary>Gets or sets the value set for the x-goog-api-client header.</summary>
+        </member>
         <member name="M:Google.Apis.Http.ConfigurableMessageHandler.#ctor(System.Net.Http.HttpMessageHandler)">
             <summary>Constructs a new configurable message handler.</summary>
         </member>
@@ -500,6 +503,9 @@
         </member>
         <member name="P:Google.Apis.Http.CreateHttpClientArgs.Initializers">
             <summary>Gets a list of initializers to initialize the HTTP client instance.</summary>
+        </member>
+        <member name="P:Google.Apis.Http.CreateHttpClientArgs.GoogleApiClientHeader">
+            <summary>Gets or sets the value for the x-goog-api-client header</summary>
         </member>
         <member name="M:Google.Apis.Http.CreateHttpClientArgs.#ctor">
             <summary>Constructs a new argument instance.</summary>
