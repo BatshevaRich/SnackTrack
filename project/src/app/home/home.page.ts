@@ -131,10 +131,10 @@ export class HomePage implements OnInit {
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
-      targetWidth: 900,
-      targetHeight: 600,
+      // targetWidth: 900,
+      // targetHeight: 600,
       saveToPhotoAlbum: false,
-      allowEdit: true,
+      allowEdit: false,
       sourceType: 1
     };
     this.camera.getPicture(options).then((imageData) => {
