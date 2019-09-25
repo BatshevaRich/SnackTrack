@@ -1,6 +1,7 @@
 ﻿using dal;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -58,7 +59,7 @@ namespace WebApi.Controllers
             DateTime dd = new DateTime();
             try
             {
-                dd = DateTime.Parse(hour);
+                dd = DateTime.ParseExact(hour.ToString().Substring(0, hour.IndexOf('+')), "yyyy-MM-ddTHH:mm:ss", null);
 
             }
             catch
@@ -69,8 +70,15 @@ namespace WebApi.Controllers
                 }
                 catch
                 {
-
-                    dd = DateTime.Now;
+                    try
+                    {
+                        dd = DateTime.Parse(hour.Substring(0, hour.IndexOf('T')));
+                    }
+                    catch
+                    {
+                        dd = DateTime.Now;
+                    }
+                   
                 }
 
             }
