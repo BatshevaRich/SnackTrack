@@ -39,8 +39,13 @@ namespace dal
                 foreach (var item in newMeal.Tags)
                 {
                     if (tags.Equals(""))
+                    {
                         tags += item;
-                    else tags += "," + item;
+                    }
+                    else
+                    {
+                        tags += "," + item;
+                    }
                 }
                 cmd.Parameters.Add("@tag", MySqlDbType.String).Value = tags;
                 cmd.ExecuteNonQuery();
@@ -179,7 +184,17 @@ namespace dal
         public static string UploadFileToStorage(string bucketName, string imageString, DateTime DateOfPic, string objectName = null)
         {
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "C:\\key\\DietDiary-f95b600d05ed.json");
-            var storage = StorageClient.Create();
+            StorageClient storage = null;
+            try
+            {
+                storage = StorageClient.Create();
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+
             var base64Data = Regex.Match(imageString, @"data:image/(?<type>.+?),(?<data>.+)").Groups["data"].Value;
             var binData = Convert.FromBase64String(base64Data);
             BinaryWriter Writer = null;
@@ -203,7 +218,7 @@ namespace dal
                 var x = storage.UploadObject(bucketName, objectName, null, f);
                 Console.WriteLine($"Uploaded {objectName}.");
             }
-            return path + bucketName + "/" + objectName;
+            return "https://storage.googleapis.com/" + bucketName + "/" + objectName;
         }
     }
 }
