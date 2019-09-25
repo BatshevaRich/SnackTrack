@@ -1,38 +1,35 @@
-p{
-    font-family: "Roboto";
-    font-size: 50px;
+p {
+  font-family: "Roboto";
+  font-size: 50px;
 }
 
-  a{
-      text-align: center;
-  }
-.txt{
-    color: #24B77F;
-    font: 100 3em/150% Impact;
-    // position: absolute;
-      z-index: 50;
-      top: 28%;
-      opacity: 0.9;
-      vertical-align: middle;
-    text-align: center;
-    padding-left:  15%;
+a {
+  text-align: center;
 }
-.txt-over{
-  color: #24B77F;
+.txt {
+  color: #24b77f;
+  font: 100 3em/150% Impact;
+  z-index: 50;
+  top: 28%;
+  opacity: 0.9;
+  vertical-align: middle;
+  text-align: center;
+  padding-left: 15%;
+}
+.txt-over {
+  color: #24b77f;
   font: 100 3em/150% Impact;
   position: absolute;
-    z-index: 50;
-    top: 50%;
-    opacity: 0.9;
-    vertical-align: center;
+  z-index: 50;
+  top: 50%;
+  opacity: 0.9;
+  vertical-align: center;
   text-align: center;
-  padding-left:  25%;
+  padding-left: 25%;
 }
-ion-content{
-   
-      --ion-background-color:rgb(58, 59, 58);
-        // url("../../assets/292.jpg") no-repeat center center / cover;
-   }
-   input.searchbar{
-   
-background: white !important;}
+ion-content {
+  --ion-background-color: rgb(58, 59, 58);
+}
+input.searchbar {
+  background: white !important;
+}

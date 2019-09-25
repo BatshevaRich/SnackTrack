@@ -15,7 +15,6 @@ export class CameraPage implements OnInit {
   constructor(private camera: Camera,public storage:Storage,public router:Router) { }
 
   ngOnInit() {
-    // this.takePicture();
   }
   takePicture() {
     const options: CameraOptions = {
@@ -33,12 +32,10 @@ export class CameraPage implements OnInit {
     this.camera.getPicture(options).then((imageData) => {
       this.currentImage = 'data:image/jpeg;base64,' + imageData;
     }, (err) => {
-      // Handle error
       console.log('Camera issue:' + err);
     });
   }
   setValue(key: string, value: any) {
-    // this.storage.remove("key");
     this.storage.set(key, value).then((response) => {
     }).catch((error) => {
       console.log('set error for ' + key + ' ', error);
@@ -54,6 +51,5 @@ export class CameraPage implements OnInit {
     };
     reader.readAsDataURL(file);
     this.router.navigate(['/options']);
-    // this.navCtrl.navigateRoot("/options"); // go to next page
   }
 }

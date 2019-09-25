@@ -18,9 +18,8 @@ import { FlatpickrModule } from 'angularx-flatpickr';
 import { NgbModalModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ViewDayMealPageModule } from './view-day-meal/view-day-meal.module';
 import {IonicStorageModule} from '@ionic/storage';
-// import { FilterPipe } from './pipes/filter.pipe';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
-import { zumImagePageModule } from './zum-image/zum-image.module';
+import { ZoomImagePageModule } from './Zoom-image/Zoom-image.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,7 +27,7 @@ import { zumImagePageModule } from './zum-image/zum-image.module';
   imports: [
     NgbModule, PipesModule,
     BrowserModule, BrowserAnimationsModule, HttpClientModule, CommonModule, IonicModule.forRoot(),IonicStorageModule.forRoot(),
-    AppRoutingModule,ViewDayMealPageModule,zumImagePageModule],
+    AppRoutingModule,ViewDayMealPageModule,ZoomImagePageModule],
   providers: [
     StatusBar,
     SplashScreen, HttpClientModule, Camera,NativeStorage,

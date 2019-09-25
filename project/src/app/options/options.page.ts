@@ -3,7 +3,7 @@ import { Component, ViewChild, Inject, LOCALE_ID } from '@angular/core';
 import { LoadingController, AlertController, NavController } from '@ionic/angular';
 import { ApiPictureService } from '../Providers/api-picture.service';
 import { Label } from '../../app/classes/Label';
-import { MealService } from '../providers/meal.service';
+import { mealService } from '../providers/meal.service';
 import { filter } from 'rxjs/operators';
 import { Storage } from '@ionic/storage';
 import { Router, NavigationExtras, NavigationStart, NavigationEnd } from '@angular/router';
@@ -23,7 +23,7 @@ export class OptionsPage {
     private router: Router,
     public apPic: ApiPictureService,
     public loadingController: LoadingController,
-    private mealProvider: MealService
+    private mealProvider: mealService
   ) {
     this.myDate = new Date();
     this.load = true;
@@ -129,8 +129,6 @@ export class OptionsPage {
    * func to upload labels to server
    * called upon pressing the 'ok' button
    */
-
-
   setValue(key: string, value: any) {
     this.storage.set(key, value).then((response) => {
       this.myDate = new Date();
@@ -171,23 +169,23 @@ export class OptionsPage {
       sourceType: 1
     };
     this.camera.getPicture(options).then((imageData) => {
-      this.currentImage = imageData;
-      // 'data:image/jpeg;base64,'
-      alert(this.currentImage);
-      this.storage.set('img', 'data:image/jpeg;base64,' + this.currentImage).then((response) => {
-        this.router.navigate(['/options']);
-
-      }).catch((error) => {
-        console.log('set error for ' + this.currentImage + ' ', error);
+      this.storage.clear().then((response)=>{
+        this.currentImage = imageData;
+        // 'data:image/jpeg;base64,'
+       // alert(this.currentImage);
+       this.setValue('img','data:image/jpeg;base64,' +  this.currentImage);
+        // this.storage.set('img','data:image/jpeg;base64,' +  this.currentImage).then((response) => {
+        //   this.router.navigate(['/options']);
+        // }).catch((error) => {
+        //   console.log('set error for ' + this.currentImage + ' ', error);
+        // });
+      }, (err) => {
+        console.log('Camera issue:' + err);
       });
-
-    }, (err) => {
-      console.log('Camera issue:' + err);
-    });
+      });
   }
 
   uploadData() {
-    //console.log(this.dateChange.value);
     let stringedLabels: string[]; // var to keep chosen strings
     stringedLabels = this.labels.filter(l => l.name).map(l => l.name);
     this.mealProvider.SaveToServer(
@@ -197,6 +195,4 @@ export class OptionsPage {
     );
     this.router.navigate(['home']);
   }
-
-
 }

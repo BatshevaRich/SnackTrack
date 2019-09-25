@@ -5,6 +5,6 @@ export class Meal {
   constructor(path: string, hour: Date, categories: string[]) {
     this.path = path;
     this.hour = hour;
-    this.categories = categories; // pass on the array to fill
+    this.categories = categories;
   }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
-import { MealService } from '../Providers/meal.service';
+import { mealService } from '../Providers/meal.service';
 import { Meal } from '../classes/Meal';
 import { AutoCompleteLabelsService } from '../Providers/auto-complete-labels.service';
 import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
@@ -12,19 +12,20 @@ import { Storage } from '@ionic/storage';
   styleUrls: ['./search.page.scss'],
 })
 export class SearchPage {
-  // constructor(private route: ActivatedRoute,
-  //             private router: Router,
-  //             public mealService: MealService,
-  //             public autoCompleteLabelsService: AutoCompleteLabelsService) {
-  //   this.display = false;
-  //   this.route.queryParams.subscribe(params => {
-  //     if (params && params.special) {
-  //       this.data = JSON.parse(params.special);
-  //       this.searchText = this.data;
-  //       this.loadLabelsFromAPI();
-  //     }
-  //   });
-  // }
+  constructor(private camera: Camera,
+    private storage: Storage, private route: ActivatedRoute, private router: Router, public mealS: mealService
+    , public autoCompleteLabelsService: AutoCompleteLabelsService) {
+
+    this.display = false;
+    console.log(this.meals);
+    this.route.queryParams.subscribe(params => {
+      if (params && params.special) {
+        this.data = JSON.parse(params.special);
+        this.searchText = this.data;
+        this.loadLabelsFromAPI();
+      }
+    });
+  }
 
   meals: Meal[] = [];
   data: any;
@@ -32,6 +33,7 @@ export class SearchPage {
   display: boolean;
   load: any;
   searchText = '';
+  currentImage: any;
 
   onSelected() {
     const navigationExtras: NavigationExtras = {
@@ -42,30 +44,11 @@ export class SearchPage {
     this.searchText = '';
     this.router.navigate(['/search'], navigationExtras);
   }
-  constructor(private camera: Camera,
-    private storage: Storage,private route: ActivatedRoute, private router: Router, public mealService: MealService
-    ,public autoCompleteLabelsService: AutoCompleteLabelsService) {
-
-    this.display = false;
-    // alert(this.display);
-
-    console.log(this.meals);
-    this.route.queryParams.subscribe(params => {
-        if (params && params.special) {
-          this.data = JSON.parse(params.special);
-this.searchText=this.data;
-          this.loadLabelsFromAPI();
-          };
-        });
-
-
-
-  }
 
   resolveAfter2Seconds() {
     return new Promise(resolve => {
       resolve(
-        this.mealService.GetMealsForSearch(this.data).then((mealk: Meal[]) => {
+        this.mealS.GetMealsForSearch(this.data).then((mealk: Meal[]) => {
           this.meals = mealk;
           console.log(this.meals);
           return mealk;
@@ -74,14 +57,11 @@ this.searchText=this.data;
   }
   async loadLabelsFromAPI() {
     this.meals = await this.resolveAfter2Seconds() as Meal[];
-    // alert(this.meals);
-    this.display=false;
-    if (this.meals.length == 0) {
-      this.display=true;
+    this.display = false;
+    if (this.meals.length === 0) {
+      this.display = true;
     }
   }
-  currentImage: any;
-
 
   takePicture($event) {
     const options: CameraOptions = {
@@ -96,16 +76,13 @@ this.searchText=this.data;
       sourceType: 1
     };
     this.camera.getPicture(options).then((imageData) => {
+      this.storage.clear();
       this.currentImage = imageData;
-      // 'data:image/jpeg;base64,'
-      // alert(this.currentImage);
-      this.storage.set('img', 'data:image/jpeg;base64,'+ this.currentImage).then((response) => {
+      this.storage.set('img', 'data:image/jpeg;base64,' + this.currentImage).then((response) => {
         this.router.navigate(['/options']);
-
       }).catch((error) => {
         console.log('set error for ' + this.currentImage + ' ', error);
       });
-      
     }, (err) => {
       console.log('Camera issue:' + err);
     });

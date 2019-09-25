@@ -1,6 +1,4 @@
 ._img {
-  // border: 2px solid #07e5d8;
-  // border-radius: 10%;
   box-shadow: 0 2px 5px #000;
   height: 100%;
   width: 100%;
@@ -9,7 +7,6 @@
   text-align: center;
   margin: auto;
   display: block;
-  // width: 250px;
 }
 .pane[state$="tabs.facts"]{
   background: green;
@@ -17,13 +14,8 @@
 .picker{
   --ion-background-color: red;
   }
-
-// background
 ion-content{
- // --background: url('../imeg/Document-page-001.jpg')  0 0/50% 10% no-repeat;
-
    --ion-background-color:rgb(58, 59, 58);
-    // url("../../assets/292.jpg") no-repeat center center / cover;
 }
 ion-card-content{
   box-shadow: 0 2px 5px #000;
@@ -38,10 +30,7 @@ ion-card-content{
 }
 .title{
   font-family: 'Roboto',sans-serif ;
-  // vertical-align: middle;
    text-align: left;
-  // padding: 5px;
-  // margin: 5px;
   font-weight: bold;
   font-size: 20px;
   color:#ffffff;
@@ -58,7 +47,6 @@ ion-chip{
 .wrapper p {
   color: black;
   font: 300 4em/150% 'Roboto',sans-serif;
-  // font-size: ;
   position: absolute;
   z-index: 99;
   top: 0px;

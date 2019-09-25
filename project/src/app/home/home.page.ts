@@ -20,7 +20,7 @@ import { AutoCompleteLabelsService } from '../Providers/auto-complete-labels.ser
 import { Subject } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView, CalendarEvent } from 'angular-calendar';
-import { MealService } from '../Providers/meal.service';
+import { mealService } from '../Providers/meal.service';
 import { Router, NavigationExtras, NavigationEnd, NavigationStart } from '@angular/router';
 import { CalendarEventActionsComponent } from 'angular-calendar/modules/common/calendar-event-actions.component';
 import { PopoverController } from '@ionic/angular';
@@ -51,14 +51,17 @@ export class HomePage implements OnInit {
               private storage: Storage, private titleService: Title,
               private router: Router,
               private modal: NgbModal,
-              private mealService: MealService,
+              private mealS: mealService,
               public autoCompleteLabelsService: AutoCompleteLabelsService,
               public popoverCtrl: PopoverController) {
     this.loadLabelsFromAPI();
     this.mealsFromServer = [];
     this.didNotLoad = true;
-    this.mealsFromServer = [];
-    this.ionViewWillEnter();
+    // this.mealsFromServer = [];
+    //this.ionViewWillEnter();
+  }
+  ionViewCanEnter(){
+    console.log('can called');
   }
   @ViewChild('box', null) userInput;
   @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
@@ -78,17 +81,26 @@ export class HomePage implements OnInit {
   dateToLoad: string;
   currentImage: any;
   navigationSubscription;
-  ionViewWillEnter() {
-    this.storage.clear();
+  // ionViewWillEnter() {
+  //   console.log('will');
+  //   this.events = [];
+  //   this.loadLabelsFromAPI();
+  //   this.refresh.next();
+  //   this.storage.clear();
+  //   this.refresh.next();
+    
+  // }
+  ionViewDidEnter() {
+    console.log('did');
+    this.events = [];
+    this.loadLabelsFromAPI();
     this.refresh.next();
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd),
-      filter((event: NavigationEnd) =>
-      event.urlAfterRedirects == 'options'))
-      .subscribe((route: NavigationStart) => {
-        this.ngOnInit();
-      });
-   
+    this.storage.clear();
+    // this.refresh.next();
+    this.mealsFromServer = [];
+    this.didNotLoad = true;
+    // this.mealsFromServer = [];
+    
   }
 
   public weekViewColumnHeader({ date, locale }: DateFormatterParams): string {
@@ -96,7 +108,6 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit() {
-    console.log('init');
     this.events = [];
     this.loadLabelsFromAPI();
     this.refresh.next();
@@ -128,22 +139,18 @@ export class HomePage implements OnInit {
     };
     this.camera.getPicture(options).then((imageData) => {
       this.currentImage = imageData;
-      // 'data:image/jpeg;base64,'
-      // alert(this.currentImage);
       this.storage.set('img', 'data:image/jpeg;base64,'+ this.currentImage).then((response) => {
         this.router.navigate(['/options']);
-
       }).catch((error) => {
         console.log('set error for ' + this.currentImage + ' ', error);
       });
-      
     }, (err) => {
       console.log('Camera issue:' + err);
     });
   }
 
   loadLabelsFromAPI() {
-    this.mealService.GetAllMeals().subscribe(
+    this.mealS.GetAllMeals().subscribe(
       (res: mealLoaded[]) => {
         this.events = [];
         for (const m of res) {
