@@ -78,7 +78,7 @@ export class OptionsPage {
         for (; i < 5; i++) {
           this.labels.push({ name: data[i].Name, wanted: true });
         }
-        for (; i < this.loadedLabels.length; i++) {
+        for (; i < data.length; i++) {
           this.unwantedLabels.push({ name: data[i].Name, wanted: true });
         }
         this.counter = 5;
