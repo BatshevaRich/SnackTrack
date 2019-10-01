@@ -6,7 +6,6 @@
   <title>SnackTrack</title>
 
   <base href="/" />
-  <script src="cordova.js"></script>
   <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="format-detection" content="telephone=no" />
   <meta name="msapplication-tap-highlight" content="no" />
@@ -19,6 +18,29 @@
 </head>
 
 <body>
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.0.0/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.0.0/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyChoQJnU3L4rVfQYEUp3tBhclNY_mQ9bV8",
+    authDomain: "dietdiary.firebaseapp.com",
+    databaseURL: "https://dietdiary.firebaseio.com",
+    projectId: "dietdiary",
+    storageBucket: "dietdiary.appspot.com",
+    messagingSenderId: "577220905399",
+    appId: "1:577220905399:web:27a67f7c9b5a525b02c032",
+    measurementId: "G-MJLDVK73E9"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
   <app-root></app-root>
 </body>
 
