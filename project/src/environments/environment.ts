@@ -3,7 +3,17 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  firebase: {
+    apiKey: 'AIzaSyChoQJnU3L4rVfQYEUp3tBhclNY_mQ9bV8',
+    authDomain: 'dietdiary.firebaseapp.com',
+    databaseURL: 'https://dietdiary.firebaseio.com',
+    projectId: 'dietdiary',
+    storageBucket: 'dietdiary.appspot.com',
+    messagingSenderId: '577220905399',
+    appId: '1:577220905399:web:27a67f7c9b5a525b02c032',
+    measurementId: 'G-MJLDVK73E9'
+  }
 };
 
 /*
