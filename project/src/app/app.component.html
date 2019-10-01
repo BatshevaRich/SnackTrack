@@ -7,7 +7,11 @@
                     <ion-img style="width:90px; height:40px;" src="https://storage.cloud.google.com/dietdiaryfoodpics/%D7%9C%D7%95%D7%92%D7%95%20%D7%9C%D7%90%D7%99%D7%9C%D7%94%20%D7%92%D7%9E%D7%95%D7%A8%D7%A8%D7%A8%D7%A8.png?authuser=0"></ion-img></ion-title>
                 </ion-col>
                 <ion-col  size="1" >
-                    
+                    <ion-buttons slot="start">
+                        <ion-button (click)="logout()">
+                          <ion-icon slot="icon-only" name="log-out"></ion-icon>
+                        </ion-button>
+                    </ion-buttons>
                 </ion-col>
               </ion-row>
       
