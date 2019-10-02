@@ -318,12 +318,6 @@
             Gets or sets JWT ID claim that provides a unique identifier for the JWT or <c>null</c>.
             </summary>
         </member>
-        <member name="P:Google.Apis.Auth.JsonWebToken.Payload.Nonce">
-            <summary>
-            The nonce value specified by the client during the authorization request.
-            Must be present if a nonce was specified in the authorization request, otherwise this will not be present.
-            </summary>
-        </member>
         <member name="P:Google.Apis.Auth.JsonWebToken.Payload.Type">
             <summary>
             Gets or sets type claim that is used to declare a type for the contents of this JWT Claims Set or 
@@ -689,11 +683,11 @@
             <summary>Gets the token revocation URL.</summary>
         </member>
         <member name="F:Google.Apis.Auth.OAuth2.Flows.GoogleAuthorizationCodeFlow.includeGrantedScopes">
-            <summary>Gets the include granted scopes indicator.
+            <summary>Gets or sets the include granted scopes indicator.
             Do not use, use <see cref="P:Google.Apis.Auth.OAuth2.Flows.GoogleAuthorizationCodeFlow.IncludeGrantedScopes"/> instead.</summary>
         </member>
         <member name="P:Google.Apis.Auth.OAuth2.Flows.GoogleAuthorizationCodeFlow.IncludeGrantedScopes">
-            <summary>Gets the include granted scopes indicator.</summary>
+            <summary>Gets or sets the include granted scopes indicator.</summary>
         </member>
         <member name="P:Google.Apis.Auth.OAuth2.Flows.GoogleAuthorizationCodeFlow.LoginHint">
             <summary>Gets the login_hint.</summary>
@@ -705,9 +699,6 @@
             See <a href="https://developers.google.com/identity/protocols/OpenIDConnect#prompt">OpenIDConnect documentation</a>
             for details.
             </summary>
-        </member>
-        <member name="P:Google.Apis.Auth.OAuth2.Flows.GoogleAuthorizationCodeFlow.Nonce">
-            <summary>Gets the nonce.</summary>
         </member>
         <member name="P:Google.Apis.Auth.OAuth2.Flows.GoogleAuthorizationCodeFlow.UserDefinedQueryParams">
             <summary>Gets the user defined query parameters.</summary>
@@ -750,9 +741,6 @@
             See <a href="https://developers.google.com/identity/protocols/OpenIDConnect#prompt">OpenIDConnect documentation</a>
             for details.
             </summary>
-        </member>
-        <member name="P:Google.Apis.Auth.OAuth2.Flows.GoogleAuthorizationCodeFlow.Initializer.Nonce">
-            <summary>Gets or sets the nonce.</summary>
         </member>
         <member name="P:Google.Apis.Auth.OAuth2.Flows.GoogleAuthorizationCodeFlow.Initializer.UserDefinedQueryParams">
             <summary>Gets or sets the optional user defined query parameters.</summary>
@@ -1316,19 +1304,13 @@
         <member name="F:Google.Apis.Auth.OAuth2.LocalServerCodeReceiver.CallbackUriTemplate127001">
             <summary>127.0.0.1 callback URI, expects a port parameter.</summary>
         </member>
-        <member name="F:Google.Apis.Auth.OAuth2.LocalServerCodeReceiver.DefaultClosePageResponse">
+        <member name="F:Google.Apis.Auth.OAuth2.LocalServerCodeReceiver.ClosePageResponse">
             <summary>Close HTML tag to return the browser so it will close itself.</summary>
         </member>
         <member name="M:Google.Apis.Auth.OAuth2.LocalServerCodeReceiver.#ctor">
             <summary>
             Create an instance of <see cref="T:Google.Apis.Auth.OAuth2.LocalServerCodeReceiver"/>.
             </summary>
-        </member>
-        <member name="M:Google.Apis.Auth.OAuth2.LocalServerCodeReceiver.#ctor(System.String)">
-            <summary>
-            Create an instance of <see cref="T:Google.Apis.Auth.OAuth2.LocalServerCodeReceiver"/>.
-            </summary>
-            <param name="closePageResponse">Custom close page response for this instance</param>
         </member>
         <member name="T:Google.Apis.Auth.OAuth2.LocalServerCodeReceiver.LimitedLocalhostHttpServer">
             <summary>
@@ -1361,23 +1343,6 @@
         </member>
         <member name="M:Google.Apis.Auth.OAuth2.PromptCodeReceiver.ReceiveCodeAsync(Google.Apis.Auth.OAuth2.Requests.AuthorizationCodeRequestUrl,System.Threading.CancellationToken)">
             <inheritdoc/>
-        </member>
-        <member name="T:Google.Apis.Auth.OAuth2.RequestExtensions">
-            <summary>
-            Extension methods for requests.
-            </summary>
-        </member>
-        <member name="M:Google.Apis.Auth.OAuth2.RequestExtensions.AddCredential``1(``0,Google.Apis.Auth.OAuth2.ICredential)">
-            <summary>
-            Add a credential that is used for this request only.
-            This will override a service-level credential (if there is one).
-            Do not call more than once per request instance, as each call incrementally adds the provided credential.
-            To perform identical requests but with distinct credentials, create a separate request instance for each credential.
-            </summary>
-            <typeparam name="T">The request type.</typeparam>
-            <param name="request">The request which requires a credential. Must not be null.</param>
-            <param name="credential">The credential to use for this request only. Must not be null.</param>
-            <returns></returns>
         </member>
         <member name="T:Google.Apis.Auth.OAuth2.Requests.AuthorizationCodeRequestUrl">
             <summary>
@@ -1513,13 +1478,6 @@
             authorizations granted to this user/application combination for other scopes.
             </summary>
             <remarks>Currently unsupported for installed apps.</remarks>
-        </member>
-        <member name="P:Google.Apis.Auth.OAuth2.Requests.GoogleAuthorizationCodeRequestUrl.Nonce">
-            <summary>
-            Gets or sets the nonce;
-            a random value generated by your app that enables replay protection.
-            See https://developers.google.com/identity/protocols/OpenIDConnect for more details.
-            </summary>
         </member>
         <member name="P:Google.Apis.Auth.OAuth2.Requests.GoogleAuthorizationCodeRequestUrl.UserDefinedQueryParams">
             <summary>

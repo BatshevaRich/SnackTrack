@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Cors;
-using System.Net.Http.Headers;
 namespace WebApi
 {
     public static class WebApiConfig

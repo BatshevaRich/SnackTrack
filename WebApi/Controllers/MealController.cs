@@ -36,6 +36,12 @@ namespace WebApi.Controllers
             return Manager.getMealsByLabel(label);
         }
 
+        [HttpGet]
+        public List<Meal> Get(string user, string name, string pass)
+        {
+            return Manager.getUserMeals(user, name, pass);
+        }
+
         /// <summary>
         /// function to add the picture to storage, and add labels + imagepath to db.
         /// calls function that deals with adding.
@@ -52,6 +58,9 @@ namespace WebApi.Controllers
             var path = HttpContext.Current.Request.Form["path"];
             var hour = HttpContext.Current.Request.Form["hour"];
             var labels = HttpContext.Current.Request.Form["labels"];
+            var user = HttpContext.Current.Request.Form["user"];
+            var name = HttpContext.Current.Request.Form["name"];
+            var mail = HttpContext.Current.Request.Form["pass"];
             foreach (var item in labels.Split(',').ToList())
             {
                 labelsFromFrontend.Add(item);
@@ -84,7 +93,7 @@ namespace WebApi.Controllers
             }
 
             Meal meal = new Meal() { DateOfPic = dd, Tags = labelsFromFrontend, Path = path };
-            Manager.addMeal(meal);
+            Manager.addMeal(meal,user,name, mail);
             return Ok();
         }
 

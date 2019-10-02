@@ -55,6 +55,14 @@ namespace WebApi.Controllers
                 Results.Add(new Label() { Name = concept.Name, Probability = concept.Value });
 
             }
+            for (int i = 0; i < Results.Count; i++)
+            {
+                // if it is List<String>
+                if (Results[i].Name=="bacon"|| Results[i].Name =="pork")
+                {
+                    Results.RemoveAt(i);
+                }
+            }
             return Results;
         }
 
