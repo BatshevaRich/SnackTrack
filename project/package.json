@@ -46,6 +46,7 @@
     "cordova-plugin-googleplus": "^8.1.1",
     "cordova-plugin-nativestorage": "^2.3.2",
     "cordova-sqlite-storage": "^3.3.0",
+    "cordova.plugin.googleplus": "^4.0.2",
     "cordova.plugins.diagnostic": "^5.0.0",
     "core-js": "^2.5.4",
     "date-fns": "^1.30.1",
