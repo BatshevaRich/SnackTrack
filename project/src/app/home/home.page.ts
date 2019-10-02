@@ -48,24 +48,12 @@ export interface mealLoaded {
 })
 export class HomePage implements OnInit {
   constructor(private camera: Camera,
-    private storage: Storage, private titleService: Title,
-    private router: Router,
-    private modal: NgbModal,
-    private mealS: mealService,
-    public autoCompleteLabelsService: AutoCompleteLabelsService,
-    public popoverCtrl: PopoverController) {
-      // this.storage.get('auth-token').then(res => {
-      //   const user = res as string;
-      //   debugger;
-      //   this.userName = user.substring(0, user.indexOf(','));
-      //   this.userPass = user.substring(user.indexOf(',') + 1, user.length);
-      //   console.log(res);
-      // });
-    this.loadLabelsFromAPI();
-    this.mealsFromServer = [];
-    this.didNotLoad = true;
-    // this.mealsFromServer = [];
-    //this.ionViewWillEnter();
+              private storage: Storage, private titleService: Title,
+              private router: Router,
+              private modal: NgbModal,
+              private mealS: mealService,
+              public autoCompleteLabelsService: AutoCompleteLabelsService,
+              public popoverCtrl: PopoverController) {
   }
   ionViewCanEnter() {
     console.log('can called');
@@ -93,7 +81,6 @@ export class HomePage implements OnInit {
   // ionViewWillEnter() {
   //   console.log('will');
   //   this.events = [];
-  //   this.loadLabelsFromAPI();
   //   this.refresh.next();
   //   this.storage.clear();
   //   this.refresh.next();
@@ -102,14 +89,16 @@ export class HomePage implements OnInit {
   ionViewDidEnter() {
     console.log('did');
     this.events = [];
-    this.loadLabelsFromAPI();
+    this.storage.get('auth-token').then(res => {
+      const user = res as string;
+      this.userName = user.substring(0, user.indexOf(','));
+      this.userPass = user.substring(user.indexOf(',') + 1, user.length);
+      console.log(res);
+      this.loadLabelsFromAPI();
+      this.mealsFromServer = [];
+      this.didNotLoad = true;
+    });
     this.refresh.next();
-    //this.storage.clear();
-    // this.refresh.next();
-    this.mealsFromServer = [];
-    this.didNotLoad = true;
-    // this.mealsFromServer = [];
-
   }
 
   public weekViewColumnHeader({ date, locale }: DateFormatterParams): string {
@@ -118,7 +107,7 @@ export class HomePage implements OnInit {
 
   ngOnInit() {
     this.events = [];
-    this.loadLabelsFromAPI();
+    
     this.refresh.next();
   }
   parseDate(value): Date {
@@ -157,7 +146,6 @@ export class HomePage implements OnInit {
       console.log('Camera issue:' + err);
     });
   }
-
   loadLabelsFromAPI() {
     this.mealS.GetAllMeals().subscribe(
       (res: mealLoaded[]) => {
