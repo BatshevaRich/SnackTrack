@@ -3,7 +3,7 @@ import { Component, ViewChild, Inject, LOCALE_ID } from '@angular/core';
 import { LoadingController, AlertController, NavController } from '@ionic/angular';
 import { ApiPictureService } from '../Providers/api-picture.service';
 import { Label } from '../../app/classes/Label';
-import { mealService } from '../providers/meal.service';
+import { MealService } from '../Providers/meal.service';
 import { filter } from 'rxjs/operators';
 import { Storage } from '@ionic/storage';
 import { Router, NavigationExtras, NavigationStart, NavigationEnd } from '@angular/router';
@@ -17,13 +17,13 @@ import { HomePage } from '../home/home.page';
 })
 export class OptionsPage {
   constructor(private camera: Camera, private storage: Storage,
-    private alertCtrl: AlertController,
-    @Inject(LOCALE_ID) private locale: string,
-    private navControl: NavController,
-    private router: Router,
-    public apPic: ApiPictureService,
-    public loadingController: LoadingController,
-    private mealProvider: mealService
+              private alertCtrl: AlertController,
+              @Inject(LOCALE_ID) private locale: string,
+              private navControl: NavController,
+              private router: Router,
+              public apPic: ApiPictureService,
+              public loadingController: LoadingController,
+              private mealS: MealService
   ) {
      this.storage.get('auth-token').then(res => {
         const user = res as string;
@@ -32,15 +32,15 @@ export class OptionsPage {
         this.userPass = user.substring(user.indexOf(',') + 1, user.length);
         console.log(res);
       });
-    this.myDate = new Date();
-    this.load = true;
-    this.loadLabelsFromAPI();
-    this.labels = new Array<{ name: string; wanted: boolean; }>();
-    this.unwantedLabels = new Array<{ name: string; wanted: boolean; }>();
-    this.labels = [];
-    this.showAll = false;
-    this.trues = 5;
-    this.counter = 5;
+     this.myDate = new Date();
+     this.load = true;
+     this.loadLabelsFromAPI();
+     this.labels = new Array<{ name: string; wanted: boolean; }>();
+     this.unwantedLabels = new Array<{ name: string; wanted: boolean; }>();
+     this.labels = [];
+     this.showAll = false;
+     this.trues = 5;
+     this.counter = 5;
     // this.base64Image = this.imageData;
 
   }
@@ -183,7 +183,7 @@ export class OptionsPage {
         this.currentImage = imageData;
         // 'data:image/jpeg;base64,'
        // alert(this.currentImage);
-       this.setValue('img','data:image/jpeg;base64,' +  this.currentImage);
+        this.setValue('img','data:image/jpeg;base64,' +  this.currentImage);
         // this.storage.set('img','data:image/jpeg;base64,' +  this.currentImage).then((response) => {
         //   this.router.navigate(['/options']);
         // }).catch((error) => {
@@ -198,7 +198,7 @@ export class OptionsPage {
   uploadData() {
     let stringedLabels: string[]; // var to keep chosen strings
     stringedLabels = this.labels.filter(l => l.name).map(l => l.name);
-    this.mealProvider.SaveToServer(
+    this.mealS.SaveToServer(
       this.user,
       this.userName,
       this.userPass,

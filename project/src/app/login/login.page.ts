@@ -14,7 +14,8 @@ import { SignupPage } from '../signup/signup.page';
 export class LoginPage implements OnInit {
   public loginForm: FormGroup;
   public loading: HTMLIonLoadingElement;
-  constructor(private authService: AuthenticationService, public loadingCtrl: LoadingController,
+  constructor(private authService: AuthenticationService,
+              public loadingCtrl: LoadingController,
               public alertCtrl: AlertController,
               private router: Router,
               private formBuilder: FormBuilder,

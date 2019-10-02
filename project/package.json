@@ -41,6 +41,7 @@
     "angularx-flatpickr": "^6.1.0",
     "calendar-utils": "0.0.59",
     "cordova-android": "^8.0.0",
+    "cordova-browser": "6.0.0",
     "cordova-ios": "5.0.1",
     "cordova-plugin-camera": "^4.1.0",
     "cordova-plugin-googleplus": "^8.1.1",

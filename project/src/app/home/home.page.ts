@@ -9,7 +9,7 @@ import { AutoCompleteLabelsService } from '../Providers/auto-complete-labels.ser
 import { Subject, Observable } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView, CalendarEvent } from 'angular-calendar';
-import { mealService } from '../Providers/meal.service';
+import { MealService } from '../Providers/meal.service';
 import { Router, NavigationExtras, NavigationEnd, NavigationStart } from '@angular/router';
 import { CalendarEventActionsComponent } from 'angular-calendar/modules/common/calendar-event-actions.component';
 import { PopoverController } from '@ionic/angular';
@@ -24,7 +24,7 @@ const colors: any = {
   blue: { primary: '#1e90ff', secondary: '#D1E8FF' },
   yellow: { primary: '#e3bc08', secondary: '#FDF1BA' }
 };
-export interface mealLoaded {
+export interface MealLoaded {
   Path: string;
   DateOfPic: string;
   Labels: string[];
@@ -46,7 +46,7 @@ export class HomePage implements OnInit {
   events: CalendarEvent[] = [];
   didNotLoad: boolean;
   activeDayIsOpen = false;
-  mealsFromServer: mealLoaded[];
+  mealsFromServer: MealLoaded[];
   searchText = '';
   imagesToLoad: string[] = [];
   labelsToLoad: string[] = [];
@@ -55,12 +55,12 @@ export class HomePage implements OnInit {
   navigationSubscription;
   userName: string;
   userPass: string;
-  events$: Observable<Array<CalendarEvent<mealLoaded>>>;
+  events$: Observable<Array<CalendarEvent<MealLoaded>>>;
   constructor(private camera: Camera,
               private storage: Storage, private titleService: Title,
               private router: Router,
               private modal: NgbModal,
-              private mealS: mealService,
+              private mealS: MealService,
               public autoCompleteLabelsService: AutoCompleteLabelsService,
               public popoverCtrl: PopoverController) { }
 
@@ -70,7 +70,7 @@ export class HomePage implements OnInit {
     this.loadLabelsFromAPI();
     // this.mealsFromServer = [];
     // this.didNotLoad = true;
-    // this.refresh.next();
+    this.refresh.next();
   }
 
   public weekViewColumnHeader({ date, locale }: DateFormatterParams): string {
@@ -113,8 +113,10 @@ export class HomePage implements OnInit {
     });
   }
   loadLabelsFromAPI() {
-    this.events$ = this.mealS.GetAllMeals().pipe(map((results: mealLoaded[]) => {
-      return results.map((res: mealLoaded) => {
+    // debugger;
+    this.events$ = this.mealS.GetAllMeals().pipe(map((results: MealLoaded[]) => {
+      return results.map((res: MealLoaded) => {
+        this.refresh.next();
         return {
           start: addHours(startOfDay(this.parseDate(res.DateOfPic)), 2),
           end: addHours(startOfDay(this.parseDate(res.DateOfPic)), 4),
@@ -122,7 +124,11 @@ export class HomePage implements OnInit {
         };
       });
     }));
-    this.refresh.next();
+    return this.mealS.GetAllMeals().subscribe((data:Response)=>{
+      
+      // debugger;
+      
+    });
     // this.mealS.GetAllMeals().subscribe(
     //   (res: mealLoaded[]) => {
     //     this.events = [];

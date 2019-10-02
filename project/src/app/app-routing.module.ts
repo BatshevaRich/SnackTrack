@@ -9,7 +9,8 @@ const routes: Routes = [
   { path: 'search', canActivate: [AuthGuard], loadChildren: './search/search.module#SearchPageModule' },
   { path: 'camera', canActivate: [AuthGuard], loadChildren: './camera/camera.module#CameraPageModule' },
   { path: 'login', loadChildren: './login/login.module#LoginPageModule' },
-  { path: 'register', loadChildren: './register/register.module#RegisterPageModule' },  { path: 'profile', loadChildren: './profile/profile.module#ProfilePageModule' },
+  { path: 'register', loadChildren: './register/register.module#RegisterPageModule' },
+  { path: 'profile', loadChildren: './profile/profile.module#ProfilePageModule' },
   { path: 'reset-password', loadChildren: './reset-password/reset-password.module#ResetPasswordPageModule' },
   { path: 'signup', loadChildren: './signup/signup.module#SignupPageModule' },
 
@@ -22,6 +23,4 @@ const routes: Routes = [
   ],
   exports: [RouterModule]
 })
-export class AppRoutingModule { 
-  
-}
+export class AppRoutingModule { }

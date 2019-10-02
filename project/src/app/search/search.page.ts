@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
-import { mealService } from '../Providers/meal.service';
+import { MealService } from '../Providers/meal.service';
 import { Meal } from '../classes/Meal';
 import { AutoCompleteLabelsService } from '../Providers/auto-complete-labels.service';
 import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
@@ -13,9 +13,11 @@ import { Storage } from '@ionic/storage';
 })
 export class SearchPage {
   constructor(private camera: Camera,
-    private storage: Storage, private route: ActivatedRoute, private router: Router, public mealS: mealService
-    , public autoCompleteLabelsService: AutoCompleteLabelsService) {
-
+              private storage: Storage,
+              private route: ActivatedRoute,
+              private router: Router,
+              public mealS: MealService,
+              public autoCompleteLabelsService: AutoCompleteLabelsService) {
     this.display = false;
     console.log(this.meals);
     this.route.queryParams.subscribe(params => {

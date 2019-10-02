@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PopoverController, NavParams, ModalController } from '@ionic/angular';
 import { Meal } from '../classes/Meal';
-import { mealService } from '../Providers/meal.service';
+import { MealService } from '../Providers/meal.service';
 import { from } from 'rxjs';
 import { ZoomImagePage } from '../Zoom-image/Zoom-image.page';
 @Component({
@@ -13,8 +13,10 @@ export class ViewDayMealPage implements OnInit {
 
   today: Date;
   mealsToday: Meal[];
-  constructor(public navParams: NavParams, public popoverCtrl: PopoverController,
-    public mealS: mealService, public modalCtrl: ModalController) {
+  constructor(public navParams: NavParams,
+              public popoverCtrl: PopoverController,
+              public mealS: MealService,
+              public modalCtrl: ModalController) {
     this.mealsToday = [];
   }
 

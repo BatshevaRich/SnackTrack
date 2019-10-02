@@ -17,7 +17,7 @@ import { FormsModule } from '@angular/forms';
 import { FlatpickrModule } from 'angularx-flatpickr';
 import { NgbModalModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ViewDayMealPageModule } from './view-day-meal/view-day-meal.module';
-import {IonicStorageModule} from '@ionic/storage';
+import { IonicStorageModule } from '@ionic/storage';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { ZoomImagePageModule } from './Zoom-image/Zoom-image.module';
 import { RegisterPageModule } from './register/register.module';
@@ -40,13 +40,27 @@ const firebaseConfig = {
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [ AngularFireModule.initializeApp(firebaseConfig), AngularFireAuthModule,
-    NgbModule, PipesModule,
-    BrowserModule, BrowserAnimationsModule, HttpClientModule, CommonModule, IonicModule.forRoot(),IonicStorageModule.forRoot(),
-    AppRoutingModule,ViewDayMealPageModule, RegisterPageModule,ZoomImagePageModule, LoginPageModule, SignupPageModule],
-  providers: [GooglePlus,
+  imports: [
+    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireAuthModule,
+    NgbModule,
+    PipesModule,
+    BrowserModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
+    CommonModule,
+    IonicModule.forRoot(),
+    IonicStorageModule.forRoot(),
+    AppRoutingModule,
+    ViewDayMealPageModule,
+    RegisterPageModule,
+    ZoomImagePageModule,
+    LoginPageModule,
+    SignupPageModule],
+  providers: [
+    GooglePlus,
     StatusBar,
-    SplashScreen, HttpClientModule, Camera,NativeStorage,
+    SplashScreen, HttpClientModule, Camera, NativeStorage,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

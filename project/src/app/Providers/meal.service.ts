@@ -3,13 +3,13 @@ import { Meal } from '../../app/classes/Meal';
 import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { map } from 'rxjs-compat/operator/map';
-import { mealLoaded } from '../home/home.page';
+import { MealLoaded } from '../home/home.page';
 import { Storage } from '@ionic/storage';
 import { debug } from 'util';
 @Injectable({
   providedIn: 'root'
 })
-export class mealService {
+export class MealService {
   constructor(private storage: Storage, public http: HttpClient) {
     this.storage.get('auth-token').then(res => {
       const user = res as string;
@@ -21,14 +21,15 @@ export class mealService {
     this.listAllMeal = [];
     this.http.get<Meal[]>(this.baseURL + 'meal').subscribe(meals => {
       this.listAllMeal = meals;
+      alert(this.listAllMeal);
     },
       err => { console.log(err); }
     );
   }
   // baseURL = 'http://ce6dc86e.ngrok.io/api/';
-  // baseURL = 'http://34.90.143.154/api/';
+  baseURL = 'http://34.90.143.154/api/';
   // baseURL = 'http://b40029a0.ngrok.io/api/';
-  baseURL = 'http://localhost:51786/api/';
+  // baseURL = 'http://localhost:51786/api/';
   listAllMeal: Meal[];
 
   userName: string;

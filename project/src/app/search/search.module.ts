@@ -17,7 +17,8 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    CommonModule,AutoCompleteModule,
+    CommonModule,
+    AutoCompleteModule,
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes)
