@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-
 import { Platform, PopoverController, NavController, AlertController, ActionSheetController} from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
@@ -9,10 +8,11 @@ import { Router } from '@angular/router';
 import { RegisterPage } from './register/register.page';
 // import { AngularFire, FirebaseListObservable } from 'angularfire2';
 import * as firebase from 'firebase/app';
-import { AngularFireAuth } from 'angularfire2/auth';
 import { Observable } from 'rxjs/Observable';
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
-import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { LoginPage } from './login/login.page';
+import { Storage } from '@ionic/storage';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -20,7 +20,9 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 })
 export class AppComponent {
   constructor(
-    public af: AngularFireAuth, public actionSheetCtrl: ActionSheetController,
+    private storage: Storage,
+    private afAuth: AngularFireAuth,
+    private gplus: GooglePlus, public actionSheetCtrl: ActionSheetController,
     private authenticationService: AuthenticationService,
     private platform: Platform,
     private splashScreen: SplashScreen,
@@ -36,32 +38,24 @@ export class AppComponent {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
-    });
-    
-
-
-    this.authenticationService.authenticationState.subscribe(state => {
-      if (state) {
-        this.router.navigate(['home']);
-        this.isLoggedIn = true;
-      } else {
-        this.router.navigate(['login']);
-      }
+      this.authenticationService.authenticationState.subscribe(state => {
+        if (state) {
+          this.router.navigate(['home']);
+          this.isLoggedIn = true;
+        } else {
+          this.router.navigate(['login']);
+          this.isLoggedIn = false;
+        }
+      });
     });
   }
-  logout() {
-    this.authenticationService.logout();
+  signOut(){
+    this.afAuth.auth.signOut();
+    this.storage.clear();
     this.isLoggedIn = false;
-  }
-  async presentPopover() {
-
-    const popover = await this.popoverCtrl.create({
-      component: RegisterPage,
-      componentProps: {
-      },
-    });
-    // popover.style.cssText = '--max-height:45%;--width:95%';
-    popover.present();
+    if(this.platform.is('cordova')){
+      this.gplus.logout();
+    }
   }
 
 }

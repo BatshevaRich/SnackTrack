@@ -24,8 +24,8 @@ export class RegisterPage implements OnInit {
 
   // On Register button tap, dismiss login modal and open register modal
 
-  login(form: NgForm) {
-    this.authService.signUp(form.value.email, form.value.password).then(data=>{
-      this.router.navigate(['home']);});
-  }
+  // login(form: NgForm) {
+  //   this.authService.signUp(form.value.email, form.value.password).then(data=>{
+  //     this.router.navigate(['home']);});
+  // }
 }

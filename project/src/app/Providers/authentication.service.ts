@@ -3,7 +3,9 @@ import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-
+import * as firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore';
 const TOKEN_KEY = 'auth-token';
 
 @Injectable({
@@ -20,6 +22,40 @@ export class AuthenticationService {
     });
   }
 
+  loginUser(email: string, password: string
+  ): Promise<firebase.auth.UserCredential> {
+    this.storage.set(TOKEN_KEY, email + ',' + password).then(data=>{this.authenticationState.next(true);});
+    return firebase.auth().signInWithEmailAndPassword(email, password);
+  }
+
+  signupUser(email: string, password: string): Promise<void> {
+    this.storage.set(TOKEN_KEY, email + ',' + password).then(() => {this.authenticationState.next(true); });
+    return firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then((newUserCredential: firebase.auth.UserCredential) => {
+        const formData = new FormData();
+        formData.append('name', email);
+        formData.append('pass', password);
+        this.http.post(this.baseURL + 'login/userlogin', formData);
+      })
+      .catch(error => {
+        console.error(error);
+        throw new Error(error);
+      });
+ 
+}
+
+  resetPassword(email:string): Promise<void> {
+    return firebase.auth().sendPasswordResetEmail(email);
+  }
+
+  logoutUser():Promise<void> {
+    this.storage.clear();
+    return firebase.auth().signOut();
+  }
+
+
   checkToken() {
     this.storage.get(TOKEN_KEY).then(res => {
       if (res) {
@@ -28,37 +64,7 @@ export class AuthenticationService {
     })
   }
 
-  login() {
-    this.checkToken();
-    // return this.storage.set(TOKEN_KEY, 'Bearer 1234567').then(() => {
-    //   debugger
-    //   this.authenticationState.next(true);
-    // });
-  }
-
-  logout() {
-    return this.storage.remove(TOKEN_KEY).then(() => {
-      this.authenticationState.next(false);
-    });
-  }
-
   isAuthenticated() {
     return this.authenticationState.value;
-  }
-
-  signUp(name: string, password: string){
-    //need to check local storage if user exists
-    const formData = new FormData();
-    formData.append('name', name);
-    formData.append('pass', password);
-    const res = this.http.post(this.baseURL + 'login/userlogin', formData);
-    return new Promise(resolve => {
-      res.subscribe(data => {
-        this.storage.set(TOKEN_KEY, name + ',' + password).then(() => {
-          this.authenticationState.next(true);
-        });
-        resolve(data);
-      });
-    });
   }
 }

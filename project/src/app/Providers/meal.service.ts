@@ -3,31 +3,39 @@ import { Meal } from '../../app/classes/Meal';
 import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { map } from 'rxjs-compat/operator/map';
-import {mealLoaded} from '../home/home.page';
+import { mealLoaded } from '../home/home.page';
 import { Storage } from '@ionic/storage';
+import { debug } from 'util';
 @Injectable({
   providedIn: 'root'
 })
 export class mealService {
   constructor(private storage: Storage, public http: HttpClient) {
+    this.storage.get('auth-token').then(res => {
+      const user = res as string;
+      this.user1 = user;
+      this.userName = user.substring(0, user.indexOf(','));
+      this.userPass = user.substring(user.indexOf(',') + 1, user.length);
+      console.log(res);
+    });
     this.listAllMeal = [];
     this.http.get<Meal[]>(this.baseURL + 'meal').subscribe(meals => {
-        this.listAllMeal = meals;
-      } ,
-      err => {console.log(err); }
-     );
+      this.listAllMeal = meals;
+    },
+      err => { console.log(err); }
+    );
   }
   // baseURL = 'http://ce6dc86e.ngrok.io/api/';
-  baseURL = 'http://34.90.143.154/api/';
+  // baseURL = 'http://34.90.143.154/api/';
   // baseURL = 'http://b40029a0.ngrok.io/api/';
-  // baseURL = 'http://localhost:51786/api/';
+  baseURL = 'http://localhost:51786/api/';
   listAllMeal: Meal[];
 
-  userName:string;
+  userName: string;
   userPass: string;
   user1: string;
 
-  public SaveToServer(user: string, name: string, pass: string,path: string, hour: Date, labels: string[]): any {
+  public SaveToServer(user: string, name: string, pass: string, path: string, hour: Date, labels: string[]): any {
     const formData = new FormData();
     formData.append('user', user);
     formData.append('name', name);
@@ -61,20 +69,15 @@ export class mealService {
       });
     });
   }
-  public GetAllMeals() {
-    const headers= new HttpHeaders({'Content-Type':'application/json'});
-    // let user1: string;
-    this.storage.get('auth-token').then(res => {
-      this.user1 = res as string;
-      this.userName = this.user1.substring(0, this.user1.indexOf(','));
-      this.userPass = this.user1.substring(this.user1.indexOf(',') + 1, this.user1.length);
-      console.log(res);
-    });
-    // debugger;
-    const params = new HttpParams().set('user',this.user1).set('name', this.userName).set('pass', this.userPass);
-    return this.http.get(this.baseURL + 'meal',{params});
-  }
 
+  public GetAllMeals() {
+    let params = new HttpParams();
+    params = params.append('user',this.user1);
+    params = params.append('name', this.userName);
+    params = params.append('pass', this.userPass);
+    return this.http.get(this.baseURL + 'meal/getall', { params });
+  }
+  
   getResults(): Observable<Meal[]> {
     let observable: Observable<Meal[]>;
     if (this.listAllMeal.length === 0) {

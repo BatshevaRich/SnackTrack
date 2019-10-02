@@ -24,6 +24,9 @@ import { RegisterPageModule } from './register/register.module';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
+import { LoginPage } from './login/login.page';
+import { LoginPageModule } from './login/login.module';
+import { SignupPageModule } from './signup/signup.module';
 const firebaseConfig = {
   apiKey: 'AIzaSyChoQJnU3L4rVfQYEUp3tBhclNY_mQ9bV8',
   authDomain: 'dietdiary.firebaseapp.com',
@@ -40,7 +43,7 @@ const firebaseConfig = {
   imports: [ AngularFireModule.initializeApp(firebaseConfig), AngularFireAuthModule,
     NgbModule, PipesModule,
     BrowserModule, BrowserAnimationsModule, HttpClientModule, CommonModule, IonicModule.forRoot(),IonicStorageModule.forRoot(),
-    AppRoutingModule,ViewDayMealPageModule, RegisterPageModule,ZoomImagePageModule],
+    AppRoutingModule,ViewDayMealPageModule, RegisterPageModule,ZoomImagePageModule, LoginPageModule, SignupPageModule],
   providers: [GooglePlus,
     StatusBar,
     SplashScreen, HttpClientModule, Camera,NativeStorage,

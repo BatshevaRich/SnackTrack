@@ -27,7 +27,6 @@ export class OptionsPage {
   ) {
      this.storage.get('auth-token').then(res => {
         const user = res as string;
-        // debugger;
         this.user = user;
         this.userName = user.substring(0, user.indexOf(','));
         this.userPass = user.substring(user.indexOf(',') + 1, user.length);
