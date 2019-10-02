@@ -76,7 +76,7 @@ export class SearchPage {
       sourceType: 1
     };
     this.camera.getPicture(options).then((imageData) => {
-      this.storage.clear();
+      //this.storage.clear();
       this.currentImage = imageData;
       this.storage.set('img', 'data:image/jpeg;base64,' + this.currentImage).then((response) => {
         this.router.navigate(['/options']);
@@ -98,7 +98,7 @@ export class SearchPage {
   sendImage3($event): void {
     const file: File = $event.target.files[0];
     const reader = new FileReader();
-    this.storage.clear();
+    //this.storage.clear();
     reader.onload = (event: any) => {
       this.setValue('img', event.target.result);
       this.router.navigate(['/options']);

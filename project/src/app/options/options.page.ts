@@ -25,6 +25,14 @@ export class OptionsPage {
     public loadingController: LoadingController,
     private mealProvider: mealService
   ) {
+     this.storage.get('auth-token').then(res => {
+        const user = res as string;
+        debugger;
+        this.user = user;
+        this.userName = user.substring(0, user.indexOf(','));
+        this.userPass = user.substring(user.indexOf(',') + 1, user.length);
+        console.log(res);
+      });
     this.myDate = new Date();
     this.load = true;
     this.loadLabelsFromAPI();
@@ -37,6 +45,9 @@ export class OptionsPage {
     // this.base64Image = this.imageData;
 
   }
+  user: string;
+  userName: string;
+  userPass: string;
   myDate: Date = new Date();
   @ViewChild('box', null) userInput;
   @ViewChild('datet', null) dateChange;
@@ -72,7 +83,7 @@ export class OptionsPage {
       this.currentImage = val;
       this.imageData = val;
       this.base64Image = val;
-      this.storage.clear();
+      //this.storage.clear();
       this.apPic.InsertImages(val).subscribe((data: Label[]) => {
         let i = 0;
         for (; i < 5; i++) {
@@ -149,7 +160,7 @@ export class OptionsPage {
   sendImage2($event): void {
     const file: File = $event.target.files[0];
     const reader = new FileReader();
-    this.storage.clear();
+    //this.storage.clear();
     reader.onload = (event: any) => {
       this.setValue('img', event.target.result);
       this.router.navigate(['/options']);
@@ -169,7 +180,7 @@ export class OptionsPage {
       sourceType: 1
     };
     this.camera.getPicture(options).then((imageData) => {
-      this.storage.clear().then((response)=>{
+      //this.storage.clear().then((response)=>{
         this.currentImage = imageData;
         // 'data:image/jpeg;base64,'
        // alert(this.currentImage);
@@ -179,9 +190,9 @@ export class OptionsPage {
         // }).catch((error) => {
         //   console.log('set error for ' + this.currentImage + ' ', error);
         // });
-      }, (err) => {
-        console.log('Camera issue:' + err);
-      });
+      //}, (err) => {
+       // console.log('Camera issue:' + err);
+      //});
       });
   }
 
@@ -189,6 +200,9 @@ export class OptionsPage {
     let stringedLabels: string[]; // var to keep chosen strings
     stringedLabels = this.labels.filter(l => l.name).map(l => l.name);
     this.mealProvider.SaveToServer(
+      this.user,
+      this.userName,
+      this.userPass,
       this.base64Image, // path
       this.dateChange.value,
       stringedLabels // labels

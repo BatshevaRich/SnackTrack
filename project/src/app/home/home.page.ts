@@ -48,19 +48,26 @@ export interface mealLoaded {
 })
 export class HomePage implements OnInit {
   constructor(private camera: Camera,
-              private storage: Storage, private titleService: Title,
-              private router: Router,
-              private modal: NgbModal,
-              private mealS: mealService,
-              public autoCompleteLabelsService: AutoCompleteLabelsService,
-              public popoverCtrl: PopoverController) {
+    private storage: Storage, private titleService: Title,
+    private router: Router,
+    private modal: NgbModal,
+    private mealS: mealService,
+    public autoCompleteLabelsService: AutoCompleteLabelsService,
+    public popoverCtrl: PopoverController) {
+      // this.storage.get('auth-token').then(res => {
+      //   const user = res as string;
+      //   debugger;
+      //   this.userName = user.substring(0, user.indexOf(','));
+      //   this.userPass = user.substring(user.indexOf(',') + 1, user.length);
+      //   console.log(res);
+      // });
     this.loadLabelsFromAPI();
     this.mealsFromServer = [];
     this.didNotLoad = true;
     // this.mealsFromServer = [];
     //this.ionViewWillEnter();
   }
-  ionViewCanEnter(){
+  ionViewCanEnter() {
     console.log('can called');
   }
   @ViewChild('box', null) userInput;
@@ -81,6 +88,8 @@ export class HomePage implements OnInit {
   dateToLoad: string;
   currentImage: any;
   navigationSubscription;
+  userName: string;
+  userPass: string;
   // ionViewWillEnter() {
   //   console.log('will');
   //   this.events = [];
@@ -88,19 +97,19 @@ export class HomePage implements OnInit {
   //   this.refresh.next();
   //   this.storage.clear();
   //   this.refresh.next();
-    
+
   // }
   ionViewDidEnter() {
     console.log('did');
     this.events = [];
     this.loadLabelsFromAPI();
     this.refresh.next();
-    this.storage.clear();
+    //this.storage.clear();
     // this.refresh.next();
     this.mealsFromServer = [];
     this.didNotLoad = true;
     // this.mealsFromServer = [];
-    
+
   }
 
   public weekViewColumnHeader({ date, locale }: DateFormatterParams): string {
@@ -139,7 +148,7 @@ export class HomePage implements OnInit {
     };
     this.camera.getPicture(options).then((imageData) => {
       this.currentImage = imageData;
-      this.storage.set('img', 'data:image/jpeg;base64,'+ this.currentImage).then((response) => {
+      this.storage.set('img', 'data:image/jpeg;base64,' + this.currentImage).then((response) => {
         this.router.navigate(['/options']);
       }).catch((error) => {
         console.log('set error for ' + this.currentImage + ' ', error);
@@ -216,7 +225,7 @@ export class HomePage implements OnInit {
   sendImage($event): void {
     const file: File = $event.target.files[0];
     const reader = new FileReader();
-    this.storage.clear();
+    //this.storage.clear();
     reader.onload = (event: any) => {
       this.setValue('img', event.target.result);
       this.router.navigate(['/options']);
