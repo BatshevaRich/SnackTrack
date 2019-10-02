@@ -51,6 +51,71 @@ namespace dal
                 cmd.ExecuteNonQuery();
             }
         }
+
+        public static List<Meal> getUserMeals(string user, string name, string pass)
+        {
+            List<Meal> listMeals = new List<Meal>();
+            using (var connection = new MySqlConnection(csb.ConnectionString))
+            {
+                connection.Open();
+                MySqlCommand cmd = connection.CreateCommand();
+                var id = UserExists(name, pass);
+                cmd.CommandText = "SELECT * from meals where user = @user";
+                cmd.Parameters.Add("@user", MySqlDbType.String).Value = user;
+                MySqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    CultureInfo provider = CultureInfo.InvariantCulture;
+                    Meal meal = new Meal
+                    {
+                        Path = reader["path"].ToString(),
+                        Tags = reader["tags"].ToString().Split(',').ToList()
+                    };
+                    IFormatProvider culture = new CultureInfo("en-US", true);
+                    meal.DateOfPic = DateTime.ParseExact(reader["dateTime"].ToString(), "dd/MM/yyyy HH:mm:ss", culture);
+                    listMeals.Add(meal);
+                }
+            }
+            return listMeals;
+        }
+
+        public static void addMeal(Meal newMeal,string user, string name, string pass)
+        {
+            using (var connection = new MySqlConnection(csb.ConnectionString))
+            {
+                connection.Open();
+                MySqlCommand cmd = connection.CreateCommand();
+                cmd.CommandText = "INSERT INTO meals(dateTime, path, tags, user) VALUES(@date, @path, @tag, @user)";
+                cmd.Parameters.Add("@date", MySqlDbType.String).Value = newMeal.DateOfPic.ToString("dd/MM/yyyy HH:mm:ss");
+                //string x = UploadFileToStorage(name, "dietdiaryfoodpics", newMeal.Path, newMeal.DateOfPic, null);
+                try
+                {
+                cmd.Parameters.Add("@path", MySqlDbType.String).Value = UploadFileToStorage(user, "dietdiaryfoodpics", newMeal.Path, newMeal.DateOfPic);
+
+                }
+                catch (Exception e)
+                {
+
+                    throw e;
+                }
+                
+                cmd.Parameters.Add("@user", MySqlDbType.String).Value = user;
+                string tags = "";
+                foreach (var item in newMeal.Tags)
+                {
+                    if (tags.Equals(""))
+                    {
+                        tags += item;
+                    }
+                    else
+                    {
+                        tags += "," + item;
+                    }
+                }
+                cmd.Parameters.Add("@tag", MySqlDbType.String).Value = tags;
+                cmd.ExecuteNonQuery();
+            }
+        }
         /// <summary>
         /// func to return list of all meals. called by mealcontroller
         /// </summary>
@@ -67,9 +132,11 @@ namespace dal
                 while (reader.Read())
                 {
                     CultureInfo provider = CultureInfo.InvariantCulture;
-                    Meal meal = new Meal();
-                    meal.Path = reader["path"].ToString();
-                    meal.Tags = reader["tags"].ToString().Split(',').ToList();
+                    Meal meal = new Meal
+                    {
+                        Path = reader["path"].ToString(),
+                        Tags = reader["tags"].ToString().Split(',').ToList()
+                    };
                     IFormatProvider culture = new CultureInfo("en-US", true);
                     meal.DateOfPic = DateTime.ParseExact(reader["dateTime"].ToString(), "dd/MM/yyyy HH:mm:ss", culture);
                     listMeals.Add(meal);
@@ -92,9 +159,11 @@ namespace dal
                 while (reader.Read())
                 {
                     CultureInfo provider = CultureInfo.InvariantCulture;
-                    Meal meal = new Meal();
-                    meal.Path = reader["path"].ToString();
-                    meal.Tags = reader["tags"].ToString().Split(',').ToList();
+                    Meal meal = new Meal
+                    {
+                        Path = reader["path"].ToString(),
+                        Tags = reader["tags"].ToString().Split(',').ToList()
+                    };
                     var x = reader["dateTime"];
                     IFormatProvider culture = new CultureInfo("en-US", true);
                     meal.DateOfPic = DateTime.ParseExact(reader["dateTime"].ToString(), "dd/MM/yyyy HH:mm:ss", culture);
@@ -120,9 +189,11 @@ namespace dal
                 while (reader.Read())
                 {
                     CultureInfo provider = CultureInfo.InvariantCulture;
-                    Meal meal = new Meal();
-                    meal.Path = reader["path"].ToString();
-                    meal.Tags = reader["tags"].ToString().Split(',').ToList();
+                    Meal meal = new Meal
+                    {
+                        Path = reader["path"].ToString(),
+                        Tags = reader["tags"].ToString().Split(',').ToList()
+                    };
                     IFormatProvider culture = new CultureInfo("en-US", true);
                     meal.DateOfPic = DateTime.ParseExact(reader["dateTime"].ToString(), "dd/MM/yyyy HH:mm:ss", culture);
                     meals.Add(meal);
@@ -143,9 +214,11 @@ namespace dal
                 while (reader.Read())
                 {
                     CultureInfo provider = CultureInfo.InvariantCulture;
-                    Meal meal = new Meal();
-                    meal.Path = reader["path"].ToString();
-                    meal.Tags = reader["tags"].ToString().Split(',').ToList();
+                    Meal meal = new Meal
+                    {
+                        Path = reader["path"].ToString(),
+                        Tags = reader["tags"].ToString().Split(',').ToList()
+                    };
                     IFormatProvider culture = new CultureInfo("en-US", true);
                     meal.DateOfPic = DateTime.ParseExact(reader["dateTime"].ToString(), "dd/MM/yyyy HH:mm:ss", culture);
                     meals.Add(meal);
@@ -220,5 +293,88 @@ namespace dal
             }
             return "https://storage.googleapis.com/" + bucketName + "/" + objectName;
         }
+
+
+        public static string UploadFileToStorage(string user, string bucketName, string imageString, DateTime DateOfPic, string objectName = null)
+        {
+            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "C:\\key\\DietDiary-f95b600d05ed.json");
+            StorageClient storage = null;
+            try
+            {
+                storage = StorageClient.Create();
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+
+            var base64Data = Regex.Match(imageString, @"data:image/(?<type>.+?),(?<data>.+)").Groups["data"].Value;
+            var binData = Convert.FromBase64String(base64Data);
+            BinaryWriter Writer = null;
+            string Name = Path.Combine("C:\\key", "pic.jpg");
+            try
+            {
+                // Create a new stream to write to the file
+                Writer = new BinaryWriter(File.OpenWrite(Name));
+                // Writer raw data                
+                Writer.Write(binData);
+                Writer.Flush();
+                Writer.Close();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            using (var f = File.OpenRead(Name))
+            {
+                objectName =Path.Combine(user + "/", DateOfPic.ToString(@"dd\-MM\-yyyy-h\:mm") + ".jpg");
+                var x = storage.UploadObject(bucketName, objectName, null, f);
+                Console.WriteLine($"Uploaded {objectName}.");
+            }
+            return "https://storage.googleapis.com/" + bucketName + "/" + objectName;
+        }
+        public static int UserExists(string name, string pass)
+        {
+            using (var connection = new MySqlConnection(csb.ConnectionString))
+            {
+                connection.Open();
+                MySqlCommand cmd = connection.CreateCommand();
+                cmd.CommandText = "select * from users where name = @name and pass= @pass";
+                cmd.Parameters.Add("@name", MySqlDbType.String).Value = name;
+                cmd.Parameters.Add("@pass", MySqlDbType.String).Value = pass;
+                MySqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    return int.Parse(reader["id"].ToString());
+
+                }
+            }
+            return 0;
+            }
+
+        public static void AddUser(string name, string pass)
+        {
+            using (var connection = new MySqlConnection(csb.ConnectionString))
+            {
+                connection.Open();
+                MySqlCommand cmd = connection.CreateCommand();
+                cmd.CommandText = "INSERT INTO users(name, pass) VALUES(@name, @pass)";
+                cmd.Parameters.Add("@name", MySqlDbType.String).Value = name;
+                cmd.Parameters.Add("@pass", MySqlDbType.String).Value = pass;
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public static void Users(string name, string pass)
+        {
+            //string email = "";
+            int idUser = UserExists(name, pass);
+            if (idUser == 0)
+            {
+                AddUser(name, pass);
+            }
+        }
+
     }
 }

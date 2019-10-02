@@ -1,464 +1,438 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <doc>
-    <assembly>
-        <name>System.Diagnostics.DiagnosticSource</name>
-    </assembly>
-    <members>
-        <member name="T:System.Diagnostics.DiagnosticSource">
-            <summary>
-            This is the basic API to 'hook' parts of the framework.   It is like an EventSource
-            (which can also write object), but is intended to log complex objects that can't be serialized.
-            
-            Please See the DiagnosticSource Users Guide 
-            https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.DiagnosticSource/src/DiagnosticSourceUsersGuide.md
-            for instructions on its use.  
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticSource.Write(System.String,System.Object)">
-            <summary>
-            Write is a generic way of logging complex payloads.  Each notification
-            is given a name, which identifies it as well as a object (typically an anonymous type)
-            that gives the information to pass to the notification, which is arbitrary.  
-            
-            The name should be short (so don't use fully qualified names unless you have to
-            to avoid ambiguity), but you want the name to be globally unique.  Typically your componentName.eventName
-            where componentName and eventName are strings less than 10 characters are a good compromise.  
-            notification names should NOT have '.' in them because component names have dots and for them both
-            to have dots would lead to ambiguity.   The suggestion is to use _ instead.  It is assumed 
-            that listeners will use string prefixing to filter groups, thus having hierarchy in component 
-            names is good.  
-            </summary>
-            <param name="name">The name of the event being written.</param>
-            <param name="value">An object that represent the value being passed as a payload for the event.
-            This is often a anonymous type which contains several sub-values.</param>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticSource.IsEnabled(System.String)">
-            <summary>
-            Optional: if there is expensive setup for the notification, you can call IsEnabled
-            before doing this setup.   Consumers should not be assuming that they only get notifications
-            for which IsEnabled is true however, it is optional for producers to call this API. 
-            The name should be the same as what is passed to Write.   
-            </summary>
-            <param name="name">The name of the event being written.</param>
-        </member>
-        <member name="T:System.Diagnostics.DiagnosticListener">
-            <summary>
-            A DiagnosticListener is something that forwards on events written with DiagnosticSource.
-            It is an IObservable (has Subscribe method), and it also has a Subscribe overload that
-            lets you specify a 'IsEnabled' predicate that users of DiagnosticSource will use for 
-            'quick checks'.   
-            
-            The item in the stream is a KeyValuePair[string, object] where the string is the name
-            of the diagnostic item and the object is the payload (typically an anonymous type).  
-            
-            There may be many DiagnosticListeners in the system, but we encourage the use of
-            The DiagnosticSource.DefaultSource which goes to the DiagnosticListener.DefaultListener.
-            
-            If you need to see 'everything' you can subscribe to the 'AllListeners' event that
-            will fire for every live DiagnosticListener in the appdomain (past or present). 
-            
-            Please See the DiagnosticSource Users Guide 
-            https://github.com/dotnet/corefx/blob/master/src/System.Diagnostics.DiagnosticSource/src/DiagnosticSourceUsersGuide.md
-            for instructions on its use.  
-            </summary>
-        </member>
-        <member name="P:System.Diagnostics.DiagnosticListener.AllListeners">
-            <summary>
-            When you subscribe to this you get callbacks for all NotificationListeners in the appdomain
-            as well as those that occurred in the past, and all future Listeners created in the future. 
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticListener.Subscribe(System.IObserver{System.Collections.Generic.KeyValuePair{System.String,System.Object}},System.Predicate{System.String})">
-            <summary>
-            Add a subscriber (Observer).  If 'IsEnabled' == null (or not present), then the Source's IsEnabled 
-            will always return true.  
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticListener.Subscribe(System.IObserver{System.Collections.Generic.KeyValuePair{System.String,System.Object}})">
-            <summary>
-            Same as other Subscribe overload where the predicate is assumed to always return true.  
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticListener.#ctor(System.String)">
-            <summary>
-            Make a new DiagnosticListener, it is a NotificationSource, which means the returned result can be used to 
-            log notifications, but it also has a Subscribe method so notifications can be forwarded
-            arbitrarily.  Thus its job is to forward things from the producer to all the listeners
-            (multi-casting).    Generally you should not be making your own DiagnosticListener but use the
-            DiagnosticListener.Default, so that notifications are as 'public' as possible.  
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticListener.Dispose">
-            <summary>
-            Clean up the NotificationListeners.   Notification listeners do NOT DIE ON THEIR OWN
-            because they are in a global list (for discoverability).  You must dispose them explicitly. 
-            Note that we do not do the Dispose(bool) pattern because we frankly don't want to support
-            subclasses that have non-managed state.   
-            </summary>
-        </member>
-        <member name="P:System.Diagnostics.DiagnosticListener.Name">
-            <summary>
-            When a DiagnosticListener is created it is given a name.   Return this.  
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticListener.ToString">
-            <summary>
-            Return the name for the ToString() to aid in debugging.  
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticListener.IsEnabled(System.String)">
-            <summary>
-            Override abstract method
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticListener.Write(System.String,System.Object)">
-            <summary>
-            Override abstract method
-            </summary>
-        </member>
-        <member name="T:System.Diagnostics.DiagnosticListener.AllListenerObservable">
-            <summary>
-            Logically AllListenerObservable has a very simple task.  It has a linked list of subscribers that want
-            a callback when a new listener gets created.   When a new DiagnosticListener gets created it should call 
-            OnNewDiagnosticListener so that AllListenerObservable can forward it on to all the subscribers.   
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticListener.AllListenerObservable.OnNewDiagnosticListener(System.Diagnostics.DiagnosticListener)">
-            <summary>
-            Called when a new DiagnosticListener gets created to tell anyone who subscribed that this happened.  
-            </summary>
-            <param name="diagnosticListener"></param>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticListener.AllListenerObservable.Remove(System.Diagnostics.DiagnosticListener.AllListenerObservable.AllListenerSubscription)">
-            <summary>
-            Remove 'subscription from the list of subscriptions that the observable has.   Called when
-            subscriptions are disposed.   Returns true if the subscription was removed.  
-            </summary>
-        </member>
-        <member name="T:System.Diagnostics.DiagnosticListener.AllListenerObservable.AllListenerSubscription">
-            <summary>
-            One node in the linked list of subscriptions that AllListenerObservable keeps.   It is
-            IDisposable, and when that is called it removes itself from the list.  
-            </summary>
-        </member>
-        <member name="T:System.Diagnostics.DiagnosticSourceEventSource">
-            <summary>
-            DiagnosticSourceEventSource serves two purposes 
-            
-              1) It allows debuggers to inject code via Function evaluation.  This is the purpose of the
-              BreakPointWithDebuggerFuncEval function in the 'OnEventCommand' method.   Basically even in
-              release code, debuggers can place a breakpoint in this method and then trigger the
-              DiagnosticSourceEventSource via ETW.  Thus from outside the process you can get a hook that
-              is guaranteed to happen BEFORE any DiangosticSource events (if the process is just starting)
-              or as soon as possible afterward if it is on attach.
-              
-              2) It provides a 'bridge' that allows DiagnosticSource messages to be forwarded to EventListers
-              or ETW.    You can do this by enabling the Microsoft-Diagnostics-DiagnosticSource with the
-              'Events' keyword (for diagnostics purposes, you should also turn on the 'Messages' keyword.  
-              
-              This EventSource defines a EventSource argument called 'FilterAndPayloadSpecs' that defines
-              what DiagnsoticSources to enable and what parts of the payload to serialize into the key-value
-              list that will be forwarded to the EventSource.    If it is empty, all serializable parts of
-              every DiagnosticSource event will be forwarded (this is NOT recommended for monitoring but 
-              can be useful for discovery).
-              
-              The FilterAndPayloadSpecs is one long string with the following structures
-              
-              * It is a newline separated list of FILTER_AND_PAYLOAD_SPEC
-              * a FILTER_AND_PAYLOAD_SPEC can be 
-                  * EVENT_NAME : TRANSFORM_SPECS
-                  * EMPTY - turns on all sources with implicit payload elements. 
-              * an EVENTNAME can be  
-                  * DIAGNOSTIC_SOURCE_NAME / DIAGNOSTC_EVENT_NAME @ EVENT_SOURCE_EVENTNAME  - give the name as well as the EventSource event to log it under.  
-                  * DIAGNOSTIC_SOURCE_NAME / DIAGNOSTC_EVENT_NAME   
-                  * DIAGNOSTIC_SOURCE_NAME    - which wildcards every event in the Diagnostic source or 
-                  * EMPTY                     - which turns on all sources
-              * TRANSFORM_SPEC is a semicolon separated list of TRANSFORM_SPEC, which can be 
-                  * - TRANSFORM_SPEC               - the '-' indicates that implicit payload elements should be suppressed 
-                  * VARIABLE_NAME = PROPERTY_SPEC  - indicates that a payload element 'VARIABLE_NAME' is created from PROPERTY_SPEC
-                  * PROPERTY_SPEC                  - This is a shortcut where VARIABLE_NAME is the LAST property name
-              * a PROPERTY_SPEC is basically a list of names separated by '.'  
-                  * PROPERTY_NAME                  - fetches a property from the DiagnosticSource payload object
-                  * PROPERTY_NAME . PROPERTY NAME  - fetches a sub-property of the object. 
-            
-            Example1:
-            
-               "BridgeTestSource1/TestEvent1:cls_Point_X=cls.Point.X;cls_Point_Y=cls.Point.Y\r\n" + 
-               "BridgeTestSource2/TestEvent2:-cls.Url"
-              
-            This indicates that two events should be turned on, The 'TestEvent1' event in BridgeTestSource1 and the
-            'TestEvent2' in BridgeTestSource2.   In the first case, because the transform did not begin with a - 
-            any primitive type/string of 'TestEvent1's payload will be serialized into the output.  In addition if
-            there a property of the payload object called 'cls' which in turn has a property 'Point' which in turn
-            has a property 'X' then that data is also put in the output with the name cls_Point_X.   Similarly 
-            if cls.Point.Y exists, then that value will also be put in the output with the name cls_Point_Y.
-            
-            For the 'BridgeTestSource2/TestEvent2' event, because the - was specified NO implicit fields will be 
-            generated, but if there is a property call 'cls' which has a property 'Url' then that will be placed in
-            the output with the name 'Url' (since that was the last property name used and no Variable= clause was 
-            specified. 
-            
-            Example:
-            
-                "BridgeTestSource1\r\n" + 
-                "BridgeTestSource2"
-                
-            This will enable all events for the BridgeTestSource1 and BridgeTestSource2 sources.   Any string/primitive 
-            properties of any of the events will be serialized into the output.  
-            
-            Example:
-            
-                ""
-                
-            This turns on all DiagnosticSources Any string/primitive properties of any of the events will be serialized 
-            into the output.   This is not likely to be a good idea as it will be very verbose, but is useful to quickly
-            discover what is available.
-            
-            
-            * How data is logged in the EventSource 
-            
-            By default all data from Diagnostic sources is logged to the the DiagnosticEventSouce event called 'Event' 
-            which has three fields  
-            
-                string SourceName, 
-                string EventName, 
-                IEnumerable[KeyValuePair[string, string]] Argument
-            
-            However to support start-stop activity tracking, there are six other events that can be used 
-            
-                Activity1Start         
-                Activity1Stop
-                Activity2Start
-                Activity2Stop
-                RecursiveActivity1Start
-                RecursiveActivity1Stop
-                
-            By using the SourceName/EventName@EventSourceName syntax, you can force particular DiagnosticSource events to
-            be logged with one of these EventSource events.   This is useful because the events above have start-stop semantics
-            which means that they create activity IDs that are attached to all logging messages between the start and
-            the stop (see https://blogs.msdn.microsoft.com/vancem/2015/09/14/exploring-eventsource-activity-correlation-and-causation-features/)
-            
-            For example the specification 
-                
-                "MyDiagnosticSource/RequestStart@Activity1Start\r\n" + 
-                "MyDiagnosticSource/RequestStop@Activity1Stop\r\n" + 
-                "MyDiagnosticSource/SecurityStart@Activity2Start\r\n" + 
-                "MyDiagnosticSource/SecurityStop@Activity2Stop\r\n" 
-            
-            Defines that RequestStart will be logged with the EventSource Event Activity1Start (and the cooresponding stop) which
-            means that all events caused between these two markers will have an activity ID assocatied with this start event.  
-            Simmilarly SecurityStart is mapped to Activity2Start.    
-            
-            Note you can map many DiangosticSource events to the same EventSource Event (e.g. Activity1Start).  As long as the
-            activities don't nest, you can reuse the same event name (since the payloads have the DiagnosticSource name which can
-            disambiguate).   However if they nest you need to use another EventSource event because the rules of EventSource 
-            activities state that a start of the same event terminates any existing activity of the same name.   
-            
-            As its name suggests RecursiveActivity1Start, is marked as recursive and thus can be used when the activity can nest with 
-            itself.   This should not be a 'top most' activity because it is not 'self healing' (if you miss a stop, then the
-            activity NEVER ends).   
-            
-            See the DiagnosticSourceEventSourceBridgeTest.cs for more explicit examples of using this bridge.  
-            </summary>
-        </member>
-        <member name="F:System.Diagnostics.DiagnosticSourceEventSource.Keywords.Messages">
-            <summary>
-            Indicates diagnostics messages from DiagnosticSourceEventSource should be included. 
-            </summary>
-        </member>
-        <member name="F:System.Diagnostics.DiagnosticSourceEventSource.Keywords.Events">
-            <summary>
-            Indicates that all events from all diagnostic sources should be forwarded to the EventSource using the 'Event' event.  
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticSourceEventSource.Message(System.String)">
-            <summary>
-            Used to send ad-hoc diagnostics to humans.   
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticSourceEventSource.Event(System.String,System.String,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
-            <summary>
-            Events from DiagnosticSource can be forwarded to EventSource using this event.  
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticSourceEventSource.EventJson(System.String,System.String,System.String)">
-            <summary>
-            This is only used on V4.5 systems that don't have the ability to log KeyValuePairs directly.
-            It will eventually go away, but we should always reserve the ID for this.    
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticSourceEventSource.Activity1Start(System.String,System.String,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
-            <summary>
-            Used to mark the beginning of an activity 
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticSourceEventSource.Activity1Stop(System.String,System.String,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
-            <summary>
-            Used to mark the end of an activity 
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticSourceEventSource.Activity2Start(System.String,System.String,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
-            <summary>
-            Used to mark the beginning of an activity 
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticSourceEventSource.Activity2Stop(System.String,System.String,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
-            <summary>
-            Used to mark the end of an activity that can be recursive.  
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticSourceEventSource.RecursiveActivity1Start(System.String,System.String,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
-            <summary>
-            Used to mark the beginning of an activity 
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticSourceEventSource.RecursiveActivity1Stop(System.String,System.String,System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
-            <summary>
-            Used to mark the end of an activity that can be recursive.  
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticSourceEventSource.NewDiagnosticListener(System.String)">
-            <summary>
-            Fires when a new DiagnosticSource becomes available.   
-            </summary>
-            <param name="SourceName"></param>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticSourceEventSource.#ctor">
-            <summary>
-            This constructor uses EventSourceSettings which is only available on V4.6 and above
-            systems.   We use the EventSourceSettings to turn on support for complex types. 
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticSourceEventSource.OnEventCommand(System.Diagnostics.Tracing.EventCommandEventArgs)">
-            <summary>
-            Called when the EventSource gets a command from a EventListener or ETW. 
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticSourceEventSource.BreakPointWithDebuggerFuncEval">
-            <summary>
-            A function which is fully interruptible even in release code so we can stop here and 
-            do function evaluation in the debugger.   Thus this is just a place that is useful
-            for the debugger to place a breakpoint where it can inject code with function evaluation
-            </summary>
-        </member>
-        <member name="T:System.Diagnostics.DiagnosticSourceEventSource.FilterAndTransform">
-            <summary>
-            FilterAndTransform represents on transformation specification from a DiagnosticsSource
-            to EventSource's 'Event' method.    (e.g.  MySource/MyEvent:out=prop1.prop2.prop3).
-            Its main method is 'Morph' which takes a DiagnosticSource object and morphs it into
-            a list of string,string key value pairs.   
-            
-            This method also contains that static 'Create/Destroy FilterAndTransformList, which
-            simply parse a series of transformation specifications.  
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticSourceEventSource.FilterAndTransform.CreateFilterAndTransformList(System.Diagnostics.DiagnosticSourceEventSource.FilterAndTransform@,System.String,System.Diagnostics.DiagnosticSourceEventSource)">
-            <summary>
-            Parses filterAndPayloadSpecs which is a list of lines each of which has the from
-            
-               DiagnosticSourceName/EventName:PAYLOAD_SPEC
-               
-            where PAYLOADSPEC is a semicolon separated list of specifications of the form
-            
-               OutputName=Prop1.Prop2.PropN
-               
-            Into linked list of FilterAndTransform that together forward events from the given
-            DiagnosticSource's to 'eventSource'.   Sets the 'specList' variable to this value
-            (destroying anything that was there previously).  
-            
-            By default any serializable properties of the payload object are also included
-            in the output payload, however this feature and be tuned off by prefixing the
-            PAYLOADSPEC with a '-'.   
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticSourceEventSource.FilterAndTransform.DestroyFilterAndTransformList(System.Diagnostics.DiagnosticSourceEventSource.FilterAndTransform@)">
-            <summary>
-            This destroys (turns off) the FilterAndTransform stopping the forwarding started with CreateFilterAndTransformList
-            </summary>
-            <param name="specList"></param>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticSourceEventSource.FilterAndTransform.#ctor(System.String,System.Int32,System.Int32,System.Diagnostics.DiagnosticSourceEventSource,System.Diagnostics.DiagnosticSourceEventSource.FilterAndTransform)">
-            <summary>
-            Creates one FilterAndTransform specification from filterAndPayloadSpec starting at 'startIdx' and ending just before 'endIdx'. 
-            This FilterAndTransform will subscribe to DiagnosticSources specified by the specification and forward them to 'eventSource.
-            For convenience, the 'Next' field is set to the 'next' parameter, so you can easily form linked lists.  
-            </summary>
-        </member>
-        <member name="T:System.Diagnostics.DiagnosticSourceEventSource.TransformSpec">
-            <summary>
-            Transform spec represents a string that describes how to extract a piece of data from
-            the DiagnosticSource payload.   An example string is OUTSTR=EVENT_VALUE.PROP1.PROP2.PROP3
-            It has a Next field so they can be chained together in a linked list.  
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticSourceEventSource.TransformSpec.#ctor(System.String,System.Int32,System.Int32,System.Diagnostics.DiagnosticSourceEventSource.TransformSpec)">
-            <summary>
-            parse the strings 'spec' from startIdx to endIdx (points just beyond the last considered char)
-            The syntax is ID1=ID2.ID3.ID4 ....   Where ID1= is optional.    
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticSourceEventSource.TransformSpec.Morph(System.Object)">
-            <summary>
-            Given the DiagnosticSourcePayload 'obj', compute a key-value pair from it.  For example 
-            if the spec is OUTSTR=EVENT_VALUE.PROP1.PROP2.PROP3 and the ultimate value of PROP3 is
-            10 then the return key value pair is  KeyValuePair("OUTSTR","10") 
-            </summary>
-        </member>
-        <member name="F:System.Diagnostics.DiagnosticSourceEventSource.TransformSpec.Next">
-            <summary>
-            A public field that can be used to form a linked list.   
-            </summary>
-        </member>
-        <member name="T:System.Diagnostics.DiagnosticSourceEventSource.TransformSpec.PropertySpec">
-            <summary>
-            A PropertySpec represents information needed to fetch a property from 
-            and efficiently.   Thus it represents a '.PROP' in a TransformSpec
-            (and a transformSpec has a list of these).  
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticSourceEventSource.TransformSpec.PropertySpec.#ctor(System.String,System.Diagnostics.DiagnosticSourceEventSource.TransformSpec.PropertySpec)">
-            <summary>
-            Make a new PropertySpec for a property named 'propertyName'. 
-            For convenience you can set he 'next' field to form a linked
-            list of PropertySpecs. 
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticSourceEventSource.TransformSpec.PropertySpec.Fetch(System.Object)">
-            <summary>
-            Given an object fetch the property that this PropertySpec represents.  
-            </summary>
-        </member>
-        <member name="F:System.Diagnostics.DiagnosticSourceEventSource.TransformSpec.PropertySpec.Next">
-            <summary>
-            A public field that can be used to form a linked list.   
-            </summary>
-        </member>
-        <member name="T:System.Diagnostics.DiagnosticSourceEventSource.TransformSpec.PropertySpec.PropertyFetch">
-            <summary>
-            PropertyFetch is a helper class.  It takes a PropertyInfo and then knows how
-            to efficiently fetch that property from a .NET object (See Fetch method).  
-            It hides some slightly complex generic code.  
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticSourceEventSource.TransformSpec.PropertySpec.PropertyFetch.FetcherForProperty(System.Reflection.PropertyInfo)">
-            <summary>
-            Create a property fetcher from a .NET Reflection PropertyInfo class that
-            represents a property of a particular type.  
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.DiagnosticSourceEventSource.TransformSpec.PropertySpec.PropertyFetch.Fetch(System.Object)">
-            <summary>
-            Given an object, fetch the property that this propertyFech represents. 
-            </summary>
-        </member>
-        <member name="T:System.Diagnostics.DiagnosticSourceEventSource.CallbackObserver`1">
-            <summary>
-            CallbackObserver is a adapter class that creates an observer (which you can pass
-            to IObservable.Subscribe), and calls the given callback every time the 'next' 
-            operation on the IObserver happens. 
-            </summary>
-            <typeparam name="T"></typeparam>
-        </member>
-    </members>
+  <assembly>
+    <name>System.Diagnostics.DiagnosticSource</name>
+  </assembly>
+  <members>
+    <member name="T:System.Diagnostics.Activity">
+      <summary>Represents an operation with context to be used for logging.</summary>
+    </member>
+    <member name="M:System.Diagnostics.Activity.#ctor(System.String)">
+      <summary>Initializes a new instance of the <see cref="T:System.Diagnostics.Activity" /> class.</summary>
+      <param name="operationName">The name of the operation.</param>
+    </member>
+    <member name="P:System.Diagnostics.Activity.ActivityTraceFlags">
+      <summary>Gets the flags (defined by the W3C ID specification) associated with the activity.</summary>
+      <returns>the flags associated with the activity.</returns>
+    </member>
+    <member name="M:System.Diagnostics.Activity.AddBaggage(System.String,System.String)">
+      <summary>Updates the <see cref="T:System.Diagnostics.Activity" /> to have a new baggage item with the specified key and value.</summary>
+      <param name="key">The baggage key.</param>
+      <param name="value">The baggage value.</param>
+      <returns>
+        <see langword="this" /> for convenient chaining.</returns>
+    </member>
+    <member name="M:System.Diagnostics.Activity.AddTag(System.String,System.String)">
+      <summary>Updates the <see cref="T:System.Diagnostics.Activity" /> to have a new tag with the provided <paramref name="key" /> and <paramref name="value" />. .</summary>
+      <param name="key">The tag key.</param>
+      <param name="value">The tag value.</param>
+      <returns>
+        <see langword="this" /> for convenient chaining.</returns>
+    </member>
+    <member name="P:System.Diagnostics.Activity.Baggage">
+      <summary>Gets a collection of key/value pairs that represents information that is passed to children of this <see cref="T:System.Diagnostics.Activity" />.</summary>
+      <returns>An enumeration of string-string key-value pairs.</returns>
+    </member>
+    <member name="P:System.Diagnostics.Activity.Current">
+      <summary>Gets or sets the current operation (<see cref="T:System.Diagnostics.Activity" />) for the current thread.  This flows across async calls.</summary>
+      <returns>The current operation for the current thread.</returns>
+    </member>
+    <member name="P:System.Diagnostics.Activity.DefaultIdFormat">
+      <summary>Gets or sets the default ID format for the <see cref="T:System.Diagnostics.Activity" />.</summary>
+    </member>
+    <member name="P:System.Diagnostics.Activity.Duration">
+      <summary>Gets the duration of the operation.</summary>
+      <returns>The delta between <see cref="P:System.Diagnostics.Activity.StartTimeUtc" /> and the end time if the <see cref="T:System.Diagnostics.Activity" /> has ended (<see cref="M:System.Diagnostics.Activity.Stop" /> or <see cref="M:System.Diagnostics.Activity.SetEndTime(System.DateTime)" /> was called), or <see cref="F:System.TimeSpan.Zero" /> if the <see cref="T:System.Diagnostics.Activity" /> has not ended and <see cref="M:System.Diagnostics.Activity.SetEndTime(System.DateTime)" /> was not called.</returns>
+    </member>
+    <member name="P:System.Diagnostics.Activity.ForceDefaultIdFormat">
+      <summary>Gets or sets a valud that detrmines if the <see cref="P:System.Diagnostics.Activity.DefaultIdFormat" /> is always used to define the default ID format.</summary>
+      <returns>
+        <see langword="true" /> to always use the <see cref="P:System.Diagnostics.Activity.DefaultIdFormat" />; otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="M:System.Diagnostics.Activity.GetBaggageItem(System.String)">
+      <summary>Returns the value of a key-value pair added to the activity with <see cref="M:System.Diagnostics.Activity.AddBaggage(System.String,System.String)" />.</summary>
+      <param name="key">The baggage key.</param>
+      <returns>The value of the key-value-pair item if it exists, or <see langword="null" /> if it does not exist.</returns>
+    </member>
+    <member name="P:System.Diagnostics.Activity.Id">
+      <summary>Gets an identifier that is specific to a particular request.</summary>
+      <returns>The activity ID.</returns>
+    </member>
+    <member name="P:System.Diagnostics.Activity.IdFormat">
+      <summary>Gets the format for the <see cref="P:System.Diagnostics.Activity.Id" />.</summary>
+      <returns>The format for the <see cref="P:System.Diagnostics.Activity.Id" />.</returns>
+    </member>
+    <member name="P:System.Diagnostics.Activity.OperationName">
+      <summary>Gets the operation name.</summary>
+      <returns>The name of the operation.</returns>
+    </member>
+    <member name="P:System.Diagnostics.Activity.Parent">
+      <summary>Gets the parent <see cref="T:System.Diagnostics.Activity" /> that created this activity.</summary>
+      <returns>The parent of this <see cref="T:System.Diagnostics.Activity" />, if it is from the same process, or <see langword="null" /> if this instance has no parent (it is a root activity) or if the parent is from outside the process.</returns>
+    </member>
+    <member name="P:System.Diagnostics.Activity.ParentId">
+      <summary>Gets the ID of this activity's parent.</summary>
+      <returns>The parent ID, if one exists, or <see langword="null" /> if it does not.</returns>
+    </member>
+    <member name="P:System.Diagnostics.Activity.ParentSpanId">
+      <summary>Gets the parent's <see cref="P:System.Diagnostics.Activity.SpanId" />.</summary>
+      <returns>The parent's <see cref="P:System.Diagnostics.Activity.SpanId" />.</returns>
+    </member>
+    <member name="P:System.Diagnostics.Activity.Recorded">
+      <summary>Gets a value that indicates whether the W3CIdFlags.Recorded flag is set.</summary>
+      <returns>
+        <see langword="true" /> if the W3CIdFlags.Recorded flag is set; otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="P:System.Diagnostics.Activity.RootId">
+      <summary>Gets the root ID of this <see cref="T:System.Diagnostics.Activity" />.</summary>
+      <returns>The root ID, or <see langword="null" /> if the current instance has either a <see cref="P:System.Diagnostics.Activity.ParentId" /> or an <see cref="P:System.Diagnostics.Activity.Id" />.</returns>
+    </member>
+    <member name="M:System.Diagnostics.Activity.SetEndTime(System.DateTime)">
+      <summary>Updates the <see cref="T:System.Diagnostics.Activity" /> to set its <see cref="P:System.Diagnostics.Activity.Duration" /> as the difference between <see cref="P:System.Diagnostics.Activity.StartTimeUtc" /> and the specified stop time.</summary>
+      <param name="endTimeUtc">The UTC stop time.</param>
+      <returns>
+        <see langword="this" /> for convenient chaining.</returns>
+    </member>
+    <member name="M:System.Diagnostics.Activity.SetIdFormat(System.Diagnostics.ActivityIdFormat)">
+      <summary>Sets the ID format on this <see cref="T:System.Diagnostics.Activity" /> before it is started.</summary>
+      <param name="format">One of the enumeration values that specifies the format of the <see cref="P:System.Diagnostics.Activity.Id" /> property.</param>
+      <returns>
+        <see langword="this" /> for convenient chaining.</returns>
+    </member>
+    <member name="M:System.Diagnostics.Activity.SetParentId(System.Diagnostics.ActivityTraceId,System.Diagnostics.ActivitySpanId,System.Diagnostics.ActivityTraceFlags)">
+      <summary>Sets the parent ID using the W3C convention of a TraceId and a SpanId.</summary>
+      <param name="traceId">The parent activity's TraceId.</param>
+      <param name="spanId">The parent activity's SpanId.</param>
+      <param name="activityTraceFlags">One of the enumeration values that specifies flags defined by the W3C standard that are associated with an activity.</param>
+      <returns>
+        <see langword="this" /> for convenient chaining.</returns>
+    </member>
+    <member name="M:System.Diagnostics.Activity.SetParentId(System.String)">
+      <summary>Updates this <see cref="T:System.Diagnostics.Activity" /> to indicate that the <see cref="T:System.Diagnostics.Activity" /> with an ID of <paramref name="parentId" /> caused this <see cref="T:System.Diagnostics.Activity" />.</summary>
+      <param name="parentId">The ID of the parent operation.</param>
+      <returns>
+        <see langword="this" /> for convenient chaining.</returns>
+    </member>
+    <member name="M:System.Diagnostics.Activity.SetStartTime(System.DateTime)">
+      <summary>Sets the start time of this <see cref="T:System.Diagnostics.Activity" />.</summary>
+      <param name="startTimeUtc">The <see cref="T:System.Diagnostics.Activity" /> start time in UTC.</param>
+      <returns>
+        <see langword="this" /> for convenient chaining.</returns>
+    </member>
+    <member name="P:System.Diagnostics.Activity.SpanId">
+      <summary>Gets the SPAN part of the <see cref="P:System.Diagnostics.Activity.Id" />.</summary>
+      <returns>The ID for the SPAN part of <see cref="P:System.Diagnostics.Activity.Id" />, if the <see cref="T:System.Diagnostics.Activity" /> has the W3C format; otherwise, a zero <see langword="SpanId" />.</returns>
+    </member>
+    <member name="M:System.Diagnostics.Activity.Start">
+      <summary>Starts the activity.</summary>
+      <returns>
+        <see langword="this" /> for convenient chaining.</returns>
+    </member>
+    <member name="P:System.Diagnostics.Activity.StartTimeUtc">
+      <summary>Gets the time when the operation started.</summary>
+      <returns>The UTC time that the operation started.</returns>
+    </member>
+    <member name="M:System.Diagnostics.Activity.Stop">
+      <summary>Stops the activity.</summary>
+    </member>
+    <member name="P:System.Diagnostics.Activity.Tags">
+      <summary>Gets a collection of key/value pairs that represent information that will be logged along with the <see cref="T:System.Diagnostics.Activity" /> to the logging system.</summary>
+      <returns>An enumeration of string-string key-value-pairs.</returns>
+    </member>
+    <member name="P:System.Diagnostics.Activity.TraceId">
+      <summary>Gets the TraceId part of the <see cref="P:System.Diagnostics.Activity.Id" />.</summary>
+      <returns>The ID for the TraceId part of the <see cref="P:System.Diagnostics.Activity.Id" />, if the ID has the W3C format; otherwise, a zero TraceId.</returns>
+    </member>
+    <member name="P:System.Diagnostics.Activity.TraceStateString">
+      <summary>Gets the W3C <see langword="tracestate" /> header.</summary>
+      <returns>The W3C <see langword="tracestate" /> header.</returns>
+    </member>
+    <member name="T:System.Diagnostics.ActivityIdFormat">
+      <summary>Specifies the format of the <see cref="P:System.Diagnostics.Activity.Id" /> property.</summary>
+    </member>
+    <member name="F:System.Diagnostics.ActivityIdFormat.Hierarchical">
+      <summary>The hierarchical format.</summary>
+    </member>
+    <member name="F:System.Diagnostics.ActivityIdFormat.Unknown">
+      <summary>An unknown format.</summary>
+    </member>
+    <member name="F:System.Diagnostics.ActivityIdFormat.W3C">
+      <summary>The W3C format.</summary>
+    </member>
+    <member name="T:System.Diagnostics.ActivitySpanId">
+      <summary>Represents a <see cref="P:System.Diagnostics.Activity.SpanId" /> formatted based on a W3C standard.</summary>
+    </member>
+    <member name="M:System.Diagnostics.ActivitySpanId.CopyTo(System.Span{System.Byte})">
+      <summary>Copies the 8 bytes of the current <see cref="T:System.Diagnostics.ActivitySpanId" /> to a specified span.</summary>
+      <param name="destination">The span to which the 8 bytes of the SpanID are to be copied.</param>
+    </member>
+    <member name="M:System.Diagnostics.ActivitySpanId.CreateFromBytes(System.ReadOnlySpan{System.Byte})">
+      <summary>Creates a new <see cref="T:System.Diagnostics.ActivitySpanId" /> value from a read-only span of eight bytes.</summary>
+      <param name="idData">A read-only span of eight bytes.</param>
+      <returns>The new span ID.</returns>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="idData" /> does not contain eight bytes.</exception>
+    </member>
+    <member name="M:System.Diagnostics.ActivitySpanId.CreateFromString(System.ReadOnlySpan{System.Char})">
+      <summary>Creates a new <see cref="T:System.Diagnostics.ActivitySpanId" /> value from a read-only span of 16 hexadecimal characters.</summary>
+      <param name="idData">A span that contains 16 hexadecimal characters.</param>
+      <returns>The new span ID.</returns>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="idData" /> does not contain 16 hexadecimal characters.
+-or-
+The characters in <paramref name="idData" /> are not all lower-case hexadecimal characters or all zeros.</exception>
+    </member>
+    <member name="M:System.Diagnostics.ActivitySpanId.CreateFromUtf8String(System.ReadOnlySpan{System.Byte})">
+      <summary>Creates a new <see cref="T:System.Diagnostics.ActivitySpanId" /> value from a read-only span of UTF8-encoded bytes.</summary>
+      <param name="idData">A read-only span of UTF8-encoded bytes.</param>
+      <returns>The new span ID.</returns>
+    </member>
+    <member name="M:System.Diagnostics.ActivitySpanId.CreateRandom">
+      <summary>Creates a new <see cref="T:System.Diagnostics.ActivitySpanId" /> based on a random number (that is very likely to be unique).</summary>
+      <returns>The new span ID.</returns>
+    </member>
+    <member name="M:System.Diagnostics.ActivitySpanId.Equals(System.Diagnostics.ActivitySpanId)">
+      <summary>Determines whether this instance and the specified <see cref="T:System.Diagnostics.ActivitySpanId" /> instance have the same value.</summary>
+      <param name="spanId">The instance to compare.</param>
+      <returns>
+        <see langword="true" /> if <paramref name="spanId" /> has the same hex value as the current instance; otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="M:System.Diagnostics.ActivitySpanId.Equals(System.Object)">
+      <summary>the current instance and a specified object, which also must be an <see cref="T:System.Diagnostics.ActivitySpanId" /> instance, have the same value.</summary>
+      <param name="obj">The object to compare.</param>
+      <returns>
+        <see langword="true" /> if <paramref name="obj" /> is an instance of <see cref="T:System.Diagnostics.ActivitySpanId" /> and has the same hex value as the current instance; otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="M:System.Diagnostics.ActivitySpanId.GetHashCode">
+      <summary>Returns the hash code of the SpanId.</summary>
+      <returns>The hash code of the SpanId.</returns>
+    </member>
+    <member name="M:System.Diagnostics.ActivitySpanId.op_Equality(System.Diagnostics.ActivitySpanId,System.Diagnostics.ActivitySpanId)">
+      <summary>Determines whether two specified <see cref="T:System.Diagnostics.ActivitySpanId" /> instances have the same value.</summary>
+      <param name="spanId1">The first instance to compare.</param>
+      <param name="spandId2">The second instance to compare.</param>
+      <returns>
+        <see langword="true" /> if the SpanId of <paramref name="spanId1" /> is the same as the SpanId of <paramref name="spandId2" />; otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="M:System.Diagnostics.ActivitySpanId.op_Inequality(System.Diagnostics.ActivitySpanId,System.Diagnostics.ActivitySpanId)">
+      <summary>Determine whether two specified <see cref="T:System.Diagnostics.ActivitySpanId" /> instances have unequal values.</summary>
+      <param name="spanId1">The first instance to compare.</param>
+      <param name="spandId2">The second instance to compare.</param>
+      <returns>
+        <see langword="true" /> if the SpanId of <paramref name="spanId1" /> is different from the SpanId of <paramref name="spandId2" />; otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="M:System.Diagnostics.ActivitySpanId.ToHexString">
+      <summary>Returns a 16-character hexadecimal string that represents this span ID.</summary>
+      <returns>The 16-character hecxadecimal string representation of this span ID.</returns>
+    </member>
+    <member name="M:System.Diagnostics.ActivitySpanId.ToString">
+      <summary>Returns a 16-character hexadecimal string that represents this span ID.</summary>
+      <returns>The 16-character hexadecimal string representation of this span ID.</returns>
+    </member>
+    <member name="T:System.Diagnostics.ActivityTraceFlags">
+      <summary>Specifies flags defined by the W3C standard that are associated with an activity.</summary>
+    </member>
+    <member name="F:System.Diagnostics.ActivityTraceFlags.None">
+      <summary>The activity has not been marked.</summary>
+    </member>
+    <member name="F:System.Diagnostics.ActivityTraceFlags.Recorded">
+      <summary>The activity (or more likely its parents) has been marked as useful to record.</summary>
+    </member>
+    <member name="T:System.Diagnostics.ActivityTraceId">
+      <summary>Represents a <see cref="P:System.Diagnostics.Activity.TraceId" /> whose format is based on a W3C standard.</summary>
+    </member>
+    <member name="M:System.Diagnostics.ActivityTraceId.CopyTo(System.Span{System.Byte})">
+      <summary>Copies the 16 bytes of the current <see cref="T:System.Diagnostics.ActivityTraceId" /> to a specified span.</summary>
+      <param name="destination">The span to which the 16 bytes of the trace ID are to be copied.</param>
+    </member>
+    <member name="M:System.Diagnostics.ActivityTraceId.CreateFromBytes(System.ReadOnlySpan{System.Byte})">
+      <summary>Creates a new <see cref="T:System.Diagnostics.ActivityTraceId" /> value from a read-only span of 16 bytes.</summary>
+      <param name="idData">A read-only span of 16 bytes.</param>
+      <returns>The new trace ID.</returns>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="idData" /> does not contain eight bytes.</exception>
+    </member>
+    <member name="M:System.Diagnostics.ActivityTraceId.CreateFromString(System.ReadOnlySpan{System.Char})">
+      <summary>Creates a new <see cref="T:System.Diagnostics.ActivityTraceId" /> value from a read-only span of 32 hexadecimal characters.</summary>
+      <param name="idData">A span that contains 32 hexadecimal characters.</param>
+      <returns>The new trace ID.</returns>
+      <exception cref="T:System.ArgumentOutOfRangeException">
+        <paramref name="idData" /> does not contain 16 hexadecimal characters.
+-or-
+The characters in <paramref name="idData" /> are not all lower-case hexadecimal characters or all zeros.</exception>
+    </member>
+    <member name="M:System.Diagnostics.ActivityTraceId.CreateFromUtf8String(System.ReadOnlySpan{System.Byte})">
+      <summary>Creates a new <see cref="T:System.Diagnostics.ActivityTraceId" /> value from a read-only span of UTF8-encoded bytes.</summary>
+      <param name="idData">A read-only span of UTF8-encoded bytes.</param>
+      <returns>The new trace ID.</returns>
+    </member>
+    <member name="M:System.Diagnostics.ActivityTraceId.CreateRandom">
+      <summary>Creates a new <see cref="T:System.Diagnostics.ActivitySpanId" /> based on a random number (that is very likely to be unique).</summary>
+      <returns>The new span ID.</returns>
+    </member>
+    <member name="M:System.Diagnostics.ActivityTraceId.Equals(System.Diagnostics.ActivityTraceId)">
+      <summary>Determines whether the current instance and a specified <see cref="T:System.Diagnostics.ActivityTraceId" /> are equal.</summary>
+      <param name="traceId">The instance to compare.</param>
+      <returns>
+        <see langword="true" /> if <paramref name="traceId" /> has the same hex value as the current instance; otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="M:System.Diagnostics.ActivityTraceId.Equals(System.Object)">
+      <summary>Determines whether this instance and a specified object, which must also be an <see cref="T:System.Diagnostics.ActivityTraceId" /> instance, have the same value.</summary>
+      <param name="obj">The object to compare.</param>
+      <returns>
+        <see langword="true" /> if <paramref name="obj" /> is an instance of <see cref="T:System.Diagnostics.ActivityTraceId" /> and has the same hex value as the current instance; otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="M:System.Diagnostics.ActivityTraceId.GetHashCode">
+      <summary>Returns the hash code of the TraceId.</summary>
+      <returns>The hash code of the TraceId.</returns>
+    </member>
+    <member name="M:System.Diagnostics.ActivityTraceId.op_Equality(System.Diagnostics.ActivityTraceId,System.Diagnostics.ActivityTraceId)">
+      <summary>Determines whether two specified <see cref="T:System.Diagnostics.ActivityTraceId" /> instances have the same value.</summary>
+      <param name="traceId1">The first instance to compare.</param>
+      <param name="traceId2">The second instance to compare.</param>
+      <returns>
+        <see langword="true" /> if the TraceId of <paramref name="traceId1" /> is the same as the TraceId of <paramref name="traceId2" />; otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="M:System.Diagnostics.ActivityTraceId.op_Inequality(System.Diagnostics.ActivityTraceId,System.Diagnostics.ActivityTraceId)">
+      <summary>Determines whether two specified <see cref="T:System.Diagnostics.ActivityTraceId" /> instances have the same value.</summary>
+      <param name="traceId1">The first instance to compare.</param>
+      <param name="traceId2">The second instance to compare.</param>
+      <returns>
+        <see langword="true" /> if the TraceId of <paramref name="traceId1" /> is different from the TraceId of <paramref name="traceId2" />; otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="M:System.Diagnostics.ActivityTraceId.ToHexString">
+      <summary>Returns a 16-character hexadecimal string that represents this span ID.</summary>
+      <returns>The 32-character hexadecimal string representation of this trace ID.</returns>
+    </member>
+    <member name="M:System.Diagnostics.ActivityTraceId.ToString">
+      <summary>Returns a 32-character hexadecimal string that represents this trace ID.</summary>
+      <returns>The 32-character hecxadecimal string representation of this trace ID.</returns>
+    </member>
+    <member name="T:System.Diagnostics.DiagnosticListener">
+      <summary>Provides an implementation of the abstract <see cref="T:System.Diagnostics.DiagnosticSource" /> class that represents a named place to which a source sends its information (events).</summary>
+    </member>
+    <member name="M:System.Diagnostics.DiagnosticListener.#ctor(System.String)">
+      <summary>Creates a new <see cref="T:System.Diagnostics.DiagnosticListener" />.</summary>
+      <param name="name">The name of this <see cref="T:System.Diagnostics.DiagnosticListener" />.</param>
+    </member>
+    <member name="P:System.Diagnostics.DiagnosticListener.AllListeners">
+      <summary>Gets the collection of listeners for this <see cref="T:System.Diagnostics.DiagnosticListener" />.</summary>
+    </member>
+    <member name="M:System.Diagnostics.DiagnosticListener.Dispose">
+      <summary>Disposes the NotificationListeners.</summary>
+    </member>
+    <member name="M:System.Diagnostics.DiagnosticListener.IsEnabled">
+      <summary>Determines whether there are any registered subscribers.</summary>
+      <returns>
+        <see langword="true" /> if there are any registered subscribers, <see langword="false" /> otherwise.</returns>
+    </member>
+    <member name="M:System.Diagnostics.DiagnosticListener.IsEnabled(System.String)">
+      <summary>Checks whether the <see cref="T:System.Diagnostics.DiagnosticListener" /> is enabled.</summary>
+      <param name="name" />
+      <returns>
+        <see langword="true" /> if notifications are enabled; otherwise, <see langword="false" />.</returns>
+    </member>
+    <member name="M:System.Diagnostics.DiagnosticListener.IsEnabled(System.String,System.Object,System.Object)">
+      <summary>Checks if the DiagnosticListener is enabled.</summary>
+      <param name="name" />
+      <param name="arg1" />
+      <param name="arg2" />
+      <returns>
+        <see langword="true" /> if it is enabled, <see langword="false" /> otherwise.</returns>
+    </member>
+    <member name="P:System.Diagnostics.DiagnosticListener.Name">
+      <summary>Gets the name of this <see cref="T:System.Diagnostics.DiagnosticListener" />.</summary>
+      <returns>The name of the <see cref="T:System.Diagnostics.DiagnosticListener" />.</returns>
+    </member>
+    <member name="M:System.Diagnostics.DiagnosticListener.OnActivityExport(System.Diagnostics.Activity,System.Object)">
+      <summary>Invokes the OnActivityExport method of all the subscribers.</summary>
+      <param name="activity">The activity affected by an external event.</param>
+      <param name="payload">An object that represents the outgoing request.</param>
+    </member>
+    <member name="M:System.Diagnostics.DiagnosticListener.OnActivityImport(System.Diagnostics.Activity,System.Object)">
+      <summary>Invokes the OnActivityImport method of all the subscribers.</summary>
+      <param name="activity">The activity affected by an external event.</param>
+      <param name="payload">An object that represents the incoming request.</param>
+    </member>
+    <member name="M:System.Diagnostics.DiagnosticListener.Subscribe(System.IObserver{System.Collections.Generic.KeyValuePair{System.String,System.Object}})">
+      <summary>Adds a subscriber.</summary>
+      <param name="observer">A subscriber.</param>
+      <returns>A reference to an interface that allows the listener to stop receiving notifications before the <see cref="T:System.Diagnostics.DiagnosticSource" /> has finished sending them.</returns>
+    </member>
+    <member name="M:System.Diagnostics.DiagnosticListener.Subscribe(System.IObserver{System.Collections.Generic.KeyValuePair{System.String,System.Object}},System.Func{System.String,System.Object,System.Object,System.Boolean})">
+      <summary>Adds a subscriber, and optionally filters events based on their name and up to two context objects.</summary>
+      <param name="observer">A subscriber.</param>
+      <param name="isEnabled">A delegate that filters events based on their name and up to two context objects (which can be <see langword="null" />), or <see langword="null" /> to if an event filter is not desirable.</param>
+      <returns>A reference to an interface that allows the listener to stop receiving notifications before the <see cref="T:System.Diagnostics.DiagnosticSource" /> has finished sending them.</returns>
+    </member>
+    <member name="M:System.Diagnostics.DiagnosticListener.Subscribe(System.IObserver{System.Collections.Generic.KeyValuePair{System.String,System.Object}},System.Func{System.String,System.Object,System.Object,System.Boolean},System.Action{System.Diagnostics.Activity,System.Object},System.Action{System.Diagnostics.Activity,System.Object})">
+      <summary>Adds a subscriber, optionally filters events based on their name and up to two context objects, and specifies methods to call when providers import or export activites from outside the process.</summary>
+      <param name="observer">A subscriber.</param>
+      <param name="isEnabled">A delegate that filters events based on their name and up to two context objects (which can be <see langword="null" />), or <see langword="null" /> if an event filter is not desirable.</param>
+      <param name="onActivityImport">An action delegate that receives the activity affected by an external event and an object that represents the incoming request.</param>
+      <param name="onActivityExport">An action delegate that receives the activity affected by an external event and an object that represents the outgoing request.</param>
+      <returns>A reference to an interface that allows the listener to stop receiving notifications before the <see cref="T:System.Diagnostics.DiagnosticSource" /> has finished sending them.</returns>
+    </member>
+    <member name="M:System.Diagnostics.DiagnosticListener.Subscribe(System.IObserver{System.Collections.Generic.KeyValuePair{System.String,System.Object}},System.Predicate{System.String})">
+      <summary>Adds a subscriber, and optionally filters events based on their name.</summary>
+      <param name="observer">A subscriber.</param>
+      <param name="isEnabled">A delegate that filters events based on their name (<see cref="T:System.String" />). The delegate should return <see langword="true" /> if the event is enabled.</param>
+      <returns>A reference to an interface that allows the listener to stop receiving notifications before the <see cref="T:System.Diagnostics.DiagnosticSource" /> has finished sending them.</returns>
+    </member>
+    <member name="M:System.Diagnostics.DiagnosticListener.ToString">
+      <summary>Returns a string with the name of this DiagnosticListener.</summary>
+      <returns>The name of this DiagnosticListener.</returns>
+    </member>
+    <member name="M:System.Diagnostics.DiagnosticListener.Write(System.String,System.Object)">
+      <summary>Logs a notification.</summary>
+      <param name="name">The name of the event to log.</param>
+      <param name="value">An object that represents the payload for the event.</param>
+    </member>
+    <member name="T:System.Diagnostics.DiagnosticSource">
+      <summary>An abstract class that allows code to be instrumented for production-time logging of rich data payloads for consumption within the process that was instrumented.</summary>
+    </member>
+    <member name="M:System.Diagnostics.DiagnosticSource.#ctor">
+      <summary>Initializes an instance of the <see cref="T:System.Diagnostics.DiagnosticSource" /> class.</summary>
+    </member>
+    <member name="M:System.Diagnostics.DiagnosticSource.IsEnabled(System.String)">
+      <summary>Verifies if the notification event is enabled.</summary>
+      <param name="name">The name of the event being written.</param>
+      <returns>
+        <see langword="true" /> if the notification event is enabled, <see langword="false" /> otherwise.</returns>
+    </member>
+    <member name="M:System.Diagnostics.DiagnosticSource.IsEnabled(System.String,System.Object,System.Object)">
+      <summary>Verifies it the notification event is enabled.</summary>
+      <param name="name">The name of the event being written.</param>
+      <param name="arg1">An object that represents the additional context for IsEnabled. Consumers should expect to receive <see langword="null" /> which may indicate that producer called pure IsEnabled(string) to check if consumer wants to get notifications for such events at all. Based on that, producer may call IsEnabled(string, object, object) again with non-<see langword="null" /> context.</param>
+      <param name="arg2">Optional. An object that represents the additional context for IsEnabled. <see langword="null" /> by default. Consumers should expect to receive <see langword="null" /> which may indicate that producer called pure IsEnabled(string) or producer passed all necessary context in <paramref name="arg1" />.</param>
+      <returns>
+        <see langword="true" /> if the notification event is enabled, <see langword="false" /> otherwise.</returns>
+    </member>
+    <member name="M:System.Diagnostics.DiagnosticSource.OnActivityExport(System.Diagnostics.Activity,System.Object)">
+      <summary>Transfers state from an activity to some event or operation, such as an outgoing HTTP request, that will occur outside the process.</summary>
+      <param name="activity">The activity affected by an external event.</param>
+      <param name="payload">An object that represents the outgoing request.</param>
+    </member>
+    <member name="M:System.Diagnostics.DiagnosticSource.OnActivityImport(System.Diagnostics.Activity,System.Object)">
+      <summary>Transfers state to an activity from some event or operation, such as an incoming request, that occurred outside the process.</summary>
+      <param name="activity">The activity affected by an external event.</param>
+      <param name="payload">A payload that represents the incoming request.</param>
+    </member>
+    <member name="M:System.Diagnostics.DiagnosticSource.StartActivity(System.Diagnostics.Activity,System.Object)">
+      <summary>Starts an <see cref="T:System.Diagnostics.Activity" /> and writes a start event.</summary>
+      <param name="activity">The <see cref="T:System.Diagnostics.Activity" /> to be started.</param>
+      <param name="args">An object that represent the value being passed as a payload for the event.</param>
+      <returns>The started activity for convenient chaining.</returns>
+    </member>
+    <member name="M:System.Diagnostics.DiagnosticSource.StopActivity(System.Diagnostics.Activity,System.Object)">
+      <summary>Stops the given <see cref="T:System.Diagnostics.Activity" />, maintains the global <see cref="P:System.Diagnostics.Activity.Current" /> activity, and notifies consumers that the <see cref="T:System.Diagnostics.Activity" /> was stopped.</summary>
+      <param name="activity">The activity to be stopped.</param>
+      <param name="args">An object that represents the value passed as a payload for the event.</param>
+    </member>
+    <member name="M:System.Diagnostics.DiagnosticSource.Write(System.String,System.Object)">
+      <summary>Provides a generic way of logging complex payloads.</summary>
+      <param name="name">The name of the event being written.</param>
+      <param name="value">An object that represents the value being passed as a payload for the event. This is often an anonymous type which contains several sub-values.</param>
+    </member>
+  </members>
 </doc>
