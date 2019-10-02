@@ -10,7 +10,8 @@ const TOKEN_KEY = 'auth-token';
   providedIn: 'root'
 })
 export class AuthenticationService {
-  baseURL = 'http://localhost:51786/api/';
+  baseURL = 'http://34.90.143.154/api/';
+  // baseURL = 'http://localhost:51786/api/';
   authenticationState = new BehaviorSubject(false);
 
   constructor(private storage: Storage, private plt: Platform, public http: HttpClient) {

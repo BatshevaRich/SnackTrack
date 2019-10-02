@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Meal } from '../../app/classes/Meal';
 import { Observable, of } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { map } from 'rxjs-compat/operator/map';
 import {mealLoaded} from '../home/home.page';
 import { Storage } from '@ionic/storage';
@@ -9,11 +9,6 @@ import { Storage } from '@ionic/storage';
   providedIn: 'root'
 })
 export class mealService {
-  // baseURL = 'http://ce6dc86e.ngrok.io/api/';
-  // baseURL = 'http://34.90.143.154/api/';
-  // baseURL = 'http://b40029a0.ngrok.io/api/';
-  baseURL = 'http://localhost:51786/api/';
-  listAllMeal: Meal[];
   constructor(private storage: Storage, public http: HttpClient) {
     this.listAllMeal = [];
     this.http.get<Meal[]>(this.baseURL + 'meal').subscribe(meals => {
@@ -22,6 +17,15 @@ export class mealService {
       err => {console.log(err); }
      );
   }
+  // baseURL = 'http://ce6dc86e.ngrok.io/api/';
+  baseURL = 'http://34.90.143.154/api/';
+  // baseURL = 'http://b40029a0.ngrok.io/api/';
+  // baseURL = 'http://localhost:51786/api/';
+  listAllMeal: Meal[];
+
+  userName:string;
+  userPass: string;
+  user1: string;
 
   public SaveToServer(user: string, name: string, pass: string,path: string, hour: Date, labels: string[]): any {
     const formData = new FormData();
@@ -57,11 +61,8 @@ export class mealService {
       });
     });
   }
-
-  userName:string;
-  userPass: string;
-  user1: string;
   public GetAllMeals() {
+    const headers= new HttpHeaders({'Content-Type':'application/json'});
     // let user1: string;
     this.storage.get('auth-token').then(res => {
       this.user1 = res as string;
@@ -69,8 +70,9 @@ export class mealService {
       this.userPass = this.user1.substring(this.user1.indexOf(',') + 1, this.user1.length);
       console.log(res);
     });
-    debugger;
-    return this.http.get(this.baseURL + 'meal', {params:{user: this.user1, name: this.userName, pass: this.userPass}});
+    // debugger;
+    const params = new HttpParams().set('user',this.user1).set('name', this.userName).set('pass', this.userPass);
+    return this.http.get(this.baseURL + 'meal',{params});
   }
 
   getResults(): Observable<Meal[]> {
