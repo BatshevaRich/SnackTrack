@@ -72,12 +72,12 @@ export class mealService {
 
   public GetAllMeals() {
     let params = new HttpParams();
-    params = params.append('user',this.user1);
+    params = params.append('user', this.user1);
     params = params.append('name', this.userName);
     params = params.append('pass', this.userPass);
     return this.http.get(this.baseURL + 'meal/getall', { params });
   }
-  
+
   getResults(): Observable<Meal[]> {
     let observable: Observable<Meal[]>;
     if (this.listAllMeal.length === 0) {

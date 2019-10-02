@@ -1,23 +1,12 @@
 
 import { Component, ChangeDetectionStrategy, ViewChild, TemplateRef, OnInit } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
-
-import {
-  startOfDay,
-  endOfDay,
-  subDays,
-  addDays,
-  endOfMonth,
-  isSameDay,
-  isSameMonth,
-  addHours
-} from 'date-fns';
+import { startOfDay, endOfDay, subDays, addDays, endOfMonth, isSameDay, isSameMonth, addHours } from 'date-fns';
 import { CalendarDateFormatter, DateFormatterParams } from 'angular-calendar';
 import { DatePipe } from '@angular/common';
 import { Title } from '@angular/platform-browser';
-
 import { AutoCompleteLabelsService } from '../Providers/auto-complete-labels.service';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView, CalendarEvent } from 'angular-calendar';
 import { mealService } from '../Providers/meal.service';
@@ -27,7 +16,7 @@ import { PopoverController } from '@ionic/angular';
 import { ViewDayMealPage } from '../view-day-meal/view-day-meal.page';
 import { Storage } from '@ionic/storage';
 import { Meal } from '../classes/Meal';
-import { filter } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { NavigationEvent } from '@ng-bootstrap/ng-bootstrap/datepicker/datepicker-view-model';
 // ,*TgpkZTbdtlA~u
 const colors: any = {
@@ -42,29 +31,17 @@ export interface mealLoaded {
 }
 @Component({
   selector: 'app-home',
-  // changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.Default,
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
-  constructor(private camera: Camera,
-              private storage: Storage, private titleService: Title,
-              private router: Router,
-              private modal: NgbModal,
-              private mealS: mealService,
-              public autoCompleteLabelsService: AutoCompleteLabelsService,
-              public popoverCtrl: PopoverController) {
-  }
-  ionViewCanEnter() {
-    console.log('can called');
-  }
   @ViewChild('box', null) userInput;
   @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
   viewDate: Date = new Date();
   modalData: { action: string; event: CalendarEvent; };
-
   refresh: Subject<any> = new Subject();
   events: CalendarEvent[] = [];
   didNotLoad: boolean;
@@ -78,38 +55,29 @@ export class HomePage implements OnInit {
   navigationSubscription;
   userName: string;
   userPass: string;
-  // ionViewWillEnter() {
-  //   console.log('will');
-  //   this.events = [];
-  //   this.refresh.next();
-  //   this.storage.clear();
-  //   this.refresh.next();
+  events$: Observable<Array<CalendarEvent<mealLoaded>>>;
+  constructor(private camera: Camera,
+              private storage: Storage, private titleService: Title,
+              private router: Router,
+              private modal: NgbModal,
+              private mealS: mealService,
+              public autoCompleteLabelsService: AutoCompleteLabelsService,
+              public popoverCtrl: PopoverController) { }
 
-  // }
   ionViewDidEnter() {
     console.log('did');
     this.events = [];
-    this.storage.get('auth-token').then(res => {
-      const user = res as string;
-      this.userName = user.substring(0, user.indexOf(','));
-      this.userPass = user.substring(user.indexOf(',') + 1, user.length);
-      console.log(res);
-      this.loadLabelsFromAPI();
-      this.mealsFromServer = [];
-      this.didNotLoad = true;
-    });
-    this.refresh.next();
+    this.loadLabelsFromAPI();
+    // this.mealsFromServer = [];
+    // this.didNotLoad = true;
+    // this.refresh.next();
   }
 
   public weekViewColumnHeader({ date, locale }: DateFormatterParams): string {
     return new DatePipe(locale).transform(date, 'EEE', locale);
   }
 
-  ngOnInit() {
-    this.events = [];
-    
-    this.refresh.next();
-  }
+  ngOnInit() { }
   parseDate(value): Date {
     if (value.indexOf('-') > -1) {
       const str = value.split('-');
@@ -129,8 +97,6 @@ export class HomePage implements OnInit {
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
-      // targetWidth: 900,
-      // targetHeight: 600,
       saveToPhotoAlbum: false,
       allowEdit: false,
       sourceType: 1
@@ -147,26 +113,29 @@ export class HomePage implements OnInit {
     });
   }
   loadLabelsFromAPI() {
-    this.mealS.GetAllMeals().subscribe(
-      (res: mealLoaded[]) => {
-        this.events = [];
-        for (const m of res) {
-          this.events.push({
-            start: addHours(startOfDay(this.parseDate(m.DateOfPic)), 2),
-            end: addHours(startOfDay(this.parseDate(m.DateOfPic)), 4),
-            title: m.Path,
-            color: colors.red,
-            allDay: true,
-            resizable: {
-              beforeStart: true,
-              afterEnd: true
-            },
-            draggable: true
-          });
-        }
-      }
-    );
+    this.events$ = this.mealS.GetAllMeals().pipe(map((results: mealLoaded[]) => {
+      return results.map((res: mealLoaded) => {
+        return {
+          start: addHours(startOfDay(this.parseDate(res.DateOfPic)), 2),
+          end: addHours(startOfDay(this.parseDate(res.DateOfPic)), 4),
+          title: res.Path,
+        };
+      });
+    }));
     this.refresh.next();
+    // this.mealS.GetAllMeals().subscribe(
+    //   (res: mealLoaded[]) => {
+    //     this.events = [];
+    //     for (const m of res) {
+    //       this.events.push({
+    //         start: addHours(startOfDay(this.parseDate(m.DateOfPic)), 2),
+    //         end: addHours(startOfDay(this.parseDate(m.DateOfPic)), 4),
+    //         title: m.Path,
+    //       });
+    //     }
+    //   }
+    // );
+    // this.refresh.next();
   }
 
   public addEvent(): void {
@@ -213,7 +182,6 @@ export class HomePage implements OnInit {
   sendImage($event): void {
     const file: File = $event.target.files[0];
     const reader = new FileReader();
-    //this.storage.clear();
     reader.onload = (event: any) => {
       this.setValue('img', event.target.result);
       this.router.navigate(['/options']);
