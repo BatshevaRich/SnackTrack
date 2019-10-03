@@ -13,11 +13,11 @@ import { Storage } from '@ionic/storage';
 })
 export class SearchPage {
   constructor(private camera: Camera,
-              private storage: Storage,
-              private route: ActivatedRoute,
-              private router: Router,
-              public mealS: MealService,
-              public autoCompleteLabelsService: AutoCompleteLabelsService) {
+    private storage: Storage,
+    private route: ActivatedRoute,
+    private router: Router,
+    public mealS: MealService,
+    public autoCompleteLabelsService: AutoCompleteLabelsService) {
     this.display = false;
     console.log(this.meals);
     this.route.queryParams.subscribe(params => {
@@ -47,22 +47,15 @@ export class SearchPage {
     this.router.navigate(['/search'], navigationExtras);
   }
 
-  resolveAfter2Seconds() {
-    return new Promise(resolve => {
-      resolve(
-        this.mealS.GetMealsForSearch(this.data).then((mealk: Meal[]) => {
-          this.meals = mealk;
-          console.log(this.meals);
-          return mealk;
-        }));
-    });
-  }
-  async loadLabelsFromAPI() {
-    this.meals = await this.resolveAfter2Seconds() as Meal[];
-    this.display = false;
-    if (this.meals.length === 0) {
-      this.display = true;
-    }
+  loadLabelsFromAPI() {
+    return this.mealS.GetMealsForSearch(this.data).subscribe(res => {
+      this.meals = res;
+      this.display = false;
+      if (this.meals.length === 0) {
+        this.display = true;
+      }
+    })
+
   }
 
   takePicture($event) {

@@ -124,10 +124,10 @@ export class HomePage implements OnInit {
         };
       });
     }));
-    return this.mealS.GetAllMeals().subscribe((data:Response)=>{
-      
+    return this.mealS.GetAllMeals().subscribe((data: Response) => {
+
       // debugger;
-      
+
     });
     // this.mealS.GetAllMeals().subscribe(
     //   (res: mealLoaded[]) => {
