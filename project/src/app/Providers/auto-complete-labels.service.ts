@@ -32,7 +32,7 @@ export class AutoCompleteLabelsService implements AutoCompleteService {
       this.params = this.params.append('name', this.userName);
       this.params = this.params.append('pass', this.userPass);
       console.log(res);
-      this.http.get<string[]>(this.baseURL + 'label?all', { params: this.params }).subscribe(allLabel => {
+      this.http.get<string[]>(this.baseURL + 'label/all', { params: this.params }).subscribe(allLabel => {
         this.labels = allLabel;
       },
         err => { console.log(err); }
@@ -45,16 +45,24 @@ export class AutoCompleteLabelsService implements AutoCompleteService {
     }
   }
   getResults(keyword: string): Observable<any[]> {
-    let observable: Observable<any>;
-    this.params = new HttpParams();
-    this.params = this.params.append('user', this.user1);
-    this.params = this.params.append('name', this.userName);
-    this.params = this.params.append('pass', this.userPass);
+    let observable: Observable<any[]>;
+    this.storage.get('auth-token').then(res => {
+      const user = res as string;
+      this.user1 = user;
+      this.userName = user.substring(0, user.indexOf(','));
+      this.userPass = user.substring(user.indexOf(',') + 1, user.length);
+      this.params = new HttpParams();
+      this.params = this.params.append('user', this.user1);
+      this.params = this.params.append('name', this.userName);
+      this.params = this.params.append('pass', this.userPass);
+      console.log(res);
+    });
     if (this.labels.length === 0) {
-      observable = this.http.get(this.baseURL + 'label?all', { params: this.params });
+      observable = this.http.get<string[]>(this.baseURL + 'label/all', { params: this.params });
     } else {
       observable = of(this.labels);
     }
+
     return observable.pipe(
       map((result) => {
         return result.filter((item) => {
@@ -62,5 +70,23 @@ export class AutoCompleteLabelsService implements AutoCompleteService {
         });
       }
       ));
+
+    // return observable;
+    // this.params = new HttpParams();
+    // this.params = this.params.append('user', this.user1);
+    // this.params = this.params.append('name', this.userName);
+    // this.params = this.params.append('pass', this.userPass);
+    // if (this.labels.length === 0) {
+    //   observable = this.http.get(this.baseURL + 'label?all', { params: this.params });
+    // } else {
+    //   observable = of(this.labels);
+    // }
+    // return observable.pipe(
+    //   map((result) => {
+    //     return result.filter((item) => {
+    //       return item.toLowerCase().indexOf(keyword.toLowerCase()) > -1;
+    //     });
+    //   }
+    //   ));
   }
 }
