@@ -9,8 +9,8 @@
   <!-- <ion-button expand="block" color="secondary" routerLink="/register" routerDirection="forward">Register</ion-button> -->
   <!-- <ion-button expand="block" color="secondary" (click)="presentPopover()">Register</ion-button> -->
 
-  <form [formGroup]="loginForm">
-      <ion-item>
+  <form  [formGroup]="loginForm">
+      <ion-item color="secondary" expand="block" style="border-radius: 20px !important;">
         <ion-label position="stacked">Email</ion-label>
         <ion-input
           formControlName="email"
@@ -21,17 +21,17 @@
         >
         </ion-input>
       </ion-item>
-      <ion-item
+      <ion-item 
         class="error-message"
         *ngIf="!loginForm.controls['email'].valid &&
            loginForm.controls['email'].touched"
       >
         <ion-label>Please enter a valid email address.</ion-label>
       </ion-item>
-    
-      <ion-item>
+    <br>
+      <ion-item color="secondary" expand="block"style="border-radius: 20px !important;">
         <ion-label position="stacked">Password</ion-label>
-        <ion-input
+        <ion-input  
           formControlName="password"
           type="password"
           placeholder="Your password"
@@ -46,23 +46,24 @@
       >
         <ion-label>Your password needs more than 6 characters.</ion-label>
       </ion-item>
-    
+    <br>
       <ion-button
         (click)="loginUser(loginForm)"
         expand="block"
         [disabled]="!loginForm.valid"
-        fill="clear"
+        color="dark"
+        strong="true"
       >
         Log In
       </ion-button>
     </form>
-    
+    <br>
     <!-- <ion-button expand="block" fill="clear" routerLink="/signup"> -->
-      <ion-button expand="block" fill="clear" (click)="presentPopover()">
+      <ion-button expand="block" color="medium" (click)="presentPopover()">
       Create a new account
     </ion-button>
-    
-    <ion-button expand="block" fill="clear" routerLink="/reset-password">
+    <br>
+    <ion-button expand="block" color="light" routerLink="/reset-password">
       I forgot my password :(
     </ion-button>
 

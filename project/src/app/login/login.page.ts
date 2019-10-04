@@ -15,11 +15,11 @@ export class LoginPage implements OnInit {
   public loginForm: FormGroup;
   public loading: HTMLIonLoadingElement;
   constructor(private authService: AuthenticationService,
-              public loadingCtrl: LoadingController,
-              public alertCtrl: AlertController,
-              private router: Router,
-              private formBuilder: FormBuilder,
-              public popoverCtrl: PopoverController) {
+    public loadingCtrl: LoadingController,
+    public alertCtrl: AlertController,
+    private router: Router,
+    private formBuilder: FormBuilder,
+    public popoverCtrl: PopoverController) {
     this.loginForm = this.formBuilder.group({
       email: ['',
         Validators.compose([Validators.required, Validators.email])],
@@ -64,9 +64,17 @@ export class LoginPage implements OnInit {
   //   this.router.navigate(['home']);
   // }
   async presentPopover() {
-
+    // let element = document.getElementById('ap')
+    // // let parent=element.parentElement
+    // let parent2 = element.parentElement //popover-content
+    // parent2.parentElement.style['color'] = "red"
+    this.loginForm.reset();
     const popover = await this.popoverCtrl.create({
       component: SignupPage,
+      showBackdrop: true,
+      cssClass: 'background: radial-gradient !important',
+      translucent: true,
+      animated: true,
       componentProps: {
       },
     });

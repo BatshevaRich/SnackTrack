@@ -4,6 +4,13 @@ form {
       margin-top: 20px !important;
     }
   }
+  .custom-popover {
+
+    ion-backdrop
+    {
+      opacity:0.1;
+    }
+  }
   
   p {
     font-size: 0.8em;
