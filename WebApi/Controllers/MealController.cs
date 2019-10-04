@@ -16,10 +16,10 @@ namespace WebApi.Controllers
     {
         // GET: api/meal
         [HttpGet]
-        public async Task<IHttpActionResult> Get()
+        public List<Meal> Get()
         {
-            List<Meal> results = await Manager.getMeals();
-            return Ok(results);
+            List<Meal> results = Manager.getMeals();
+            return results;
         }
 
         // GET: api/meal/5
@@ -30,16 +30,36 @@ namespace WebApi.Controllers
             return Manager.getMealsToDay(dateTime);
             //return Manager.GetMonthMeals(dateTime);
         }
+        [Route("gettoday")]
+        [HttpGet]
+        public List<Meal> GetD(string year, string month, string day, string user, string name, string pass)
+        {
+            //var dd = DateTime.Parse(dateTime);
+            return UserManager.getMealsToDay(year, month, day, name, pass);
+            //return Manager.GetMonthMeals(dateTime);
+        }
+
         [HttpGet]
         public List<Meal> Get(string label)
         {
             return Manager.getMealsByLabel(label);
         }
 
+        [Route("getlabels")]
+        [HttpGet]
+        public List<Meal> Get(string label, string user, string name, string pass)
+        {
+            return UserManager.getMealsByLabel(label, name, pass);
+        }
+
+
+
+        [Route("getall/")]
         [HttpGet]
         public List<Meal> Get(string user, string name, string pass)
         {
-            return Manager.getUserMeals(user, name, pass);
+            List<Meal> results = Manager.getUserMeals(user, name, pass);
+            return results;
         }
 
         /// <summary>
@@ -93,7 +113,7 @@ namespace WebApi.Controllers
             }
 
             Meal meal = new Meal() { DateOfPic = dd, Tags = labelsFromFrontend, Path = path };
-            Manager.addMeal(meal,user,name, mail);
+            UserManager.addMeal(meal,user,name, mail);
             return Ok();
         }
 

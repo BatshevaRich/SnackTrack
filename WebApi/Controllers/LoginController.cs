@@ -37,7 +37,7 @@ namespace WebApi.Controllers
             //List<string> labelsFromFrontend = new List<string>();
             var value = HttpContext.Current.Request.Form["name"];
             var pass = HttpContext.Current.Request.Form["pass"];
-            Manager.Users(value, pass);
+            UserManager.Users(value, pass);
             return Ok();
 
         }

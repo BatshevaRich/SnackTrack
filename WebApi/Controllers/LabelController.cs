@@ -18,6 +18,14 @@ namespace WebApi.Controllers
         {
             return Manager.GetLabels();
         }
+        [Route("all/")]
+        [HttpGet]
+        // GET: api/label
+        public List<string> Get(string user, string name, string pass)
+        {
+            List<string> results = UserManager.GetLabels(user, name, pass);
+            return results;
+        }
 
         // GET: api/label/5
         public string Get(int id)

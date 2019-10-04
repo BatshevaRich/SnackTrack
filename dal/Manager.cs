@@ -6,7 +6,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 namespace dal
 {
     public static class Manager
@@ -20,6 +19,7 @@ namespace dal
             CertificateFile = @"C:\key\client.pfx",
             SslCa = @"C:\key\server-ca.pem",
             SslMode = MySqlSslMode.None,
+            ConnectionTimeout = int.MaxValue
         };
         public static string path = "https://storage.cloud.google.com/";
         /// <summary>
@@ -61,7 +61,8 @@ namespace dal
                 MySqlCommand cmd = connection.CreateCommand();
                 var id = UserExists(name, pass);
                 cmd.CommandText = "SELECT * from meals where user = @user";
-                cmd.Parameters.Add("@user", MySqlDbType.String).Value = user;
+                cmd.CommandTimeout = 0;
+                cmd.Parameters.Add("@user", MySqlDbType.String).Value = name;
                 MySqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
@@ -79,7 +80,7 @@ namespace dal
             return listMeals;
         }
 
-        public static void addMeal(Meal newMeal,string user, string name, string pass)
+        public static void addMeal(Meal newMeal, string user, string name, string pass)
         {
             using (var connection = new MySqlConnection(csb.ConnectionString))
             {
@@ -90,7 +91,7 @@ namespace dal
                 //string x = UploadFileToStorage(name, "dietdiaryfoodpics", newMeal.Path, newMeal.DateOfPic, null);
                 try
                 {
-                cmd.Parameters.Add("@path", MySqlDbType.String).Value = UploadFileToStorage(user, "dietdiaryfoodpics", newMeal.Path, newMeal.DateOfPic);
+                    cmd.Parameters.Add("@path", MySqlDbType.String).Value = UploadFileToStorage(user, "dietdiaryfoodpics", newMeal.Path, newMeal.DateOfPic);
 
                 }
                 catch (Exception e)
@@ -98,7 +99,7 @@ namespace dal
 
                     throw e;
                 }
-                
+
                 cmd.Parameters.Add("@user", MySqlDbType.String).Value = user;
                 string tags = "";
                 foreach (var item in newMeal.Tags)
@@ -120,26 +121,37 @@ namespace dal
         /// func to return list of all meals. called by mealcontroller
         /// </summary>
         /// <returns></returns>
-        public async static Task<List<Meal>> getMeals()
+        public static List<Meal> getMeals()
         {
+            IFormatProvider culture = new CultureInfo("en-US", true);
+            CultureInfo provider = CultureInfo.InvariantCulture;
             List<Meal> listMeals = new List<Meal>();
             using (var connection = new MySqlConnection(csb.ConnectionString))
             {
                 connection.Open();
                 MySqlCommand cmd = connection.CreateCommand();
                 cmd.CommandText = "SELECT * from meals";
-                MySqlDataReader reader = cmd.ExecuteReader();
-                while (reader.Read())
+                using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
-                    CultureInfo provider = CultureInfo.InvariantCulture;
-                    Meal meal = new Meal
+                    try
                     {
-                        Path = reader["path"].ToString(),
-                        Tags = reader["tags"].ToString().Split(',').ToList()
-                    };
-                    IFormatProvider culture = new CultureInfo("en-US", true);
-                    meal.DateOfPic = DateTime.ParseExact(reader["dateTime"].ToString(), "dd/MM/yyyy HH:mm:ss", culture);
-                    listMeals.Add(meal);
+                        while (reader.Read())
+                        {
+                            Meal meal = new Meal
+                            {
+                                Path = reader["path"].ToString(),
+                                Tags = reader["tags"].ToString().Split(',').ToList(),
+                                DateOfPic = DateTime.ParseExact(reader["dateTime"].ToString(), "dd/MM/yyyy HH:mm:ss", culture)
+                            };
+                            listMeals.Add(meal);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+
+                        return listMeals;
+                    }
+                    
                 }
             }
             return listMeals;
@@ -205,6 +217,8 @@ namespace dal
         public static List<Meal> getMealsByLabel(string label)
         {
             List<Meal> meals = new List<Meal>();
+            IFormatProvider culture = new CultureInfo("en-US", true);
+            CultureInfo provider = CultureInfo.InvariantCulture;
             using (var connection = new MySqlConnection(csb.ConnectionString))
             {
                 connection.Open();
@@ -212,15 +226,13 @@ namespace dal
                 cmd.CommandText = "SELECT * from meals where FIND_IN_SET('" + label + "', tags)";
                 MySqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
-                {
-                    CultureInfo provider = CultureInfo.InvariantCulture;
+                {                   
                     Meal meal = new Meal
                     {
                         Path = reader["path"].ToString(),
-                        Tags = reader["tags"].ToString().Split(',').ToList()
-                    };
-                    IFormatProvider culture = new CultureInfo("en-US", true);
-                    meal.DateOfPic = DateTime.ParseExact(reader["dateTime"].ToString(), "dd/MM/yyyy HH:mm:ss", culture);
+                        Tags = reader["tags"].ToString().Split(',').ToList(),
+                        DateOfPic = DateTime.ParseExact(reader["dateTime"].ToString(), "dd/MM/yyyy HH:mm:ss", culture)
+                };                   
                     meals.Add(meal);
                 }
             }
@@ -328,7 +340,7 @@ namespace dal
             }
             using (var f = File.OpenRead(Name))
             {
-                objectName =Path.Combine(user + "/", DateOfPic.ToString(@"dd\-MM\-yyyy-h\:mm") + ".jpg");
+                objectName = Path.Combine(user + "/", DateOfPic.ToString(@"dd\-MM\-yyyy-h\:mm") + ".jpg");
                 var x = storage.UploadObject(bucketName, objectName, null, f);
                 Console.WriteLine($"Uploaded {objectName}.");
             }
@@ -340,7 +352,7 @@ namespace dal
             {
                 connection.Open();
                 MySqlCommand cmd = connection.CreateCommand();
-                cmd.CommandText = "select * from users where name = @name and pass= @pass";
+                cmd.CommandText = "select * from users where name = @name";
                 cmd.Parameters.Add("@name", MySqlDbType.String).Value = name;
                 cmd.Parameters.Add("@pass", MySqlDbType.String).Value = pass;
                 MySqlDataReader reader = cmd.ExecuteReader();
@@ -351,7 +363,7 @@ namespace dal
                 }
             }
             return 0;
-            }
+        }
 
         public static void AddUser(string name, string pass)
         {
@@ -359,9 +371,8 @@ namespace dal
             {
                 connection.Open();
                 MySqlCommand cmd = connection.CreateCommand();
-                cmd.CommandText = "INSERT INTO users(name, pass) VALUES(@name, @pass)";
+                cmd.CommandText = "INSERT INTO users(name) VALUES(@name)";
                 cmd.Parameters.Add("@name", MySqlDbType.String).Value = name;
-                cmd.Parameters.Add("@pass", MySqlDbType.String).Value = pass;
                 cmd.ExecuteNonQuery();
             }
         }

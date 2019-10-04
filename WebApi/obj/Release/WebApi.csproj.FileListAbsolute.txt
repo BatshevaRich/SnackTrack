@@ -62,9 +62,6 @@ C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\Google.Cloud.Storag
 C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\Google.Apis.Auth.dll
 C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\Google.Apis.Storage.v1.dll
 C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\Google.Apis.dll
-C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\Google.Protobuf.dll
-C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\Renci.SshNet.dll
-C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\BouncyCastle.Crypto.dll
 C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\Google.Apis.Core.dll
 C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\Google.Api.Gax.Rest.dll
 C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\Google.Api.Gax.dll
@@ -86,8 +83,6 @@ C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\Google.Apis.Storage
 C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\Google.Apis.Storage.v1.xml
 C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\Google.Apis.pdb
 C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\Google.Apis.xml
-C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\Google.Protobuf.xml
-C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\Renci.SshNet.xml
 C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\Google.Apis.Core.pdb
 C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\Google.Apis.Core.xml
 C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\Google.Api.Gax.Rest.pdb
@@ -101,3 +96,7 @@ C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\obj\Release\WebApi.dll
 C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\obj\Release\WebApi.pdb
 C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\System.Interactive.Async.dll
 C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\System.Interactive.Async.xml
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\Google.Apis.Auth.PlatformServices.dll
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\Google.Apis.PlatformServices.dll
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\System.Collections.Immutable.dll
+C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\System.Collections.Immutable.xml
