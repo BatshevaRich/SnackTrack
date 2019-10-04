@@ -206,6 +206,12 @@ export class OptionsPage {
       this.dateChange.value,
       stringedLabels // labels
     );
-    this.router.navigate(['home']);
+    const updated:boolean = true;
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+        special: JSON.stringify(updated)
+      }
+    };
+    this.router.navigate(['/home'], navigationExtras);
   }
 }

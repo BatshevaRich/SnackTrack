@@ -6,6 +6,8 @@ import { HttpClient } from '@angular/common/http';
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { GooglePlus } from '@ionic-native/google-plus/ngx';
 const TOKEN_KEY = 'auth-token';
 
 @Injectable({
@@ -16,7 +18,11 @@ export class AuthenticationService {
   // baseURL = 'http://localhost:51786/api/';
   authenticationState = new BehaviorSubject(false);
 
-  constructor(private storage: Storage, private plt: Platform, public http: HttpClient) {
+  constructor(private afAuth: AngularFireAuth,
+              private gplus: GooglePlus,
+              private storage: Storage,
+              private plt: Platform,
+              public http: HttpClient) {
     this.plt.ready().then(() => {
       this.checkToken();
     });
@@ -24,12 +30,14 @@ export class AuthenticationService {
 
   loginUser(email: string, password: string
   ): Promise<firebase.auth.UserCredential> {
-    this.storage.set(TOKEN_KEY, email + ',' + password).then(data=>{this.authenticationState.next(true);});
+    this.storage.set(TOKEN_KEY, email + ',' + password).then(data => {
+      this.authenticationState.next(true);
+    });
     return firebase.auth().signInWithEmailAndPassword(email, password);
   }
 
   signupUser(email: string, password: string): Promise<void> {
-    this.storage.set(TOKEN_KEY, email + ',' + password).then(() => {this.authenticationState.next(true); });
+    this.storage.set(TOKEN_KEY, email + ',' + password).then(() => { this.authenticationState.next(true); });
     return firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
@@ -43,16 +51,18 @@ export class AuthenticationService {
         console.error(error);
         throw new Error(error);
       });
- 
-}
 
-  resetPassword(email:string): Promise<void> {
+  }
+
+  resetPassword(email: string): Promise<void> {
     return firebase.auth().sendPasswordResetEmail(email);
   }
 
-  logoutUser():Promise<void> {
-    this.storage.clear();
-    return firebase.auth().signOut();
+  logoutUser(): Promise<void> {
+    this.storage.clear().then(data=>{
+      return firebase.auth().signOut();
+    });
+    return null;
   }
 
 
@@ -61,10 +71,12 @@ export class AuthenticationService {
       if (res) {
         this.authenticationState.next(true);
       }
-    })
+    });
   }
 
   isAuthenticated() {
     return this.authenticationState.value;
   }
+
+
 }

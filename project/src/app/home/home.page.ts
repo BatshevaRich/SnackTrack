@@ -18,6 +18,8 @@ import { Storage } from '@ionic/storage';
 import { Meal } from '../classes/Meal';
 import { filter, map } from 'rxjs/operators';
 import { NavigationEvent } from '@ng-bootstrap/ng-bootstrap/datepicker/datepicker-view-model';
+import { ActivatedRoute } from '@angular/router';
+import { HttpParams } from '@angular/common/http';
 // ,*TgpkZTbdtlA~u
 const colors: any = {
   red: { primary: Image, secondary: Image },
@@ -55,14 +57,23 @@ export class HomePage implements OnInit {
   navigationSubscription;
   userName: string;
   userPass: string;
+  updated: boolean;
   events$: Observable<Array<CalendarEvent<MealLoaded>>>;
   constructor(private camera: Camera,
+              private route: ActivatedRoute,
               private storage: Storage, private titleService: Title,
               private router: Router,
               private modal: NgbModal,
               private mealS: MealService,
               public autoCompleteLabelsService: AutoCompleteLabelsService,
-              public popoverCtrl: PopoverController) { }
+              public popoverCtrl: PopoverController) {
+                this.route.queryParams.subscribe(params => {
+                  if (params && params.special) {
+                    this.updated = JSON.parse(params.special);
+                    this.loadLabelsFromAPI();
+                  }
+                });
+               }
 
   ionViewDidEnter() {
     console.log('did');
@@ -113,35 +124,28 @@ export class HomePage implements OnInit {
     });
   }
   loadLabelsFromAPI() {
-    // debugger;
-    this.events$ = this.mealS.GetAllMeals().pipe(map((results: MealLoaded[]) => {
-      return results.map((res: MealLoaded) => {
-        this.refresh.next();
-        return {
-          start: addHours(startOfDay(this.parseDate(res.DateOfPic)), 2),
-          end: addHours(startOfDay(this.parseDate(res.DateOfPic)), 4),
-          title: res.Path,
-        };
-      });
-    }));
-    return this.mealS.GetAllMeals().subscribe((data: Response) => {
-
-      // debugger;
-
+    this.storage.get('auth-token').then(res => {
+      const user = res as string;
+      const user1: string = user;
+      this.userName = user.substring(0, user.indexOf(','));
+      this.userPass = user.substring(user.indexOf(',') + 1, user.length);
+      let params = new HttpParams();
+      params = params.append('user', user1);
+      params = params.append('name', this.userName);
+      params = params.append('pass', this.userPass);
+      this.events$ = this.mealS.GetAllMeals(params).pipe(map((results: MealLoaded[]) => {
+        return results.map((res: MealLoaded) => {
+          this.refresh.next();
+          return {
+            start: addHours(startOfDay(this.parseDate(res.DateOfPic)), 2),
+            end: addHours(startOfDay(this.parseDate(res.DateOfPic)), 4),
+            title: res.Path,
+          };
+        });
+      }));
     });
-    // this.mealS.GetAllMeals().subscribe(
-    //   (res: mealLoaded[]) => {
-    //     this.events = [];
-    //     for (const m of res) {
-    //       this.events.push({
-    //         start: addHours(startOfDay(this.parseDate(m.DateOfPic)), 2),
-    //         end: addHours(startOfDay(this.parseDate(m.DateOfPic)), 4),
-    //         title: m.Path,
-    //       });
-    //     }
-    //   }
-    // );
-    // this.refresh.next();
+
+    // return this.mealS.GetAllMeals().subscribe((data: Response) => { });
   }
 
   public addEvent(): void {
@@ -197,7 +201,6 @@ export class HomePage implements OnInit {
 
   async presentPopover({ date, events }: { date: Date; events: CalendarEvent[] }) {
     this.autoCompleteLabelsService.initialization();
-    this.loadLabelsFromAPI();
     const popover = await this.popoverCtrl.create({
       component: ViewDayMealPage,
       componentProps: {

@@ -50,12 +50,13 @@ export class AppComponent {
     });
   }
   signOut(){
-    this.afAuth.auth.signOut();
-    this.storage.clear();
+    this.storage.clear().then(data=>{
+      this.afAuth.auth.signOut();
+    });
     this.isLoggedIn = false;
-    if(this.platform.is('cordova')){
-      this.gplus.logout();
-    }
+    // if(this.platform.is('cordova')){
+    //   this.gplus.logout();
+    // }
   }
 
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../Providers/authentication.service';
-import { LoadingController, AlertController } from '@ionic/angular';
+import { LoadingController, AlertController, PopoverController } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 @Component({
@@ -13,6 +13,7 @@ export class SignupPage implements OnInit {
   public signupForm: FormGroup;
   public loading: any;
   constructor(
+    public popoverCtrl: PopoverController,
     private authService: AuthenticationService,
     private loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
@@ -39,10 +40,10 @@ export class SignupPage implements OnInit {
     } else {
       const email: string = signupForm.value.email;
       const password: string = signupForm.value.password;
-  
       this.authService.signupUser(email, password).then(
         () => {
           this.loading.dismiss().then(() => {
+            this.popoverCtrl.dismiss();
             this.router.navigateByUrl('home');
           });
         },

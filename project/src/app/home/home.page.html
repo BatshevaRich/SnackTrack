@@ -5,7 +5,7 @@
   <ion-row>
     <ion-col size="0.02"></ion-col>
     <ion-col size="9">
-        <!-- -webkit-tap-highlight-color: #005D57; -->
+      <!-- -webkit-tap-highlight-color: #005D57; -->
       <ion-auto-complete
         style="height:200%;width: 300px; color:#ffffff;-moz-background-inline-policy: bounding-box;
       -moz-user-input: #ffffff;
@@ -15,11 +15,8 @@
 -webkit-column-break-before: #ffffff;
 -webkit-text-stroke-color: #ffffff;
 -webkit-text-fill-color: #24B77F;
-
 -webkit-column-rule-color: #005D57;
--webkit-border-before-color: #005D57;font-weight: bold;
-
-          "
+-webkit-border-before-color: #005D57;font-weight: bold;"
         [(ngModel)]="searchText"
         (keyup.enter)="onSelected()"
         (itemSelected)="onSelected()"
@@ -35,7 +32,6 @@
       </ion-button>
     </ion-col>
   </ion-row>
-
   <ion-row>
     <ion-col size="2" style="padding-top:0px">
       <ion-button
@@ -64,12 +60,12 @@
     </ion-col>
   </ion-row>
   <ng-template #loading>
-      <div class="text-center">
-        <i class="fa fa-spin fa-spinner fa-5x"></i> <br />
-        Loading events...
-      </div>
-    </ng-template>
-    
+    <div class="text-center">
+      <i class="fa fa-spinner fa-spin" style="font-size:60px"></i> <br />
+      <h2>Loading Meals...</h2>
+    </div>
+  </ng-template>
+
   <!-- <ion-content style="width: 100%"> -->
   <div *ngIf="events$ | async; else loading; let events">
     <div [ngSwitch]="view" style="color: #ffffff;">

@@ -30,9 +30,9 @@ export class MealService {
     });
   }
   // baseURL = 'http://ce6dc86e.ngrok.io/api/';
-  // baseURL = 'http://34.90.143.154/api/';
+  baseURL = 'http://34.90.143.154/api/';
   // baseURL = 'http://b40029a0.ngrok.io/api/';
-  baseURL = 'http://localhost:51786/api/';
+  // baseURL = 'http://localhost:51786/api/';
   listAllMeal: Meal[];
   params: HttpParams;
   userName: string;
@@ -56,8 +56,8 @@ export class MealService {
     });
   }
 
-  public GetTodayMeals(myDate: Date) {
-    const res = this.http.get(this.baseURL + 'meal?dateTime=' + myDate.toDateString());
+  public GetTodayMeals(param: HttpParams) {
+    const res = this.http.get(this.baseURL + 'meal/gettoday', { params: param });
     return new Promise(resolve => {
       res.subscribe(data => {
         resolve(data);
@@ -65,31 +65,33 @@ export class MealService {
     });
   }
 
-  public GetMealsForSearch(label: string) {
-    let param = new HttpParams();
-    param = param.append('label', label);
-    param = param.append('user', this.user1);
-    param = param.append('name', this.userName);
-    param = param.append('pass', this.userPass);
+  public GetMealsForSearch(param: HttpParams) {
     return this.http.get<Meal[]>(this.baseURL + 'meal/getlabels', { params: param });
-    // return new Promise(resolve => {
-    //   res.subscribe(data => {
-    //     resolve(data);
-    //   });
-    // });
   }
 
-  public GetAllMeals() {
-    return this.http.get(this.baseURL + 'meal/getall', { params: this.params });
+  public GetAllMeals(param: HttpParams) {
+    return this.http.get(this.baseURL + 'meal/getall', { params: param });
   }
 
   getResults(): Observable<Meal[]> {
     let observable: Observable<Meal[]>;
-    if (this.listAllMeal.length === 0) {
-      observable = this.http.get<Meal[]>(this.baseURL + 'meal/getall', { params: this.params });
-    } else {
-      observable = of(this.listAllMeal);
-    }
+    this.storage.get('auth-token').then(res => {
+      const user = res as string;
+      this.user1 = user;
+      this.userName = user.substring(0, user.indexOf(','));
+      this.userPass = user.substring(user.indexOf(',') + 1, user.length);
+      this.params = new HttpParams();
+      this.params = this.params.append('user', this.user1);
+      this.params = this.params.append('name', this.userName);
+      this.params = this.params.append('pass', this.userPass);
+      console.log(res);
+
+      if (this.listAllMeal.length === 0) {
+        observable = this.http.get<Meal[]>(this.baseURL + 'meal/getall', { params: this.params });
+      } else {
+        observable = of(this.listAllMeal);
+      }
+    });
     return observable;
   }
 }

@@ -5,6 +5,7 @@ import { Meal } from '../classes/Meal';
 import { AutoCompleteLabelsService } from '../Providers/auto-complete-labels.service';
 import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
 import { Storage } from '@ionic/storage';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-search',
@@ -46,16 +47,32 @@ export class SearchPage {
     this.searchText = '';
     this.router.navigate(['/search'], navigationExtras);
   }
-
+  userName: string;
+  userPass: string;
   loadLabelsFromAPI() {
-    return this.mealS.GetMealsForSearch(this.data).subscribe(res => {
-      this.meals = res;
-      this.display = false;
-      if (this.meals.length === 0) {
-        this.display = true;
-      }
+    this.storage.get('auth-token').then(res => {
+      const user = res as string;
+      const user1: string = user;
+      this.userName = user.substring(0, user.indexOf(','));
+      this.userPass = user.substring(user.indexOf(',') + 1, user.length);
+      let params = new HttpParams();
+      params = params.append('user', user1);
+      params = params.append('name', this.userName);
+      params = params.append('pass', this.userPass);
+      console.log(res);
+      let param = new HttpParams();
+      param = param.append('label', this.data);
+      param = param.append('user', user1);
+      param = param.append('name', this.userName);
+      param = param.append('pass', this.userPass);
+      return this.mealS.GetMealsForSearch(param).subscribe(res => {
+        this.meals = res;
+        this.display = false;
+        if (this.meals.length === 0) {
+          this.display = true;
+        }
+      })
     })
-
   }
 
   takePicture($event) {
