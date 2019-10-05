@@ -2,3 +2,5 @@ node_modules
 project/config.xml
 project/package-lock.json
 project/package.json
+project/src/environment/environment.ts
+project/src/environment/environment.prod.ts

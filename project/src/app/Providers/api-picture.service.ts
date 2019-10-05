@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Label } from '../../app/classes/Label';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {environment} from '../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class ApiPictureService {
   labels: Label[];
- // baseURL = 'http://localhost:54640/api/';
-   baseURL = 'http://34.90.143.154/api/'
-// baseURL = 'https://helpless-mayfly-52.localtunnel.me/api/'
-   //baseURL = 'http://d2feee8e.ngrok.io/api/';
+   baseURL = environment.baseURL;
   fileToUpload: File;
   constructor(public httpClient: HttpClient) {}
 

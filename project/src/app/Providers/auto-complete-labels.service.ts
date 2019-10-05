@@ -5,13 +5,14 @@ import { Observable, of } from 'rxjs';
 import { AutoCompleteService } from 'ionic4-auto-complete';
 import { Label } from '../classes/Label';
 import { Storage } from '@ionic/storage';
+import {environment} from '../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class AutoCompleteLabelsService implements AutoCompleteService {
   labelAttribute = 'name';
   private labels: any[] = [];
-  baseURL = 'http://34.90.143.154/api/';
+  baseURL = environment.baseURL;
   params: HttpParams;
   userName: string;
   userPass: string;
@@ -70,23 +71,5 @@ export class AutoCompleteLabelsService implements AutoCompleteService {
         });
       }
       ));
-
-    // return observable;
-    // this.params = new HttpParams();
-    // this.params = this.params.append('user', this.user1);
-    // this.params = this.params.append('name', this.userName);
-    // this.params = this.params.append('pass', this.userPass);
-    // if (this.labels.length === 0) {
-    //   observable = this.http.get(this.baseURL + 'label?all', { params: this.params });
-    // } else {
-    //   observable = of(this.labels);
-    // }
-    // return observable.pipe(
-    //   map((result) => {
-    //     return result.filter((item) => {
-    //       return item.toLowerCase().indexOf(keyword.toLowerCase()) > -1;
-    //     });
-    //   }
-    //   ));
   }
 }
