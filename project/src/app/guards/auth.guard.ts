@@ -21,7 +21,6 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot
   ): boolean | Observable<boolean> | Promise<boolean> {
     return new Promise((resolve, reject) => {
-      if (!this.auth.isAuthenticated) {
         firebase.auth().onAuthStateChanged((user: firebase.User) => {
           if (user) {
             resolve(true);
@@ -31,7 +30,6 @@ export class AuthGuard implements CanActivate {
             resolve(false);
           }
         });
-      } else { (resolve(true)); }
     });
 
   }

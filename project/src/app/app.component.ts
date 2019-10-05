@@ -38,9 +38,8 @@ export class AppComponent {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
-      if (!this.authenticationService.isAuthenticated) {
+      if (!this.authenticationService.isAuthenticated()) {
       this.authenticationService.authenticationState.subscribe(state => {
-        
         if (state) {
           this.router.navigate(['home']);
           this.isLoggedIn = true;
@@ -53,9 +52,11 @@ export class AppComponent {
   }
   signOut(){
     this.storage.clear().then(data=>{
+      this.isLoggedIn = false;
+      this.authenticationService.logoutUser();
       this.afAuth.auth.signOut();
     });
-    this.isLoggedIn = false;
+    
     // if(this.platform.is('cordova')){
     //   this.gplus.logout();
     // }

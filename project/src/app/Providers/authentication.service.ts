@@ -60,6 +60,7 @@ export class AuthenticationService {
 
   logoutUser(): Promise<void> {
     this.storage.clear().then(data=>{
+      this.authenticationState.next(false);
       return firebase.auth().signOut();
     });
     return null;
@@ -75,7 +76,6 @@ export class AuthenticationService {
   }
 
   isAuthenticated() {
-    debugger
     return this.authenticationState.value;
   }
 

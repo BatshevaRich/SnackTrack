@@ -44,6 +44,7 @@ export class ResetPasswordPage implements OnInit {
                 text: 'Ok',
                 role: 'cancel',
                 handler: () => {
+                  this.resetPasswordForm.reset();
                   this.router.navigateByUrl('login');
                 },
               },

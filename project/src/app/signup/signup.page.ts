@@ -44,6 +44,7 @@ export class SignupPage implements OnInit {
         () => {
           this.loading.dismiss().then(() => {
             this.popoverCtrl.dismiss();
+            this.signupForm.reset();
             this.router.navigateByUrl('home');
           });
         },
