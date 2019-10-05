@@ -36,7 +36,7 @@ export class ViewDayMealPage implements OnInit {
           let param = new HttpParams();
           param = param.append('year', this.today.getFullYear().toString());
           param = param.append('month', (this.today.getMonth() + 1).toString());
-          param = param.append('day', (this.today.getDay() - 1).toString());
+          param = param.append('day', this.today.getDate().toString());
           param = param.append('user', user1);
           param = param.append('name', this.userName);
           param = param.append('pass', this.userPass);
