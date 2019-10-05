@@ -50,9 +50,10 @@
       <ion-button
         (click)="loginUser(loginForm)"
         expand="block"
-        [disabled]="!loginForm.valid"
         color="dark"
         strong="true"
+        [disabled]="!loginForm.valid"
+        
       >
         Log In
       </ion-button>
@@ -63,7 +64,7 @@
       Create a new account
     </ion-button>
     <br>
-    <ion-button expand="block" color="light" routerLink="/reset-password">
+    <ion-button expand="block" color="light" (click)="presentPasswordPopover()">
       I forgot my password :(
     </ion-button>
 

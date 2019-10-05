@@ -6,6 +6,7 @@ import { RegisterPage } from '../register/register.page';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { LoadingController, AlertController } from '@ionic/angular';
 import { SignupPage } from '../signup/signup.page';
+import { ResetPasswordPage } from '../reset-password/reset-password.page';
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -15,11 +16,11 @@ export class LoginPage implements OnInit {
   public loginForm: FormGroup;
   public loading: HTMLIonLoadingElement;
   constructor(private authService: AuthenticationService,
-    public loadingCtrl: LoadingController,
-    public alertCtrl: AlertController,
-    private router: Router,
-    private formBuilder: FormBuilder,
-    public popoverCtrl: PopoverController) {
+              public loadingCtrl: LoadingController,
+              public alertCtrl: AlertController,
+              private router: Router,
+              private formBuilder: FormBuilder,
+              public popoverCtrl: PopoverController) {
     this.loginForm = this.formBuilder.group({
       email: ['',
         Validators.compose([Validators.required, Validators.email])],
@@ -73,6 +74,19 @@ export class LoginPage implements OnInit {
       component: SignupPage,
       showBackdrop: true,
       cssClass: 'background: radial-gradient !important',
+      translucent: true,
+      animated: true,
+      componentProps: {
+      },
+    });
+    // popover.style.cssText = '--max-height:45%;--width:95%';
+    popover.present();
+  }
+  async presentPasswordPopover(){
+    this.loginForm.reset();
+    const popover = await this.popoverCtrl.create({
+      component: ResetPasswordPage,
+      showBackdrop: true,
       translucent: true,
       animated: true,
       componentProps: {

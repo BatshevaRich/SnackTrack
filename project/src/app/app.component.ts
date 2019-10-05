@@ -38,7 +38,9 @@ export class AppComponent {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      if (!this.authenticationService.isAuthenticated) {
       this.authenticationService.authenticationState.subscribe(state => {
+        
         if (state) {
           this.router.navigate(['home']);
           this.isLoggedIn = true;
@@ -46,7 +48,7 @@ export class AppComponent {
           this.router.navigate(['login']);
           this.isLoggedIn = false;
         }
-      });
+      })};
     });
   }
   signOut(){

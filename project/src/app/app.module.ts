@@ -27,6 +27,7 @@ import { GooglePlus } from '@ionic-native/google-plus/ngx';
 import { LoginPage } from './login/login.page';
 import { LoginPageModule } from './login/login.module';
 import { SignupPageModule } from './signup/signup.module';
+import { ResetPasswordPageModule } from './reset-password/reset-password.module';
 const firebaseConfig = {
   apiKey: 'AIzaSyChoQJnU3L4rVfQYEUp3tBhclNY_mQ9bV8',
   authDomain: 'dietdiary.firebaseapp.com',
@@ -56,7 +57,9 @@ const firebaseConfig = {
     RegisterPageModule,
     ZoomImagePageModule,
     LoginPageModule,
-    SignupPageModule],
+    SignupPageModule,
+    ResetPasswordPageModule
+  ],
   providers: [
     GooglePlus,
     StatusBar,

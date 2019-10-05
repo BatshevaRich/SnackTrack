@@ -75,6 +75,7 @@ export class AuthenticationService {
   }
 
   isAuthenticated() {
+    debugger
     return this.authenticationState.value;
   }
 
