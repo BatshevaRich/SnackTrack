@@ -1,7 +1,7 @@
 <img src="https://github.com/BatshevaRich/SnackTrackFrontend/blob/master/project/src/assets/logo.png" alt="drawing" width="200"/>
 
 # SnackTrackFrontend
-The frontend of the SnackTrack app, using ionic
+The frontend of the SnackTrack app, using ionic-framework wrapping Angular. The backend is [here.](https://github.com/BatshevaRich/SnackTrackBackend)
 ## Installation
 You can download this app on the [Google Appstore](https://play.google.com)! Just search for SnackTrack
 ## External Libraries Used
