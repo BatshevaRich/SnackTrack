@@ -179,12 +179,11 @@ namespace dal
 
             var base64Data = Regex.Match(imageString, @"data:image/(?<type>.+?),(?<data>.+)").Groups["data"].Value;
             var binData = Convert.FromBase64String(base64Data);
-            BinaryWriter Writer = null;
             string Name = Path.Combine("C:\\key", "pic.jpg");
             try
             {
                 // Create a new stream to write to the file
-                Writer = new BinaryWriter(File.OpenWrite(Name));
+                BinaryWriter Writer = new BinaryWriter(File.OpenWrite(Name));
                 // Writer raw data                
                 Writer.Write(binData);
                 Writer.Flush();

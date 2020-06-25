@@ -252,7 +252,6 @@ C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\roslyn\VBCSCompiler
 C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\Clarifai.dll
 C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\dal.dll
 C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
-C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\Newtonsoft.Json.dll
 C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\System.Collections.Immutable.dll
 C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\System.Diagnostics.DiagnosticSource.dll
 C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\System.Interactive.Async.dll
@@ -272,7 +271,6 @@ C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\Google.Api.Gax.dll
 C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\dal.pdb
 C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\dal.dll.config
 C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\Newtonsoft.Json.xml
-C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\System.Collections.Immutable.xml
 C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\System.Diagnostics.DiagnosticSource.xml
 C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\System.Interactive.Async.xml
 C:\Users\owner\Documents\GitHub\SnackTrackBackend\WebApi\bin\System.Net.Http.Formatting.xml
