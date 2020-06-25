@@ -1,6 +1,6 @@
 <img src="https://github.com/BatshevaRich/SnackTrackFrontend/blob/master/project/src/assets/logo.png" alt="drawing" width="200"/>
 
-# SnackTrackBackend
+# SnackTrack
 The SnackTrack app, backend using C#, frontend using ionic.
 ## Installation
 You can download this app on the [Google Appstore](https://play.google.com)! Just search for SnackTrack
