@@ -1,0 +1,30 @@
+<ion-grid class="popover-page">
+<ion-header>
+  <ion-toolbar>
+    <ion-title  style="color:#005D57;font-family: 'Roboto', sans-serif;">
+      {{today|date:'d MMMM, y'}}
+    </ion-title>
+    <ion-buttons slot="primary">
+      <ion-button (click)="close()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<!-- <ion-content> -->
+ <ion-list>
+    <ion-item style="background: cornsilk;color:#005D57"  *ngFor="let m of mealsToday" lines="full"  (click)="Zoom(m.Path)">
+        <ion-thumbnail slot="start">
+         <img [src]="m.Path">
+        </ion-thumbnail>
+        <ion-label>
+          <h3>{{m.DateOfPic|date:'shortTime'}}</h3>
+          <p class="ion-text-wrap">{{m.Tags}}</p>
+        </ion-label>
+      </ion-item>
+  </ion-list>
+  <ion-label *ngIf='mealsToday.length==0' style="font-family: 'Roboto', sans-serif;color:red">You didn't eat anything today</ion-label>
+<!-- </ion-content> -->
+</ion-grid>

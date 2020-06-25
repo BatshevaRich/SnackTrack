@@ -1,0 +1,60 @@
+
+<ion-content>
+    <img [src]="currentImage" *ngIf="currentImage">
+    <!-- <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+      <ion-fab-button (click)="sendI()" color="medium" size="small">
+        <ion-icon name="send"></ion-icon>
+        </ion-fab-button>
+        
+    </ion-fab> -->
+    <ion-fab vertical="bottom" horizontal="end" vertical="top" slot="fixed" *ngIf="currentImage">
+        <ion-fab-button (click)="sendImage($event)" color="medium" size="small">
+          <ion-icon name="send"></ion-icon>
+          </ion-fab-button>
+          
+      </ion-fab>
+  <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+    <ion-fab-button (click)="takePicture()" color="medium" size="small">
+      <ion-icon name="camera"></ion-icon>
+      </ion-fab-button>
+      
+  </ion-fab>
+  <ion-fab vertical="bottom" horizontal="end">
+    <ion-fab-button color="medium" size="small">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+       
+      <ion-fab-button routerLink="../home" color="medium" size="small">
+        <ion-icon name="calendar"></ion-icon>
+      </ion-fab-button>
+      <label style="size: 5000px" for="file-input">
+        <ion-fab-button color="medium" size="small">
+         <ion-icon name="link"></ion-icon>
+        </ion-fab-button>
+      </label>
+      <input  
+      type="file" 
+      id="file-input" 
+      accept="image/*" 
+      capture="camera"
+      (change)="sendImage($event)" 
+      style="display: none"/>‏ 
+      
+    </ion-fab-list>
+  </ion-fab>
+  </ion-content>
+  
+  <!-- <img [src]="currentImage" > -->
+  
+  
+  <!-- <ion-fab vertical="top" horizontal="end" slot="fixed">
+    <ion-fab-button routerLink="../home">
+      <ion-icon name="calendar" ></ion-icon>
+    </ion-fab-button>
+    <ion-fab-button routerLink="../upload">
+    <ion-icon name="cloud-upload" ></ion-icon>
+  </ion-fab-button>
+    <br>
+    
+  </ion-fab> -->

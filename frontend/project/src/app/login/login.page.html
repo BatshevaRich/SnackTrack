@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Login</ion-title>
+  </ion-toolbar>
+</ion-header>
+ 
+<ion-content padding>
+  <!-- <ion-button (click)="login()" expand="block">Login</ion-button> -->
+  <!-- <ion-button expand="block" color="secondary" routerLink="/register" routerDirection="forward">Register</ion-button> -->
+  <!-- <ion-button expand="block" color="secondary" (click)="presentPopover()">Register</ion-button> -->
+
+  <form  [formGroup]="loginForm">
+      <ion-item color="secondary" expand="block" style="border-radius: 20px !important;">
+        <ion-label position="stacked">Email</ion-label>
+        <ion-input
+          formControlName="email"
+          type="email"
+          placeholder="Your email address"
+          [class.invalid]="!loginForm.controls['email'].valid &&
+          loginForm.controls['email'].touched"
+        >
+        </ion-input>
+      </ion-item>
+      <ion-item 
+        class="error-message"
+        *ngIf="!loginForm.controls['email'].valid &&
+           loginForm.controls['email'].touched"
+      >
+        <ion-label>Please enter a valid email address.</ion-label>
+      </ion-item>
+    <br>
+      <ion-item color="secondary" expand="block"style="border-radius: 20px !important;">
+        <ion-label position="stacked">Password</ion-label>
+        <ion-input  
+          formControlName="password"
+          type="password"
+          placeholder="Your password"
+          [class.invalid]="!loginForm.controls['password'].valid&& loginForm.controls['password'].touched"
+        >
+        </ion-input>
+      </ion-item>
+      <ion-item
+        class="error-message"
+        *ngIf="!loginForm.controls['password'].valid
+          && loginForm.controls['password'].touched"
+      >
+        <ion-label>Your password needs more than 6 characters.</ion-label>
+      </ion-item>
+    <br>
+      <ion-button
+        (click)="loginUser(loginForm)"
+        expand="block"
+        color="dark"
+        strong="true"
+        [disabled]="!loginForm.valid"
+        
+      >
+        Log In
+      </ion-button>
+    </form>
+    <br>
+    <!-- <ion-button expand="block" fill="clear" routerLink="/signup"> -->
+      <ion-button expand="block" color="medium" (click)="presentPopover()">
+      Create a new account
+    </ion-button>
+    <br>
+    <ion-button expand="block" color="light" (click)="presentPasswordPopover()">
+      I forgot my password :(
+    </ion-button>
+
+</ion-content>

@@ -1,0 +1,248 @@
+
+
+// //background icon
+// //month
+// h3 { color: #007D51; font-family: 'Raleway',sans-serif; font-size: 30px; line-height: 36px; margin: 0 0 24px; text-align: center; }
+
+// ion-content{
+   
+//   --ion-background-color:#111D12  url("https://storage.cloud.google.com/dietdiaryfoodpics/292.jpg?authuser=0") no-repeat center center / cover;
+// }
+
+// .cal-day-selected {
+//   background-color: black !important;
+// }
+// .cal-day-weekend {
+//   background-color: black;
+// }
+// .cal-day-weekend span[data-cal-date] {
+//   color: blue !important;
+// }
+// div{
+//   mwl-calendar-month-view {
+// width: 10px;
+// height: 10px;
+//   }
+// }
+
+
+// // day
+
+// // div { color: #007D51; font-family: 'Roboto',sans-serif;  text-align: center; }
+
+// ion-row {
+//   text-align: center;
+//   }
+//   .ng-star-inserted ion-page{
+//     background: red;
+//   }
+
+
+
+// .autocomplete {
+// 	width: 100%;
+// 	ion-list {
+// 		position: absolute;
+// 		width: inherit;
+// 		overflow-y: scroll;
+//     z-index: 999;
+//     color:red;
+
+// 		ion-item {
+
+// 			img {
+// 				width: auto;
+// 				margin: auto;
+// 				display: block;
+// 			}
+// 		}
+
+// 		ion-item:hover {
+//       color: red;
+// 			cursor: pointer;
+// 			background: #005D57;
+// 		}
+// 	}
+// }
+// ion-fab-button[data-desc]::after {
+//   position: absolute;
+//   content: attr(data-desc);
+//   z-index: 1;
+//   right: 55px;
+//   bottom: 4px;
+//   background-color: red;
+//   padding: 9px;
+//   border-radius: 15px;
+//   color:red;
+//   box-shadow: 0 3px 5px -1px rgba(0,0,0,0.2), 0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12);
+// }
+// ion-icon { zoom: 100%;color:white; }
+
+
+
+// //event on the calendar
+// ion-badge {
+//   height:15;
+//   width:15;
+//   border-radius: 20px;
+//   color:black;
+//   background-color: #1EB980;
+//   font-size: 7px;
+// }
+
+// // .cal-month-view .cal-day-cell {
+// //   min-height: 100px;
+// //   color:black;
+// //   background-color: black;
+// // }
+
+// // ion-auto-complete{
+// //   // background-color: aliceblue;
+// //   color: #ffffff;
+
+// // }
+
+// ion-auto-complete{
+//   padding: 1px ;
+//   border-radius: 10px;
+//   width: 100%;
+//   --background	:red;
+// }
+// ion-searchbar{
+//   .searchbar-input{
+//   border-radius: 30px;
+//   --background: red;
+//   }
+//   }
+
+ion-content{
+  // --background: url('../imeg/Document-page-001.jpg')  0 0/50% 10% no-repeat;
+  --ion-background-color:rgb(58, 59, 58);
+    // url("../../assets/292.jpg")no-repeat center center / cover;
+    // --ion-background-color:#111D12  url("https://storage.cloud.google.com/dietdiaryfoodpics/292.jpg?authuser=0") no-repeat center center / cover;
+ }
+
+
+ mwl-calendar-month{
+   background: red;
+ }
+
+
+ .cal-month-view .cal-day-cell {
+   --background: red;
+
+   
+ }
+
+
+
+
+
+
+
+
+
+
+//month
+h3 { color: #24B77F;font-weight: bold; font-family: 'Roboto',sans-serif;font-size: 40px;  line-height: 36px; margin: 0 0 24px; text-align: center; }
+
+
+// day
+
+div { color: #24B77F; font-family: 'Roboto',sans-serif; font-size: 10px; margin: 0 0 24px; text-align: center; }
+
+ion-row {
+  text-align: center;
+  }
+  searchbar-input {
+    background: black !important;
+    border-radius: 30px !important;
+    height: 40px !important;
+    max-width: 400px;
+    font-size: 1.25em !important;
+    border: 1px solid transparent;
+}
+
+
+
+//autocomplete {
+//  width: 100%;
+//  ion-list {
+//    position: absolute;
+//    width: inherit;
+//    overflow-y: scroll;
+//    max-height: 150%;
+//    z-index: 999;
+
+//    ion-item {
+
+//      img {
+//        max-height: 2.5rem;
+//        width: auto;
+//        margin: auto;
+//        display: block;
+//      }
+//    }
+
+//    ion-item:hover {
+//      cursor: pointer;
+//      background: #005D57;
+//    }
+//  }
+// }
+// ion-fab-button[data-desc]::after {
+//   position: absolute;
+//   content: attr(data-desc);
+//   z-index: 1;
+//   right: 55px;
+//   bottom: 4px;
+//   background-color: #005D57;
+//   padding: 9px;
+//   border-radius: 15px;
+//   color:#005D57;
+//   box-shadow: 0 3px 5px -1px rgba(0,0,0,0.2), 0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12);
+// }
+ion-icon { zoom: 100%;color:white; }
+
+//event on the calendar
+ion-badge {
+  width:20px;
+  border-radius: 50px;
+  background-color: #1EB980;
+  font-size: 10px;
+  text-align: center;
+}
+
+
+.cal-month-view .cal-day-cell {
+  min-height: 100px;
+  color:black;
+  background-color: black;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
