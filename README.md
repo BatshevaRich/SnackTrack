@@ -1,4 +1,4 @@
-<img src="https://github.com/BatshevaRich/SnackTrackFrontend/blob/master/project/src/assets/logo.png" alt="drawing" width="200"/>
+<img src="https://github.com/BatshevaRich/SnackTrack/blob/master/Frontend/project/src/assets/logo.png" alt="drawing" width="200"/>
 
 # SnackTrack
 The SnackTrack app, backend using C#, frontend using ionic.
